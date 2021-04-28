@@ -37,7 +37,7 @@ async def on_message(message):
         await message.channel.send("Command not found!")
 
 
-def help(message):
+async def help(message):
     embed=discord.Embed(title="Command list") # create an embed named "Command list"
     embed.add_field(name="..help", value="Shows this embed", inline=False) # TODO: instead of writing these out by hand, have a dict of commands
     await message.channel.send(embed=embed) # send the embed

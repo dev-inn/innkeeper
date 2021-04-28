@@ -35,7 +35,7 @@ async def on_message(message):
     #     # but only the first word in the command to ignore args
     # except Exception as e:
     #     await message.channel.send("Command not found!")
-    commands[message.replace(prefix,'').split(" ")[0]](message)
+    commands[message.content.replace(prefix,'').split(" ")[0]](message)
 
 
 async def help(message):

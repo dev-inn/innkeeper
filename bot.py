@@ -24,6 +24,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    print("bot received a message")
 
     if message.author == client.user: # bot won't reply to itself
         return
@@ -31,6 +32,7 @@ async def on_message(message):
         return
 
     try:
+        print("trying to handle it")
         commands[message.replace(prefix,'').split(" ")[0]](message) # ugly line that runs the function corresponding to the command without the prefix
         # but only the first word in the command to ignore args
     except Exception as e:
@@ -38,6 +40,7 @@ async def on_message(message):
 
 
 async def help(message):
+    print("help command recieved")
     embed=discord.Embed(title="Command list") # create an embed named "Command list"
     embed.add_field(name="..help", value="Shows this embed", inline=False) # TODO: instead of writing these out by hand, have a dict of commands
     await message.channel.send(embed=embed) # send the embed

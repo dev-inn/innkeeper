@@ -20,14 +20,14 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
-    if message.author == client.user:
+    if message.author == client.user: # bot won't reply to itself
         return
-    if(not message.content.startswith(prefix)):
+    if(not message.content.startswith(prefix)): # if the message doesn't start with the prefix, ignore
         return
 
-    if(message.content.startswith(prefix + "help")):
-        embed=discord.Embed(title="Command list")
-        embed.add_field(name="..help", value="Shows this embed", inline=False)
-        await message.channel.send(embed=embed)
+    if(message.content.startswith(prefix + "help")): # if the message is "[prefix]help", or [prefix]help with anything after it, run this command
+        embed=discord.Embed(title="Command list") # create an embed named "Command list"
+        embed.add_field(name="..help", value="Shows this embed", inline=False) # TODO: instead of writing these out by hand, have a dict of commands
+        await message.channel.send(embed=embed) # send the embed
 
-client.run(TOKEN)
+client.run(TOKEN) # run the bot

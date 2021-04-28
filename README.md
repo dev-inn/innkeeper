@@ -7,6 +7,6 @@ Bot for the Developer’s Inn Discord server
 pip install -U discord.py
 pip install -U python-dotenv
 ```
-# Running
+## Running
 
 `python bot.py`

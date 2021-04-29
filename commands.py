@@ -34,7 +34,7 @@ async def help(message):
     Creates and sends a discord embed with a list of all command names and
     descriptions avalable in the command_registry.
     '''
-    embed = discord.Embed(title="Command list")
+    embed = discord.Embed(title="Command list", color=0x25b037)
     for cmd_name in command_registry:
         cmd = command_registry[cmd_name]
         embed.add_field(name=cmd.name + ' ' + cmd.args,

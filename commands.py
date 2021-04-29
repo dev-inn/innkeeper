@@ -61,6 +61,9 @@ async def award(message):
             'Expected a mention. Did you mean `?award @' + contents[1] +'`?')
         return
     user = message.mentions[0]
+    if user == message.author:
+        await message.channel.send('You can\'t award yourself!')
+        return
     id = user.id # key to the database
 
     await message.channel.send('Awarded 1 reputation to ' + user.mention + '.')
@@ -91,8 +94,17 @@ async def rank(message):
     '''
     Get the rank of the user.
     '''
-    user = message.content.split(' ')[1]
-    await message.channel.send(user + ' is rank #1, level 83.')
+    contents = message.content.split(' ')
+    user = message.author
+    if len(message.mentions) == 1:
+        user = message.mentions[0]
+    elif len(contents) > 1:
+        await message.channel.send(
+            'Too many words. Try `?rank <username>`.')
+        return
+    id = user.id # key to the database
+
+    await message.channel.send(user.mention + ' is rank #1, level 83.')
 
 Command('rank', '<username>',
     'Get the rank of a user.', rank).register()

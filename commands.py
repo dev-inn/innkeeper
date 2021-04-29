@@ -36,13 +36,22 @@ async def help(message):
         embed.add_field(name=cmd.name, value=cmd.description, inline=False)
     await message.channel.send(embed=embed)
 
-Command('help', 'Shows a list of available commands', help).register()
+Command('help', 'Shows a list of available commands.', help).register()
 
 async def award(message):
     '''
     Awards a user with a reputation point.
     '''
     user = message.content.split(' ')[1]
-    await message.channel.send('Awarded 1 reputation to ' + user)
+    await message.channel.send('Awarded 1 reputation to ' + user + '.')
 
-Command('help', 'Shows a list of available commands', help).register()
+Command('award', 'Awards a user with a reputation point', award).register()
+
+async def status(message):
+    '''
+    Get the score of a user.
+    '''
+    user = message.content.split(' ')[1]
+    await message.channel.send(user + ' has 1 reputation point.')
+
+Command('status', 'Get the score of a user.', status).register()

@@ -52,8 +52,8 @@ async def on_message(message):
     if (not message.content.startswith(prefix)):  # if the message doesn't start with the prefix, ignore
         return
 
-    command = message.content.replace(prefix, '').split(" ")[
-        0]  # get the command by getting the message minus the prefix and then getting the first word
+    command = message.content.replace(prefix, '').split(" ")[0]  # get the command by getting the message minus the prefix and then getting the first word
+    command = command.lower()
     if (command == ''):  # if theres nothing but the prefix, ignore
         return
     if command in command_registry:  # if the command exists, run it

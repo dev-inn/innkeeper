@@ -14,7 +14,7 @@ prefix = botdata[0] # set prefix to the first in there
 print(botdata[1]) # print out the second (just for debug purposes)
 
 # Avatar
-pfp_path = "avatar.png"
+pfp_path = "avatar.jpg"
 
 fp = open(pfp_path, 'rb')
 pfp = fp.read()

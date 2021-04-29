@@ -56,6 +56,24 @@ async def setCredits(message):
     db.setCredits(user.id, amt)
     await message.channel.send('Successfully set ' + user.mention + '\'s credits to ' + str(amt))
 
+async def newrank(message):
+    '''
+    ?newrank <@role> <entry_rep>
+    '''
+    contents = message.content.split(' ')
+    amt = 0
+    if (len(message.role_mentions) == 1):
+        user = message.role_mentions[0]
+    else:
+        await message.channel.send('Try `' + botdata[0] + 'setCredits <user> <amount>')
+        return
+    try:
+        entry_rep = int(contents[2])
+    except Exception:
+        await message.channel.send('Invalid amount, must be integer amount of credits')
+        return
+    db.setCredits(user.id, amt)
+    await message.channel.send('Successfully set ' + user.mention + '\'s credits to ' + str(amt))
 
 ###--------------------------------------------------------------------------###
 ### Register Commands                                                        ###
@@ -67,3 +85,6 @@ Command('nuke', None,
 
 Command('setcredits', '<username> <amount>', 'Sets a users credits to specified amount',
         setCredits).register(admin_command_registry)
+
+Command('newrank', '<role> <entry_reputation>', 'Create a new role for a given reputation level',
+        newrank).register(admin_command_registry)

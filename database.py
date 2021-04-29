@@ -22,10 +22,10 @@ cursor.execute(
     "CREATE TABLE IF NOT EXISTS reputation " + table_string)
 
 columns = [i[1] for i in cursor.execute('PRAGMA table_info(reputation)')]
-
-for col, type in table_types.items():
-    if col not in columns:
-        cursor.execute('ALTER TABLE reputation ADD COLUMN ' + col + ' ' + type)
+if columns != [name for name, _ in table_types.items()]:
+    cursor.execute('DROP TABLE reputation')
+    cursor.execute(
+        "CREATE TABLE reputation " + table_string)
 
 def disconnectDB():
     return
@@ -44,6 +44,7 @@ def getCredits(userID):
     '''
     if not exists(userID):
         register(userID)
+        return 1
     rows = cursor.execute(
         "SELECT credits FROM reputation WHERE id = ?", (userID,),).fetchall()
     if not rows:
@@ -61,7 +62,8 @@ def register(userID):
     '''
     Register a user into the database with a reputation of 0.
     '''
-    cursor.execute("INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 0, 1, 1),)
+    cursor.execute(
+        "INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 0, 1, 1),)
     connection.commit()
 
 def getReputation(userID):

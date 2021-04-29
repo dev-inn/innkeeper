@@ -3,9 +3,29 @@
 import sqlite3
 
 connection = sqlite3.connect('reputation.db')
+
+table_types = {
+    'id':'INTEGER',
+    'value':'INTEGER',
+    'rank':'INTEGER',
+    'credits':'INTEGER',
+}
+
+# create the sqlite table string
+table_string = '('
+for col, type in table_types.items():
+    table_string += col + ' ' + type
+table_string += ')'
+
 cursor = connection.cursor()
 cursor.execute(
-    "CREATE TABLE IF NOT EXISTS reputation (id INTEGER, value INTEGER, rank INTEGER, credits INTEGER)")
+    "CREATE TABLE IF NOT EXISTS reputation " + table_string)
+
+columns = [i[1] for i in cursor.execute('PRAGMA table_info(reputation)')]
+
+for col, type in table_types.items():
+    if col not in columns:
+        cur.execute('ALTER TABLE reputation ADD COLUMN ' + col + ' ' + type)
 
 def disconnectDB():
     return

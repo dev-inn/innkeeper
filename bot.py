@@ -5,7 +5,7 @@ import discord
 import sqlite3
 
 # local imports
-import commands
+from commands import *
 
 prefix = "?"
 

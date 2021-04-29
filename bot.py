@@ -3,7 +3,6 @@
 import os
 import sys
 import discord
-import sqlite3
 
 # local imports
 from commands import *

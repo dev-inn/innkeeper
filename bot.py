@@ -1,9 +1,10 @@
 # bot.py
-
 import os
 import sys
 
 # local imports
+from threading import Thread
+
 import commands
 import admin_commands
 import scheduled_jobs as sj
@@ -25,7 +26,6 @@ TOKEN = os.environ.get("DISCORD_TOKEN")
 if TOKEN is None:
     TOKEN = sys.argv[1]
 client = discord.Client()  # set up bot with discord api
-
 
 
 @client.event
@@ -51,13 +51,16 @@ async def on_message(message):
         await command_registry[command].invoke(message)
     elif command in hidden_command_registry:  # if the command exists, run it
         await hidden_command_registry[command].invoke(message)
-    elif command in admin_command_registry:  # if the command exists, run it
+    elif command in admin_commands.admin_command_registry:  # if the command exists, run it
         # TODO: verify permissions, or check if we are in debug mode
-        await admin_command_registry[command].invoke(message)
+        await admin_commands.admin_command_registry[command].invoke(message)
     else:
         await message.channel.send('Oops, I don\'t recognize that command')
 
 
-client.run(TOKEN)  # run the bot
+# launches scheduler on a new thread
+thread = Thread(target=sj.run_scheduler)
+thread.start()
 
-sj.run_scheduler()
+client.run(TOKEN)  # run the bot
+thread.join()

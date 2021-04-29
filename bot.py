@@ -55,4 +55,4 @@ async def on_message(message):
 
 client.run(TOKEN) # run the bot
 
-sj.run_scheduler():
+sj.run_scheduler()

@@ -25,7 +25,7 @@ columns = [i[1] for i in cursor.execute('PRAGMA table_info(reputation)')]
 
 for col, type in table_types.items():
     if col not in columns:
-        cur.execute('ALTER TABLE reputation ADD COLUMN ' + col + ' ' + type)
+        cursor.execute('ALTER TABLE reputation ADD COLUMN ' + col + ' ' + type)
 
 def disconnectDB():
     return

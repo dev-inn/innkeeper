@@ -158,7 +158,7 @@ async def leaderboard(message):
     i = 0
     for row in rows:
         i += 1
-        embed.add_field(name='#'+str(i), value=str('@<'+row[0]) +'> ' + str(row[1]), inline=False)
+        embed.add_field(name='#'+str(i), value='@<'+str(row[0]) +'> ' + str(row[1]), inline=False)
 
     await message.channel.send(embed=embed)
 

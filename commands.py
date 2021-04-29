@@ -98,7 +98,7 @@ async def award(message):
 
     db.award(message.author.id, user.id)
     await message.channel.send('Awarded 1 reputation to ' + user.mention + '.' +
-        message.author.mention ' has ' + db.getCredits(message.author.id) +
+        message.author.mention + ' has ' + db.getCredits(message.author.id) +
         ' remaining credits.')
 
 async def reputation(message):

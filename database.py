@@ -13,7 +13,6 @@ def exists(userID):
     '''
     Returns true if a user is registered in the database.
     '''
-    print("exists")
     rows = cursor.execute(
         "SELECT value FROM reputation WHERE id = ?", (userID,),).fetchall()
     return len(rows) > 0
@@ -22,14 +21,12 @@ def register(userID):
     '''
     Register a user into the database with a reputation of 0.
     '''
-    print("register")
     cursor.execute("INSERT INTO reputation VALUES (?, ?)", (userID, 0,),)
 
 def getReputation(userID):
     '''
     Return user score
     '''
-    print("getReputation")
     rows = cursor.execute(
         "SELECT value FROM reputation WHERE id = ?", (userID,),).fetchall()
     if not rows:
@@ -40,7 +37,6 @@ def award(userID):
     '''
     increment user score by one. Return new user score
     '''
-    print("award")
     if not exists(userID):
         register(userID)
     reputation = getReputation(userID)

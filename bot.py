@@ -36,7 +36,6 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    print("bot received a message")
 
     if message.author == client.user: # bot won't reply to itself
         return

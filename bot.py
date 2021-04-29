@@ -30,8 +30,11 @@ async def on_message(message):
     if(not message.content.startswith(prefix)): # if the message doesn't start with the prefix, ignore
         return
 
-    command = message.content.replace(prefix,'').split(" ")[0]
-    if command in command_registry:
+    if(message.content.replace(prefix,'') == ''): #if theres nothing but the prefix, ignore
+        return
+
+    command = message.content.replace(prefix,'').split(" ")[0] # get the command by getting the message minus the prefix and then getting the first word
+    if command in command_registry: # if the command exists, run it
         command_registry[command].invoke(message)
     else:
         await message.channel.send('Oops, I don\'t recognize that command')

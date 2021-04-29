@@ -2,12 +2,13 @@
 
 import sqlite3
 
-connection = sqlite3.connect("reputation.db")
+connection = sqlite3.connect('reputation.db')
 cursor = connection.cursor()
-#cursor.execute("CREATE TABLE reputation (id INTEGER, value INTEGER)")
+cursor.execute(
+    "CREATE TABLE IF NOT EXISTS reputation (id INTEGER, value INTEGER, rank INTEGER)")
 
 def disconnectDB():
-    connection = sqlite3.connect("reputation.db")
+    return
 
 def exists(userID):
     '''
@@ -21,7 +22,8 @@ def register(userID):
     '''
     Register a user into the database with a reputation of 0.
     '''
-    cursor.execute("INSERT INTO reputation VALUES (?, ?)", (userID, 0,),)
+    cursor.execute("INSERT INTO reputation VALUES (?, ?, ?)", (userID, 0, 1),)
+    connection.commit()
 
 def getReputation(userID):
     '''
@@ -42,7 +44,8 @@ def award(userID, quantity=1):
     reputation = getReputation(userID)
     cursor.execute("UPDATE reputation SET value = ? WHERE id = ?",
         (reputation + quantity, userID))
-    return 0
+    connection.commit()
+    return reputation + quantity
 
 def reload_awards(rankID, quantity=1):
     '''
@@ -50,6 +53,7 @@ def reload_awards(rankID, quantity=1):
     '''
     cursor.execute("UPDATE reputation SET value = ? WHERE rank = ?",
         (quantity, rankID))
+    connection.commit()
 
 def nuke(userID):
     '''
@@ -61,3 +65,4 @@ def nuke(userID):
 
     if exists(userID):
         cursor.execute("DELETE FROM reputation WHERE id = ?", (userID))
+        connection.commit()

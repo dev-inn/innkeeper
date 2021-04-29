@@ -34,7 +34,7 @@ class Rank:
 
     @staticmethod
     def getRankForRep(rep):
-        highest_rank = rank_registry.items().first[1]
+        highest_rank = list(rank_registry.values())[0]
         # TODO: can we improve on brute force?
         for rank in rank_registry:
             if rank.entry_rep > highest_rank and rank.entry_rep <= rep:

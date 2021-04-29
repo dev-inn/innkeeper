@@ -1,19 +1,25 @@
+# commands.py
+
+import os
+import discord
+import sqlite3
 
 command_registry = { }
 
 class Command:
-    def __init__(name, description, function):
+    def __init__(self, name, description, function):
         self.name = name
         self.description = description
         self.function = function
 
-    def register(registry=command_registry):
-        if command_registry[name]:
-            print('WARNING: ' + name + 'is already registered. Overwriting.')
-        command_registry[name] = self
+    def register(self, registry=command_registry):
+        if self.name in command_registry:
+            print('WARNING: ' + self.name
+                + 'is already registered. Overwriting.')
+        command_registry[self.name] = self
 
-    def invoke(message):
-        self.function(message)
+    async def invoke(self, message):
+        await self.function(message)
 
 ###--------------------------------------------------------------------------###
 ### Command Implementations                                                  ###
@@ -25,7 +31,8 @@ async def help(message):
     descriptions avalable in the command_registry.
     '''
     embed=discord.Embed(title="Command list")
-    for cmd in command_registry:
+    for cmd_name in command_registry:
+        cmd = command_registry[cmd_name]
         embed.add_field(name=cmd.name, value=cmd.description, inline=False)
     await message.channel.send(embed=embed)
 

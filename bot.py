@@ -5,7 +5,7 @@ import discord
 import sqlite3
 
 # local imports
-import commands
+from commands import *
 
 prefix = "?"
 
@@ -30,20 +30,13 @@ async def on_message(message):
     if(not message.content.startswith(prefix)): # if the message doesn't start with the prefix, ignore
         return
 
-    # try:
-    print("trying to handle it")
-    #     commands[message.replace(prefix,'').split(" ")[0]](message) # ugly line that runs the function corresponding to the command without the prefix
-    #     # but only the first word in the command to ignore args
-    # except Exception as e:
-    #     await message.channel.send("Command not found!")
+    if(message.content.replace(prefix,'') == ''): #if theres nothing but the prefix, ignore
+        return
 
-    command = message.content.replace(prefix,'').split(" ")[0]
-    command_registry[command](message)
-
-async def help(message):
-    print("help command recieved")
-    embed=discord.Embed(title="Command list") # create an embed named "Command list"
-    embed.add_field(name="..help", value="Shows this embed", inline=False) # TODO: instead of writing these out by hand, have a dict of commands
-    await message.channel.send(embed=embed) # send the embed
+    command = message.content.replace(prefix,'').split(" ")[0] # get the command by getting the message minus the prefix and then getting the first word
+    if command in command_registry: # if the command exists, run it
+        command_registry[command].invoke(message)
+    else:
+        await message.channel.send('Oops, I don\'t recognize that command')
 
 client.run(TOKEN) # run the bot

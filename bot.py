@@ -7,7 +7,11 @@ import sqlite3
 # local imports
 from commands import *
 
-prefix = "?"
+with open('botdata.txt', 'r') as file:
+    botdata = file.read().split(",") # get variables from botdata.txt
+
+prefix = botdata[0] # set prefix to the first in there
+print(botdata[1]) # print out the second (just for debug purposes)
 
 # load secrets
 TOKEN = os.environ.get("DISCORD_TOKEN")

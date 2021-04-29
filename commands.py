@@ -63,7 +63,6 @@ async def award(message):
     user = message.mentions[0]
     id = user.id # key to the database
 
-
     await message.channel.send('Awarded 1 reputation to ' + user.mention + '.')
 
 Command('award', '<username>',
@@ -73,8 +72,17 @@ async def reputation(message):
     '''
     Get the reputation of a user.
     '''
-    user = message.content.split(' ')[1]
-    await message.channel.send(user + ' has 1 reputation point.')
+    contents = message.content.split(' ')
+    user = message.author
+    if len(message.mentions) == 1:
+        user = message.mentions[0]
+    elif len(contents) > 1:
+        await message.channel.send(
+            'Too many words. Try `?reputation <username>`.')
+        return
+    id = user.id # key to the database
+
+    await message.channel.send(user.mention + ' has 1 reputation point.')
 
 Command('reputation', '<username>',
     'Get the reputation of a user.', reputation).register()

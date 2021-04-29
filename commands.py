@@ -51,6 +51,7 @@ async def help(message):
     url = botdata[2]
 
     embed = discord.Embed(title="Command list", color=0x25b037)
+    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/525140186762575873/837189807411036200/unknown.png")
     embed.add_field(name='Prefix',
         value=prefix, inline=False)
     for cmd_name in command_registry:
@@ -59,6 +60,7 @@ async def help(message):
             value=cmd.description, inline=False)
     embed.add_field(name='Need support?',
         value=url, inline=False)
+
     await message.channel.send(embed=embed)
 
 async def award(message):

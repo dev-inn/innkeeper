@@ -150,6 +150,7 @@ def leaderboard():
     Return top 10 rows' id and value fields
     '''
     rows = cursor.execute("SELECT id,value FROM reputation ORDER BY value DESC LIMIT 10").fetchall()
+    "SELECT value FROM reputation WHERE id = ?", (userID,), ).fetchall()
     return rows
 
 

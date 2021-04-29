@@ -97,8 +97,8 @@ async def award(message):
         return
 
     db.award(message.author.id, user.id)
-    await message.channel.send('Awarded 1 reputation to ' + str(user.mention) + '.' +
-        message.author.mention + ' has ' + db.getCredits(message.author.id) +
+    await message.channel.send('Awarded 1 reputation to ' + user.mention + '.' +
+        message.author.mention + ' has ' + str(db.getCredits(message.author.id)) +
         ' remaining credits.')
 
 async def reputation(message):
@@ -165,6 +165,28 @@ async def nuke(message):
     db.nuke(id)
     await message.channel.send('Reset ' + user.mention + ' reputation to 0.')
 
+async def setCredits(message):
+    '''
+    Set a users credits to desired amount
+    Only to be used by admins
+    '''
+    contents = message.content.split(' ')
+    amt =0
+    if(len(message.mentions) ==1):
+        user = message.mentions[0]
+    else:
+        await message.channel.send('Try `'+botdata[0] + 'setCredits <user> <amount>')
+        return
+    try:
+        amt = int(contents[2])
+    except Exception:
+        await message.channel.send('Invalid amount, must be integer amount of credits')
+        return
+    db.setCredits(user.id, amt)
+
+
+
+
 # xpGain = random.randint(15, 25) -- Use this for getting a random xp to give each time a user sends a message
 
 ###--------------------------------------------------------------------------###
@@ -190,3 +212,6 @@ Command('leaderboard', None,
 Command('nuke', None,
     'Delete a user from the reputation database.',
     nuke).register(admin_command_registry)
+
+Command('setcredits', '<username> <amount', 'Sets a users credits to specified amount',
+        setCredits).register(admin_command_registry)

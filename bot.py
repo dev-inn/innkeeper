@@ -1,7 +1,11 @@
 # bot.py
+
 import os
 import discord
 import sqlite3
+
+# local imports
+import commands
 
 prefix = "?"
 
@@ -12,11 +16,6 @@ TOKEN = os.environ.get("DISCORD_TOKEN")
 con = sqlite3.connect('reputation.db')
 
 client = discord.Client() # set up bot with discord api
-
-# Commands dict
-commands = {
-    "help":help
-}
 
 @client.event
 async def on_ready():
@@ -39,13 +38,7 @@ async def on_message(message):
     #     await message.channel.send("Command not found!")
 
     command = message.content.replace(prefix,'').split(" ")[0]
-
-    if command == "help":
-        await help(message)
-    else:
-        print("invalid")
-        # do other things
-
+    command_registry[command](message)
 
 async def help(message):
     print("help command recieved")

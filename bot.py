@@ -6,6 +6,7 @@ import discord
 
 # local imports
 from commands import *
+import scheduled_jobs as sj
 
 with open('botdata.txt', 'r') as file:
     botdata = file.read().split(",") # get variables from botdata.txt
@@ -53,3 +54,5 @@ async def on_message(message):
         await message.channel.send('Oops, I don\'t recognize that command')
 
 client.run(TOKEN) # run the bot
+
+sj.run_scheduler():

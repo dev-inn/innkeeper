@@ -44,6 +44,13 @@ def award(userID, quantity=1):
         (reputation + quantity, userID))
     return 0
 
+def reload_awards(rankID, quantity=1):
+    '''
+    increment user score by one. Return new user score
+    '''
+    cursor.execute("UPDATE reputation SET value = ? WHERE rank = ?",
+        (quantity, rankID))
+
 def nuke(userID):
     '''
     Delete user from database.

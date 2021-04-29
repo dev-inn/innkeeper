@@ -21,6 +21,19 @@ Get the rank of a user.
 #### `leaderboard` or `l`
 Shows a list of the top users by xp and reputation points.
 
+---
+
+### Admin Command List
+
+#### `admin help`
+Shows a list of admin commands.
+#### `nuke`
+Resets a users reputation back to 0
+#### `setcredits \<username> <amount>`
+Sets a users credits to specified amount.
+#### `newrank <role> <entry_reputation>`
+Create a new role for a given reputation level.
+
 ### Support
 
 File an [issue](https://github.com/dev-inn/innkeeper/issues) here on Github.

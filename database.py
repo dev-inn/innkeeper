@@ -140,5 +140,5 @@ def nuke(userID):
     # table so an admin may restore the change
 
     if exists(userID):
-        cursor.execute("DELETE * FROM reputation WHERE id = ?", (userID))
+        cursor.execute("DELETE FROM reputation WHERE id = ?", (userID))
         connection.commit()

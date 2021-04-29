@@ -10,9 +10,6 @@ command_registry = {}
 # these do not show up in help section
 hidden_command_registry = {}
 
-# these are only available to admin users
-admin_command_registry = {}
-
 global discordclient # holds a copy of the client object
 
 def setdiscordclient(c): # allows object to be set from outside file
@@ -168,45 +165,6 @@ async def leaderboard(message):
 
     await message.channel.send(embed=embed)
 
-
-async def nuke(message):
-    '''
-    Completely resets a user reputation.
-    Only to be used by admins.
-    '''
-    contents = message.content.split(' ')
-    if len(message.mentions) == 1:
-        user = message.mentions[0]
-    else:
-        await message.channel.send(
-            'Try `' + botdata[0] + 'nuke <username>`.')
-        return
-    id = user.id  # key to the database
-    db.nuke(id)
-    await message.channel.send('Reset ' + user.mention + ' reputation to 0.')
-
-
-async def setCredits(message):
-    '''
-    Set a users credits to desired amount
-    Only to be used by admins
-    '''
-    contents = message.content.split(' ')
-    amt = 0
-    if (len(message.mentions) == 1):
-        user = message.mentions[0]
-    else:
-        await message.channel.send('Try `' + botdata[0] + 'setCredits <user> <amount>')
-        return
-    try:
-        amt = int(contents[2])
-    except Exception:
-        await message.channel.send('Invalid amount, must be integer amount of credits')
-        return
-    db.setCredits(user.id, amt)
-    await message.channel.send('Successfully set ' + user.mention + '\'s credits to ' + str(amt))
-
-
 # xpGain = random.randint(15, 25) -- Use this for getting a random xp to give each time a user sends a message
 
 ###--------------------------------------------------------------------------###
@@ -228,10 +186,3 @@ Command('rank', '<username>',
 Command('leaderboard', None,
         'Shows a list of the top users by xp and reputation points.',
         leaderboard, 'l').register()
-
-Command('nuke', None,
-        'Delete a user from the reputation database.',
-        nuke).register(admin_command_registry)
-
-Command('setcredits', '<username> <amount>', 'Sets a users credits to specified amount',
-        setCredits).register(admin_command_registry)

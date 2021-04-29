@@ -123,6 +123,14 @@ def reload_awards(rankID, quantity):
     connection.commit()
 
 
+def leaderboard():
+    '''
+    Return top 10 rows' id and value fields
+    '''
+    rows = cursor.execute("SELECT id,value FROM reputation ORDER BY value DESC LIMIT 10").fetchall()
+    return rows
+
+
 def nuke(userID):
     '''
     Delete user from database.

@@ -153,7 +153,13 @@ async def leaderboard(message):
     reputation points abailable in (somewhere).
     '''
     embed = discord.Embed(title="Leaderboard")
-    embed.add_field(name='#1', value='Test User', inline=False)
+    # embed.add_field(name='#1', value='Test User', inline=False)
+    rows = db.leaderboard()
+    i = 0
+    for row in rows:
+        i += 1
+        embed.add_field(name='#'+str(i), value=str(row[0]) + str(row[1]), inline=False)
+
     await message.channel.send(embed=embed)
 
 
@@ -221,5 +227,5 @@ Command('nuke', None,
         'Delete a user from the reputation database.',
         nuke).register(admin_command_registry)
 
-Command('setcredits', '<username> <amount', 'Sets a users credits to specified amount',
+Command('setcredits', '<username> <amount>', 'Sets a users credits to specified amount',
         setCredits).register(admin_command_registry)

@@ -13,6 +13,12 @@ hidden_command_registry = {}
 # these are only available to admin users
 admin_command_registry = {}
 
+global discordclient # holds a copy of the client object
+
+def setdiscordclient(c): # allows object to be set from outside file
+    global discordclient
+    discordclient = c
+
 
 class Command:
     def __init__(self, name, args, description, function, shorthand=None):
@@ -158,7 +164,7 @@ async def leaderboard(message):
     i = 0
     for row in rows:
         i += 1
-        embed.add_field(name='#' + str(i), value=discord.Client.get_user(id=row[0]).mention + str(row[1]), inline=False)
+        embed.add_field(name='#' + str(i), value=discordclient.get_user(id=row[0]).mention + str(row[1]), inline=False)
 
     await message.channel.send(embed=embed)
 

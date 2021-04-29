@@ -5,6 +5,7 @@ import sys
 import discord
 
 # local imports
+import commands
 from commands import *
 import scheduled_jobs as sj
 
@@ -25,6 +26,7 @@ if TOKEN is None:
     TOKEN = sys.argv[1]
 
 client = discord.Client()  # set up bot with discord api
+commands.setdiscordclient(client) # passes client object to commands.py
 
 
 @client.event

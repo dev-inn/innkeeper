@@ -26,16 +26,16 @@ class Rank:
                   + 'is already registered. Overwriting.')
         registry[self.name] = self
 
-    def assign_rank(userID, rank):
+    def assign_rank(self, userID):
         '''
         userID - integer
         rank - Rank object
         '''
-        db.set_rank(userID, rank.rank)
+        db.set_rank(userID, self.rank)
 
     @staticmethod
     def getRankForRep(rep):
-        highest_rank = rank_registry.items().first()
+        highest_rank = list(rank_registry.values())[0]
         # TODO: can we improve on brute force?
         for rank in rank_registry:
             if highest_rank < rank.entry_rep <= rep:

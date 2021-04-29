@@ -41,7 +41,7 @@ def exists(userID):
     Returns true if a user is registered in the database.
     '''
     rows = cursor.execute(
-        "SELECT value FROM reputation WHERE id = ?", (userID,), ).fetchall()
+        "SELECT value FROM reputation WHERE id = ?", (userID,),).fetchall()
     return len(rows) > 0
 
 
@@ -53,7 +53,7 @@ def getCredits(userID):
         register(userID)
         return 1
     rows = cursor.execute(
-        "SELECT credits FROM reputation WHERE id = ?", (userID,), ).fetchall()
+        "SELECT credits FROM reputation WHERE id = ?", (userID,),).fetchall()
     if not rows:
         return 0
     return rows[0][0]
@@ -140,5 +140,5 @@ def nuke(userID):
     # table so an admin may restore the change
 
     if exists(userID):
-        cursor.execute("DELETE FROM reputation WHERE id = ?", (userID))
+        cursor.execute("DELETE FROM reputation WHERE id = ?", (userID,),)
         connection.commit()

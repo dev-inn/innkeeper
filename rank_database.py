@@ -2,10 +2,13 @@
 
 import sqlite3
 
+global connection
 global cursor
 
-def start_rankdb_with_connection(connection):
+def start_rankdb_with_connection(cn):
+    global connection
     global cursor
+    connection = connection
     cursor = connection.cursor()
 
     table_types = {

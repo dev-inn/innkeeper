@@ -4,6 +4,7 @@ import discord
 
 # local imports
 import database as db
+from ranks import Rank
 
 command_registry = {}
 
@@ -103,10 +104,11 @@ async def award(message):
             + 'to give. Credits reload every 6 hours.')
         return
 
-    db.award(message.author.id, user.id)
+    reputation = db.award(message.author.id, user.id)
     await message.channel.send('Awarded 1 reputation to ' + user.mention + '. ' +
                                message.author.mention + ' has ' + str(db.getCredits(message.author.id)) +
                                ' remaining credits.')
+    Rank.getRankForRep(reputation).assign_rank(user.id)
 
 
 async def reputation(message):
@@ -128,8 +130,8 @@ async def reputation(message):
     plurality = 's'
     if reputation == 1:
         plurality = ''
-    await message.channel.send(user.mention + ' has ' + str(reputation)
-                               + ' reputation point' + plurality + '.')
+    await message.channel.send(user.mention + ' is rank ' + get_rank(user.id)
+        + ' with ' + str(reputation) + ' reputation.')
 
 
 async def rank(message):

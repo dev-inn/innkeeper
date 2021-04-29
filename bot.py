@@ -13,6 +13,12 @@ import time
 lastCheckedTime = time.time()
 scheduleInterval = 6 * 60 * 60  # 6 hours x 60 mins x 60 secs gets 6 hours in seconds
 
+
+def setLastCheckedTime(t):
+    global lastCheckedTime
+    lastCheckedTime = t
+
+
 with open('botdata.txt', 'r') as file:
     botdata = file.read().split(",")  # get variables from botdata.txt
 
@@ -63,9 +69,9 @@ async def on_message(message):
     # i dont like this but its the easiest way to have a non blocking scheduled event that runs repeatedly
     if lastCheckedTime + scheduleInterval < time.time():
         sj.run_scheduler()
-        global lastCheckedTime
-        lastCheckedTime = time.time() - ((
-                    time.time() - lastCheckedTime) - scheduleInterval)  # sets last checked time to when it should have been activated to account for the fact messages arent constantly sent
+
+        setLastCheckedTime(time.time() - ((
+                                        time.time() - lastCheckedTime) - scheduleInterval))  # sets last checked time to when it should have been activated to account for the fact messages arent constantly sent
 
 
 client.run(TOKEN)  # run the bot

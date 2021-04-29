@@ -21,7 +21,7 @@ def setLastCheckedTime(t):
 
 with open('botdata.txt', 'r') as file:
     botdata = file.read().split(",")  # get variables from botdata.txt
-    admin_commands.setBotData(botdata)
+    admin_commands.set_bot_data(botdata)
 
 prefix = botdata[0]  # set prefix to the first in there
 

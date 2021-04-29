@@ -16,7 +16,7 @@ from commands import Command
 global botdata
 
 
-def setBotData(data):
+def set_bot_data(data):
     global botdata
     botdata = data
 
@@ -26,19 +26,18 @@ async def nuke(message):
     Completely resets a user reputation.
     Only to be used by admins.
     '''
-    contents = message.content.split(' ')
     if len(message.mentions) == 1:
         user = message.mentions[0]
     else:
         await message.channel.send(
             'Try `' + botdata[0] + 'nuke <username>`.')
         return
-    id = user.id  # key to the database
-    db.nuke(id)
+    uid = user.id  # key to the database
+    db.nuke(uid)
     await message.channel.send('Reset ' + user.mention + ' reputation to 0.')
 
 
-async def setCredits(message):
+async def set_credits(message):
     '''
     Set a users credits to desired amount
     Only to be used by admins
@@ -79,7 +78,7 @@ async def newrank(message):
     await message.channel.send('Successfully set ' + user.mention + '\'s credits to ' + str(amt))
 
 
-async def helpAdmin(message):
+async def help_admin(message):
     prefix = botdata[0]
     url = botdata[2]
 
@@ -106,9 +105,9 @@ Command('nuke', None,
         nuke).register(admin_command_registry)
 
 Command('setcredits', '<username> <amount>', 'Sets a users credits to specified amount',
-        setCredits).register(admin_command_registry)
+        set_credits).register(admin_command_registry)
 
 Command('newrank', '<role> <entry_reputation>', 'Create a new role for a given reputation level',
         newrank).register(admin_command_registry)
 
-Command('adminhelp', None, 'Shows this screen', helpAdmin).register(admin_command_registry)
+Command('adminhelp', None, 'Shows this screen', help_admin, 'ah').register(admin_command_registry)

@@ -182,4 +182,4 @@ Command('leaderboard', None,
 
 Command('nuke', None,
     'Delete a user from the reputation database.',
-    leaderboard, 'l').register(admin_command_registry)
+    nuke).register(admin_command_registry)

@@ -164,7 +164,9 @@ async def leaderboard(message):
     i = 0
     for row in rows:
         i += 1
-        embed.add_field(name='#' + str(i), value=discordclient.get_user(row[0]).mention + str(row[1]), inline=False)
+        embed.add_field(name='#' + str(i),
+            value=discordclient.get_user_info(row[0]).name + str(row[1]),
+            inline=False)
 
     await message.channel.send(embed=embed)
 

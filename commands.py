@@ -53,7 +53,7 @@ async def help(message):
     prefix = botdata[0]
     url = botdata[2]
 
-    embed = discord.Embed(title="Command list", color=0x25b037)
+    embed = discord.Embed(title="Command list", color=0x215FF3)
     embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/525140186762575873/837189807411036200/unknown.png")
     embed.add_field(name='Prefix',
         value=prefix, inline=False)

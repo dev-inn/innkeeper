@@ -1,4 +1,7 @@
-# innkeeper
+# Innkeeper
+
+[![Lint and Test](https://github.com/dev-inn/innkeeper/actions/workflows/python-app.yml/badge.svg)](https://github.com/dev-inn/innkeeper/actions/workflows/python-app.yml)
+
 Bot for the Developer’s Inn Discord server
 
 ## User Guide

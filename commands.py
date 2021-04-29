@@ -2,17 +2,18 @@
 command_registry = { }
 
 class Command:
-    def __init__(name, description, function):
+    def __init__(self, name, description, function):
         self.name = name
         self.description = description
         self.function = function
 
-    def register(registry=command_registry):
-        if command_registry[name]:
-            print('WARNING: ' + name + 'is already registered. Overwriting.')
-        command_registry[name] = self
+    def register(self, registry=command_registry):
+        if self.name in command_registry:
+            print('WARNING: ' + self.name
+                + 'is already registered. Overwriting.')
+        command_registry[self.name] = self
 
-    def invoke(message):
+    def invoke(self, message):
         self.function(message)
 
 ###--------------------------------------------------------------------------###

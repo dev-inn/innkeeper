@@ -38,12 +38,9 @@ async def on_message(message):
     #     await message.channel.send("Command not found!")
 
     command = message.content.replace(prefix,'').split(" ")[0]
-    command_registry[command](message)
-
-async def help(message):
-    print("help command recieved")
-    embed=discord.Embed(title="Command list") # create an embed named "Command list"
-    embed.add_field(name="..help", value="Shows this embed", inline=False) # TODO: instead of writing these out by hand, have a dict of commands
-    await message.channel.send(embed=embed) # send the embed
+    if command in command_registry:
+        command_registry[command].invoke(message)
+    else:
+        await message.channel.send('Oops, I don\'t recognize that command')
 
 client.run(TOKEN) # run the bot

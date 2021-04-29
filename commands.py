@@ -71,7 +71,7 @@ async def leaderboard(message):
     reputation points abailable in (somewhere).
     '''
     embed = discord.Embed(title="Leaderboard")
-        embed.add_field(name='#1', value='Test User', inline = False)
+    embed.add_field(name='#1', value='Test User', inline = False)
     await message.channel.send(embed=embed)
 
 Command('leaderboard', 'Shows a list of the top users by xp and reputation points.', leaderboard).register()

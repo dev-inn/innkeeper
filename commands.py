@@ -47,11 +47,11 @@ async def award(message):
 
 Command('award', 'Awards a user with a reputation point', award).register()
 
-async def status(message):
+async def reputation(message):
     '''
-    Get the score of a user.
+    Get the reputation of a user.
     '''
     user = message.content.split(' ')[1]
     await message.channel.send(user + ' has 1 reputation point.')
 
-Command('status', 'Get the score of a user.', status).register()
+Command('reputation', 'Get the reputation of a user.', reputation).register()

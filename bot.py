@@ -33,7 +33,8 @@ client = discord.Client() # set up bot with discord api
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!') # just a debug message to let us know bot is up and running
-    await client.user.edit(avatar=pfp) # adds an avatar to the bot
+    if (client.user.avatar != pfp):
+        await client.user.edit(avatar=pfp) # adds an avatar to the bot
 
 @client.event
 async def on_message(message):

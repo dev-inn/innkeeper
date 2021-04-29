@@ -130,8 +130,9 @@ async def reputation(message):
     plurality = 's'
     if reputation == 1:
         plurality = ''
-    await message.channel.send(user.mention + ' is rank ' + db.get_rank(user.id)
-        + ' with ' + str(reputation) + ' reputation.')
+    await message.channel.send(user.mention + ' is rank '
+        + str(db.get_rank(user.id)) + ' with ' + str(reputation)
+        + ' reputation.')
 
 
 async def rank(message):

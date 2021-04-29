@@ -113,6 +113,26 @@ def award(fromUserID, toUserID, quantity=1):
     connection.commit()
     return reputation + quantity
 
+def set_rank(userID, rank):
+    '''
+    Set a user's new rank
+    '''
+    if not exists(userID):
+        register(userID)
+
+    cursor.execute("UPDATE reputation SET rank = ? WHERE id = ?",
+                   (rank, userID))
+    connection.commit()
+
+def get_rank(userID):
+    '''
+    Return user rank
+    '''
+    rows = cursor.execute(
+        "SELECT rank FROM reputation WHERE id = ?", (userID,), ).fetchall()
+    if not rows:
+        return 1
+    return rows[0][0]
 
 def reload_awards(rankID, quantity):
     '''

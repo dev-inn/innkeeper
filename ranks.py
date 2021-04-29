@@ -2,6 +2,8 @@
 
 rank_registry = {}
 
+# local imports
+import database as db
 
 class Rank:
     def __init__(self, rank, entry_rep, budget, name, role):
@@ -23,15 +25,21 @@ class Rank:
                   + 'is already registered. Overwriting.')
         registry[self.name] = self
 
-    @staticmethod
-    def assign_rank(userID):
-        return
+    def assign_rank(userID, rank):
+        '''
+        userID - integer
+        rank - Rank object
+        '''
+        db.set_rank(userID, rank.rank)
 
     @staticmethod
     def getRankForRep(rep):
-        for rank in rank_registry:  # sorry this is just a brute force search
-            if rank.entry_rep <= rep:
-                return rank
+        highest_rank = rank_registry.items().first()
+        # TODO: can we improve on brute force?
+        for rank in rank_registry:
+            if rank.entry_rep > highest_rank and rank.entry_rep <= rep:
+                highest_rank = rank
+        return highest_rank
 
 
 ###--------------------------------------------------------------------------###

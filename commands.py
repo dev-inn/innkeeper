@@ -4,6 +4,7 @@ import discord
 
 # local imports
 import database as db
+from ranks import Rank
 
 command_registry = {}
 
@@ -103,10 +104,11 @@ async def award(message):
             + 'to give. Credits reload every 6 hours.')
         return
 
-    db.award(message.author.id, user.id)
+    reputation = db.award(message.author.id, user.id)
     await message.channel.send('Awarded 1 reputation to ' + user.mention + '. ' +
                                message.author.mention + ' has ' + str(db.getCredits(message.author.id)) +
                                ' remaining credits.')
+    Rank.getRankForRep(reputation).assign_rank(user.id)
 
 
 async def reputation(message):
@@ -128,27 +130,9 @@ async def reputation(message):
     plurality = 's'
     if reputation == 1:
         plurality = ''
-    await message.channel.send(user.mention + ' has ' + str(reputation)
-                               + ' reputation point' + plurality + '.')
-
-
-async def rank(message):
-    '''
-    Get the rank of the user.
-    '''
-    contents = message.content.split(' ')
-    user = message.author
-    if len(message.mentions) == 1:
-        user = message.mentions[0]
-    elif len(contents) > 1:
-        await message.channel.send(
-            'Too many words. Try `' + botdata[0]
-            + 'rank <username>`.')
-        return
-    id = user.id  # key to the database
-
-    await message.channel.send(user.mention + ' is rank #1, level 83.')
-
+    await message.channel.send(user.mention + ' is rank '
+        + str(db.get_rank(user.id)) + ' with ' + str(reputation)
+        + ' reputation.')
 
 async def leaderboard(message):
     '''
@@ -178,10 +162,7 @@ Command('award', '<username>',
         'Awards a user with a reputation point', award, 'a').register()
 
 Command('reputation', '<username>',
-        'Get the reputation of a user.', reputation, 'r').register()
-
-Command('rank', '<username>',
-        'Get the rank of a user.', rank).register()
+        'Get the rank and reputation of a user.', reputation, 'r').register()
 
 Command('leaderboard', None,
         'Shows a list of the top users by xp and reputation points.',

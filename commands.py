@@ -7,8 +7,11 @@ import sqlite3
 command_registry = { }
 
 class Command:
-    def __init__(self, name, description, function):
+    def __init__(self, name, args, description, function):
         self.name = name
+        self.args = args
+        if args is None:
+            self.args = ''
         self.description = description
         self.function = function
 
@@ -33,10 +36,11 @@ async def help(message):
     embed = discord.Embed(title="Command list")
     for cmd_name in command_registry:
         cmd = command_registry[cmd_name]
-        embed.add_field(name=cmd.name, value=cmd.description, inline=False)
+        embed.add_field(name=cmd.name + ' ' + cmd.args,
+            value=cmd.description, inline=False)
     await message.channel.send(embed=embed)
 
-Command('help', 'Shows a list of available commands.', help).register()
+Command('help', None, 'Shows a list of available commands.', help).register()
 
 async def award(message):
     '''
@@ -45,7 +49,7 @@ async def award(message):
     user = message.content.split(' ')[1]
     await message.channel.send('Awarded 1 reputation to ' + user + '.')
 
-Command('award', 'Awards a user with a reputation point', award).register()
+Command('award', '<username>','Awards a user with a reputation point', award).register()
 
 async def reputation(message):
     '''
@@ -54,7 +58,7 @@ async def reputation(message):
     user = message.content.split(' ')[1]
     await message.channel.send(user + ' has 1 reputation point.')
 
-Command('reputation', 'Get the reputation of a user.', reputation).register()
+Command('reputation', '<username>', 'Get the reputation of a user.', reputation).register()
 
 async def rank(message):
     '''
@@ -63,7 +67,7 @@ async def rank(message):
     user = message.content.split(' ')[1]
     await message.channel.send(user + ' is rank #1, level 83.')
 
-Command('rank', 'Get the rank of a user.', rank).register()
+Command('rank', '<username>', 'Get the rank of a user.', rank).register()
 
 async def leaderboard(message):
     '''
@@ -74,6 +78,6 @@ async def leaderboard(message):
     embed.add_field(name='#1', value='Test User', inline = False)
     await message.channel.send(embed=embed)
 
-Command('leaderboard', 'Shows a list of the top users by xp and reputation points.', leaderboard).register()
+Command('leaderboard', None, 'Shows a list of the top users by xp and reputation points.', leaderboard).register()
 
 # xpGain = random.randint(15, 25) -- Use this for getting a random xp to give each time a user sends a message

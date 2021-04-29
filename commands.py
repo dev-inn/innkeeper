@@ -1,8 +1,9 @@
 # commands.py
 
-import os
 import discord
-import sqlite3
+
+# local imports
+import database as db
 
 command_registry = { }
 
@@ -65,7 +66,7 @@ async def award(message):
         await message.channel.send('You can\'t award yourself!')
         return
     id = user.id # key to the database
-
+    db.award(id)
     await message.channel.send('Awarded 1 reputation to ' + user.mention + '.')
 
 Command('award', '<username>',
@@ -85,7 +86,12 @@ async def reputation(message):
         return
     id = user.id # key to the database
 
-    await message.channel.send(user.mention + ' has 1 reputation point.')
+    reputation = db.getReputation(id)
+    plurality = 's'
+    if reputation == 1:
+        plurality = ''
+    await message.channel.send(user.mention + ' has ' + str(reputation)
+        + ' reputation point' + plurality + '.')
 
 Command('reputation', '<username>',
     'Get the reputation of a user.', reputation).register()

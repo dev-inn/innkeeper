@@ -41,7 +41,7 @@ async def on_message(message):
     command = message.content.replace(prefix,'').split(" ")[0]
 
     if command == "help":
-        help(message)
+        await help(message)
     else:
         print("invalid")
         # do other things

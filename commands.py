@@ -37,3 +37,12 @@ async def help(message):
     await message.channel.send(embed=embed)
 
 Command('help', 'Shows a list of available commands', help).register()
+
+async def award(message):
+    '''
+    Awards a user with a reputation point.
+    '''
+    user = message.content.split(' ')[1]
+    await message.channel.send('Awarded 1 reputation to ' + user)
+
+Command('help', 'Shows a list of available commands', help).register()

@@ -5,7 +5,7 @@ import discord
 import sqlite3
 
 # local imports
-import commands
+from commands import *
 
 prefix = "?"
 
@@ -39,7 +39,7 @@ async def on_message(message):
 
     command = message.content.replace(prefix,'').split(" ")[0]
     if command in command_registry:
-        command_registry[command].invoke(message)
+        await command_registry[command].invoke(message)
     else:
         await message.channel.send('Oops, I don\'t recognize that command')
 

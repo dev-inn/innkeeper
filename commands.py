@@ -149,13 +149,13 @@ async def leaderboard(message):
     reputation points abailable in (somewhere).
     '''
     embed = discord.Embed(title="Leaderboard")
+    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/525140186762575873/837189807411036200/unknown.png")
     # embed.add_field(name='#1', value='Test User', inline=False)
     rows = db.leaderboard()
     i = 0
     for row in rows:
         i += 1
-        embed.add_field(name='#' + str(i), value=(await discordclient.fetch_user(row[0])).mention + str(row[1]),
-                        inline=False)
+        embed.add_field(name='#' + str(i), value=(await discordclient.fetch_user(row[0])).mention + str(row[1]))
 
     await message.channel.send(embed=embed)
 

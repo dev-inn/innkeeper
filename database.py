@@ -113,16 +113,15 @@ def award(fromUserID, toUserID, quantity=1):
     connection.commit()
     return reputation + quantity
 
-def set_rank(userID):
+def set_rank(userID, rank):
     '''
     Set a user's new rank
     '''
     if not exists(userID):
         register(userID)
 
-    reputation = getReputation(toUserID)
     cursor.execute("UPDATE reputation SET rank = ? WHERE id = ?",
-                   (rank, toUserID))
+                   (rank, userID))
     connection.commit()
 
 def get_rank(userID):

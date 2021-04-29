@@ -5,6 +5,7 @@ import sys
 
 # local imports
 import commands
+import admin_commands
 import scheduled_jobs as sj
 from commands import *
 

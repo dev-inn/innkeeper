@@ -30,7 +30,7 @@ async def help(message):
     Creates and sends a discord embed with a list of all command names and
     descriptions avalable in the command_registry.
     '''
-    embed=discord.Embed(title="Command list")
+    embed = discord.Embed(title="Command list")
     for cmd_name in command_registry:
         cmd = command_registry[cmd_name]
         embed.add_field(name=cmd.name, value=cmd.description, inline=False)
@@ -55,3 +55,25 @@ async def reputation(message):
     await message.channel.send(user + ' has 1 reputation point.')
 
 Command('reputation', 'Get the reputation of a user.', reputation).register()
+
+async def rank(message):
+    '''
+    Get the rank of the user.
+    '''
+    user = message.content.split(' ')[1]
+    await message.channel.send(user + ' is rank #1, level 83.')
+
+Command('rank', 'Get the rank of a user.', rank).register()
+
+async def leaderboard(message):
+    '''
+    Creates and sends a discord embed with a list of the top users by xp and
+    reputation points abailable in (somewhere).
+    '''
+    embed = discord.Embed(title="Leaderboard")
+        embed.add_field(name='#1', value='Test User', inline = False)
+    await message.channel.send(embed=embed)
+
+Command('leaderboard', 'Shows a list of the top users by xp and reputation points.', leaderboard).register()
+
+# xpGain = random.randint(15, 25) -- Use this for getting a random xp to give each time a user sends a message

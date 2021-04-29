@@ -8,7 +8,7 @@ global cursor
 def start_rankdb_with_connection(cn):
     global connection
     global cursor
-    connection = connection
+    connection = cn
     cursor = connection.cursor()
 
     table_types = {

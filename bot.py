@@ -2,12 +2,11 @@
 
 import os
 import sys
-import discord
 
 # local imports
 import commands
-from commands import *
 import scheduled_jobs as sj
+from commands import *
 
 with open('botdata.txt', 'r') as file:
     botdata = file.read().split(",")  # get variables from botdata.txt
@@ -24,13 +23,13 @@ pfp = fp.read()
 TOKEN = os.environ.get("DISCORD_TOKEN")
 if TOKEN is None:
     TOKEN = sys.argv[1]
-
 client = discord.Client()  # set up bot with discord api
-commands.setdiscordclient(client) # passes client object to commands.py
+
 
 
 @client.event
 async def on_ready():
+    commands.setdiscordclient(client)  # passes client object to commands.py
     print(f'{client.user} has connected to Discord!')  # just a debug message to let us know bot is up and running
     if (client.user.avatar != pfp):
         await client.user.edit(avatar=pfp)  # adds an avatar to the bot

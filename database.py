@@ -5,7 +5,7 @@ import sqlite3
 connection = sqlite3.connect('reputation.db')
 cursor = connection.cursor()
 cursor.execute(
-    "CREATE TABLE IF NOT EXISTS reputation (id INTEGER, value INTEGER, rank INTEGER)")
+    "CREATE TABLE IF NOT EXISTS reputation (id INTEGER, value INTEGER, rank INTEGER, credits INTEGER)")
 
 def disconnectDB():
     return
@@ -18,11 +18,28 @@ def exists(userID):
         "SELECT value FROM reputation WHERE id = ?", (userID,),).fetchall()
     return len(rows) > 0
 
+def getCredits(userID):
+    '''
+    Returns the users award credits.
+    '''
+    rows = cursor.execute(
+        "SELECT credits FROM reputation WHERE id = ?", (userID,),).fetchall()
+    if not rows:
+        return 0
+    return rows[0][0]
+
+def subtractCredits(userID, quantity=1):
+    '''
+    Removes one award credit.
+    '''
+    cursor.execute("UPDATE reputation SET credits = ? WHERE id = ?",
+        (getCredits(userID) -1, userID))
+
 def register(userID):
     '''
     Register a user into the database with a reputation of 0.
     '''
-    cursor.execute("INSERT INTO reputation VALUES (?, ?, ?)", (userID, 0, 1),)
+    cursor.execute("INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 0, 1, 1),)
     connection.commit()
 
 def getReputation(userID):
@@ -35,23 +52,27 @@ def getReputation(userID):
         return 0
     return rows[0][0]
 
-def award(userID, quantity=1):
+def award(fromUserID, toUserID, quantity=1):
     '''
     increment user score by one. Return new user score
     '''
-    if not exists(userID):
-        register(userID)
-    reputation = getReputation(userID)
+    if not exists(fromUserID):
+        register(fromUserID)
+    if not exists(toUserID):
+        register(toUserID)
+
+    subtractCredits(fromUserID, quantity)
+    reputation = getReputation(toUserID)
     cursor.execute("UPDATE reputation SET value = ? WHERE id = ?",
-        (reputation + quantity, userID))
+        (reputation + quantity, toUserID))
     connection.commit()
     return reputation + quantity
 
-def reload_awards(rankID, quantity=1):
+def reload_awards(rankID, quantity):
     '''
     increment user score by one. Return new user score
     '''
-    cursor.execute("UPDATE reputation SET value = ? WHERE rank = ?",
+    cursor.execute("UPDATE reputation SET credits = ? WHERE rank = ?",
         (quantity, rankID))
     connection.commit()
 

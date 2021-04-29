@@ -90,8 +90,13 @@ async def award(message):
     if user == message.author:
         await message.channel.send('You can\'t award yourself!')
         return
-    id = user.id # key to the database
-    db.award(id)
+    if db.getCredits(message.author.id) == 0:
+        await message.channel.send(
+            'Sorry, ' + message.author.mention + ', you have no awards left '
+            + 'to give. Credits reload every 6 hours.')
+        return
+
+    db.award(message.author.id, user.id)
     await message.channel.send('Awarded 1 reputation to ' + user.mention + '.')
 
 async def reputation(message):

@@ -14,7 +14,7 @@ def reload_awards():
 
     # Reload a budget equal to user rank
     # e.g. 1 award budget per 1 rank every 6 hrs
-    for rank in rank_registry:
+    for rank in ranks.rank_registry:
         db.reload_awards(rank.rank, rank.budget)
 
 ###--------------------------------------------------------------------------###

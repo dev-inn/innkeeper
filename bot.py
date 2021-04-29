@@ -51,9 +51,9 @@ async def on_message(message):
         await command_registry[command].invoke(message)
     elif command in hidden_command_registry:  # if the command exists, run it
         await hidden_command_registry[command].invoke(message)
-    elif command in admin_command_registry:  # if the command exists, run it
+    elif command in admin_commands.admin_command_registry:  # if the command exists, run it
         # TODO: verify permissions, or check if we are in debug mode
-        await admin_command_registry[command].invoke(message)
+        await admin_commands.admin_command_registry[command].invoke(message)
     else:
         await message.channel.send('Oops, I don\'t recognize that command')
 

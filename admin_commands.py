@@ -1,5 +1,7 @@
 # admin_commands.py
 # these are only available to admin users
+import bot
+
 admin_command_registry = {}
 
 # local imports
@@ -20,7 +22,7 @@ async def nuke(message):
         user = message.mentions[0]
     else:
         await message.channel.send(
-            'Try `' + botdata[0] + 'nuke <username>`.')
+            'Try `' + bot.botdata[0] + 'nuke <username>`.')
         return
     id = user.id  # key to the database
     db.nuke(id)
@@ -37,7 +39,7 @@ async def setCredits(message):
     if (len(message.mentions) == 1):
         user = message.mentions[0]
     else:
-        await message.channel.send('Try `' + botdata[0] + 'setCredits <user> <amount>')
+        await message.channel.send('Try `' + bot.botdata[0] + 'setCredits <user> <amount>')
         return
     try:
         amt = int(contents[2])

@@ -192,7 +192,7 @@ async def setCredits(message):
         await message.channel.send('Invalid amount, must be integer amount of credits')
         return
     db.setCredits(user.id, amt)
-    await message.channel.send('Successfully set ' + user.mention + '\'s credits to ' + amt)
+    await message.channel.send('Successfully set ' + user.mention + '\'s credits to ' + str(amt))
 
 
 # xpGain = random.randint(15, 25) -- Use this for getting a random xp to give each time a user sends a message

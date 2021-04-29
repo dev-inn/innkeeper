@@ -1,9 +1,12 @@
 # database.py
 
 import sqlite3
-import rank_database
-import user_database
+import rank_database as rdb
+import user_database as udb
 
 connection = sqlite3.connect('reputation.db')
-start_rankdb_with_connection(connection)
-start_userdb_with_connection(connection)
+rdb.start_rankdb_with_connection(connection)
+udb.start_userdb_with_connection(connection)
+
+from rank_database import *
+from user_database import *

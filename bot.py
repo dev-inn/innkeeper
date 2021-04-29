@@ -23,9 +23,6 @@ TOKEN = os.environ.get("DISCORD_TOKEN")
 if TOKEN is None:
     TOKEN = sys.argv[1]
 
-# connect to database
-con = sqlite3.connect('reputation.db')
-
 client = discord.Client() # set up bot with discord api
 
 @client.event
@@ -47,6 +44,8 @@ async def on_message(message):
         return
     if command in command_registry: # if the command exists, run it
         await command_registry[command].invoke(message)
+    elif command in hidden_command_registry: # if the command exists, run it
+        await hidden_command_registry[command].invoke(message)
     else:
         await message.channel.send('Oops, I don\'t recognize that command')
 

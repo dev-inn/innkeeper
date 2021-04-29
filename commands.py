@@ -11,9 +11,10 @@ command_registry = {}
 # these do not show up in help section
 hidden_command_registry = {}
 
-global discordclient # holds a copy of the client object
+global discordclient  # holds a copy of the client object
 
-def setdiscordclient(c): # allows object to be set from outside file
+
+def setdiscordclient(c):  # allows object to be set from outside file
     global discordclient
     discordclient = c
 
@@ -82,12 +83,12 @@ async def award(message):
     if len(contents) == 1:
         await message.channel.send(
             'This command needs a username. Try `' + botdata[0]
-            + 'award <username>`.')
+            + 'award <username> <?amount>`.')
         return
-    elif len(contents) > 2:
+    elif len(contents) > 3:
         await message.channel.send(
             'Too many words. Try `' + botdata[0]
-            + 'award <username>`.')
+            + 'award <username> <?amount>`.')
         return
     elif len(message.mentions) != 1:
         await message.channel.send(
@@ -98,14 +99,22 @@ async def award(message):
     if user == message.author:
         await message.channel.send('You can\'t award yourself!')
         return
-    if db.getCredits(message.author.id) == 0:
+
+    amt = 1
+    if (len(contents) == 3):
+        try:
+            amt = int(contents[3])
+        except:
+            print("failed to parse amount")
+
+    if db.getCredits(message.author.id) < amt:
         await message.channel.send(
-            'Sorry, ' + message.author.mention + ', you have no awards left '
+            'Sorry, ' + message.author.mention + ', you dont have enough awards left'
             + 'to give. Credits reload every 6 hours.')
         return
 
-    reputation = db.award(message.author.id, user.id)
-    await message.channel.send('Awarded 1 reputation to ' + user.mention + '. ' +
+    reputation = db.award(message.author.id, user.id, quantity=amt)
+    await message.channel.send('Awarded ' + amt + ' reputation to ' + user.mention + '. ' +
                                message.author.mention + ' has ' + str(db.getCredits(message.author.id)) +
                                ' remaining credits.')
     Rank.getRankForRep(reputation).assign_rank(user.id)
@@ -131,8 +140,9 @@ async def reputation(message):
     if reputation == 1:
         plurality = ''
     await message.channel.send(user.mention + ' is rank '
-        + str(db.get_rank(user.id)) + ' with ' + str(reputation)
-        + ' reputation.')
+                               + str(db.get_rank(user.id)) + ' with ' + str(reputation)
+                               + ' reputation.')
+
 
 async def leaderboard(message):
     '''
@@ -145,9 +155,11 @@ async def leaderboard(message):
     i = 0
     for row in rows:
         i += 1
-        embed.add_field(name='#' + str(i), value=(await discordclient.fetch_user(row[0])).mention + str(row[1]), inline=False)
+        embed.add_field(name='#' + str(i), value=(await discordclient.fetch_user(row[0])).mention + str(row[1]),
+                        inline=False)
 
     await message.channel.send(embed=embed)
+
 
 # xpGain = random.randint(15, 25) -- Use this for getting a random xp to give each time a user sends a message
 

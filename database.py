@@ -42,6 +42,8 @@ def getCredits(userID):
     '''
     Returns the users award credits.
     '''
+    if not exists(userID):
+        register(userID)
     rows = cursor.execute(
         "SELECT credits FROM reputation WHERE id = ?", (userID,),).fetchall()
     if not rows:
@@ -53,7 +55,7 @@ def subtractCredits(userID, quantity=1):
     Removes one award credit.
     '''
     cursor.execute("UPDATE reputation SET credits = ? WHERE id = ?",
-        (getCredits(userID) -1, userID))
+        (getCredits(userID) - quantity, userID))
 
 def register(userID):
     '''

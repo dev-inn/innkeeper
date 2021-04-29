@@ -13,6 +13,12 @@ with open('botdata.txt', 'r') as file:
 prefix = botdata[0] # set prefix to the first in there
 print(botdata[1]) # print out the second (just for debug purposes)
 
+# Avatar
+pfp_path = "avatar.png"
+
+fp = open(pfp_path, 'rb')
+pfp = fp.read()
+
 # load secrets
 TOKEN = os.environ.get("DISCORD_TOKEN")
 
@@ -24,6 +30,7 @@ client = discord.Client() # set up bot with discord api
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!') # just a debug message to let us know bot is up and running
+    await client.user.edit(avatar=pfp) # adds an avatar to the bot
 
 @client.event
 async def on_message(message):

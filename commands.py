@@ -103,7 +103,7 @@ async def award(message):
     amt = 1
     if (len(contents) == 3):
         try:
-            amt = int(contents[3])
+            amt = int(contents[2])
         except:
             print("failed to parse amount")
 

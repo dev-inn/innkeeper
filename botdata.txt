@@ -1,1 +1,1 @@
-?,avatar.jpg,
+?,avatar.jpg,https://github.com/dev-inn/innkeeper,

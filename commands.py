@@ -7,9 +7,13 @@ import database as db
 
 command_registry = { }
 
+# these do not show up in help section
+hidden_command_registry = { }
+
 class Command:
-    def __init__(self, name, args, description, function):
+    def __init__(self, name, args, description, function, shorthand=None):
         self.name = name
+        self.shorthand = shorthand
         self.args = args
         if args is None:
             self.args = ''
@@ -17,10 +21,15 @@ class Command:
         self.function = function
 
     def register(self, registry=command_registry):
-        if self.name in command_registry:
+        if self.name in registry:
             print('WARNING: ' + self.name
                 + 'is already registered. Overwriting.')
-        command_registry[self.name] = self
+        registry[self.name] = self
+
+        if self.shorthand and self.shorthand in hidden_command_registry:
+            print('WARNING: ' + self.shorthand
+                + 'is already registered. Overwriting.')
+        hidden_command_registry[self.shorthand] = self
 
     async def invoke(self, message):
         await self.function(message)
@@ -29,20 +38,28 @@ class Command:
 ### Command Implementations                                                  ###
 ###--------------------------------------------------------------------------###
 
+with open('botdata.txt', 'r') as file:
+    botdata = file.read().split(",") # get variables from botdata.txt
+
 async def help(message):
     '''
     Creates and sends a discord embed with a list of all command names and
     descriptions avalable in the command_registry.
     '''
+
+    prefix = botdata[0]
+    url = botdata[2]
+
     embed = discord.Embed(title="Command list", color=0x25b037)
+    embed.add_field(name='Prefix',
+        value=prefix, inline=False)
     for cmd_name in command_registry:
         cmd = command_registry[cmd_name]
         embed.add_field(name=cmd.name + ' ' + cmd.args,
             value=cmd.description, inline=False)
+    embed.add_field(name='Need support?',
+        value=url, inline=False)
     await message.channel.send(embed=embed)
-
-Command('help', None,
-    'Shows a list of available commands.', help).register()
 
 async def award(message):
     '''
@@ -51,15 +68,18 @@ async def award(message):
     contents = message.content.split(' ')
     if len(contents) == 1:
         await message.channel.send(
-            'This command needs a username. Try `?award <username>`.')
+            'This command needs a username. Try `' + botdata[0]
+            + 'award <username>`.')
         return
     elif len(contents) > 2:
         await message.channel.send(
-            'Too many words. Try `?award <username>`.')
+            'Too many words. Try `' + botdata[0]
+            + 'award <username>`.')
         return
     elif len(message.mentions) != 1:
         await message.channel.send(
-            'Expected a mention. Did you mean `?award @' + contents[1] +'`?')
+            'Expected a mention. Did you mean `' + botdata[0]
+            + 'award @' + contents[1] +'`?')
         return
     user = message.mentions[0]
     if user == message.author:
@@ -68,9 +88,6 @@ async def award(message):
     id = user.id # key to the database
     db.award(id)
     await message.channel.send('Awarded 1 reputation to ' + user.mention + '.')
-
-Command('award', '<username>',
-    'Awards a user with a reputation point', award).register()
 
 async def reputation(message):
     '''
@@ -82,7 +99,8 @@ async def reputation(message):
         user = message.mentions[0]
     elif len(contents) > 1:
         await message.channel.send(
-            'Too many words. Try `?reputation <username>`.')
+            'Too many words. Try `' + botdata[0]
+            + 'reputation <username>`.')
         return
     id = user.id # key to the database
 
@@ -92,9 +110,6 @@ async def reputation(message):
         plurality = ''
     await message.channel.send(user.mention + ' has ' + str(reputation)
         + ' reputation point' + plurality + '.')
-
-Command('reputation', '<username>',
-    'Get the reputation of a user.', reputation).register()
 
 async def rank(message):
     '''
@@ -106,14 +121,12 @@ async def rank(message):
         user = message.mentions[0]
     elif len(contents) > 1:
         await message.channel.send(
-            'Too many words. Try `?rank <username>`.')
+            'Too many words. Try `' + botdata[0]
+            + 'rank <username>`.')
         return
     id = user.id # key to the database
 
     await message.channel.send(user.mention + ' is rank #1, level 83.')
-
-Command('rank', '<username>',
-    'Get the rank of a user.', rank).register()
 
 async def leaderboard(message):
     '''
@@ -124,7 +137,24 @@ async def leaderboard(message):
     embed.add_field(name='#1', value='Test User', inline = False)
     await message.channel.send(embed=embed)
 
-Command('leaderboard', None,
-    'Shows a list of the top users by xp and reputation points.', leaderboard).register()
-
 # xpGain = random.randint(15, 25) -- Use this for getting a random xp to give each time a user sends a message
+
+###--------------------------------------------------------------------------###
+### Register Commands                                                        ###
+###--------------------------------------------------------------------------###
+
+Command('help', None,
+    'Shows a list of available commands.', help, 'h').register()
+
+Command('award', '<username>',
+    'Awards a user with a reputation point', award, 'a').register()
+
+Command('reputation', '<username>',
+    'Get the reputation of a user.', reputation, 'r').register()
+
+Command('rank', '<username>',
+    'Get the rank of a user.', rank).register()
+
+Command('leaderboard', None,
+    'Shows a list of the top users by xp and reputation points.',
+    leaderboard, 'l').register()

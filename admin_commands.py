@@ -1,7 +1,5 @@
 # admin_commands.py
 # these are only available to admin users
-import bot
-
 admin_command_registry = {}
 
 # local imports
@@ -11,6 +9,15 @@ from commands import Command
 ###--------------------------------------------------------------------------###
 ### Command Implementations                                                  ###
 ###--------------------------------------------------------------------------###
+
+
+global botdata
+
+
+def setBotData(data):
+    global botdata
+    botdata= data
+
 
 async def nuke(message):
     '''
@@ -22,7 +29,7 @@ async def nuke(message):
         user = message.mentions[0]
     else:
         await message.channel.send(
-            'Try `' + bot.botdata[0] + 'nuke <username>`.')
+            'Try `' + botdata[0] + 'nuke <username>`.')
         return
     id = user.id  # key to the database
     db.nuke(id)
@@ -39,7 +46,7 @@ async def setCredits(message):
     if (len(message.mentions) == 1):
         user = message.mentions[0]
     else:
-        await message.channel.send('Try `' + bot.botdata[0] + 'setCredits <user> <amount>')
+        await message.channel.send('Try `' + botdata[0] + 'setCredits <user> <amount>')
         return
     try:
         amt = int(contents[2])
@@ -49,13 +56,14 @@ async def setCredits(message):
     db.setCredits(user.id, amt)
     await message.channel.send('Successfully set ' + user.mention + '\'s credits to ' + str(amt))
 
+
 ###--------------------------------------------------------------------------###
 ### Register Commands                                                        ###
 ###--------------------------------------------------------------------------###
 
 Command('nuke', None,
-'Delete a user from the reputation database.',
-nuke).register(admin_command_registry)
+        'Delete a user from the reputation database.',
+        nuke).register(admin_command_registry)
 
 Command('setcredits', '<username> <amount>', 'Sets a users credits to specified amount',
-setCredits).register(admin_command_registry)
+        setCredits).register(admin_command_registry)

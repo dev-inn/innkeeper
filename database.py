@@ -14,8 +14,12 @@ table_types = {
 # create the sqlite table string
 table_string = '('
 for col, type in table_types.items():
-    table_string += col + ' ' + type + ' '
+    table_string += col + ' ' + type + ','
+
+table_string = table_string[:len(table_string)-1]
 table_string += ')'
+
+print(table_string)
 
 cursor = connection.cursor()
 cursor.execute(

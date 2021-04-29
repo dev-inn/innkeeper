@@ -5,6 +5,7 @@ rank_registry = {}
 # local imports
 import database as db
 
+
 class Rank:
     def __init__(self, rank, entry_rep, budget, name, role):
         '''
@@ -37,7 +38,7 @@ class Rank:
         highest_rank = rank_registry.items().first()
         # TODO: can we improve on brute force?
         for rank in rank_registry:
-            if rank.entry_rep > highest_rank and rank.entry_rep <= rep:
+            if highest_rank < rank.entry_rep <= rep:
                 highest_rank = rank
         return highest_rank
 

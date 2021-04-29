@@ -3,12 +3,14 @@ import os
 import sys
 
 # local imports
-from threading import Thread
-
 import commands
 import admin_commands
 import scheduled_jobs as sj
 from commands import *
+import time
+
+lastCheckedTime = time.time()
+scheduleInterval = 6 * 60 * 60  # 6 hours x 60 mins x 60 secs gets 6 hours in seconds
 
 with open('botdata.txt', 'r') as file:
     botdata = file.read().split(",")  # get variables from botdata.txt
@@ -57,10 +59,8 @@ async def on_message(message):
     else:
         await message.channel.send('Oops, I don\'t recognize that command')
 
+    if lastCheckedTime + scheduleInterval < time.time():
+        sj.run_scheduler()
 
-# launches scheduler on a new thread
-thread = Thread(target=sj.run_scheduler)
-thread.start()
 
 client.run(TOKEN)  # run the bot
-thread.join()

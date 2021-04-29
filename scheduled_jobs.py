@@ -1,11 +1,9 @@
 # scheduled_jobs.py
 
-import schedule
-import time
-
 # local imports
 import database as db
 import ranks
+
 
 def reload_awards():
     '''
@@ -14,23 +12,24 @@ def reload_awards():
 
     # Reload a budget equal to user rank
     # e.g. 1 award budget per 1 rank every 6 hrs
-    try: # need this else the thread can crash
-        for rank in ranks.rank_registry:
+    try:  # need this else the thread can crash
+        for rankName in ranks.rank_registry:
+            rank = ranks.rank_registry[rankName]
+            print(rank.entry_rep)
             db.reload_awards(rank.rank, rank.budget)
-    except:
+    except Exception as e:
         print("Error setting budgets")
+        print(e)
+
 
 ###--------------------------------------------------------------------------###
 ### Add the Scheduler                                                        ###
 ###--------------------------------------------------------------------------###
+
 
 def run_scheduler():
     '''
     Add scheduled jobs at the end of bot.py
     '''
 
-    schedule.every(6).seconds.do(reload_awards)
-
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    reload_awards()

@@ -104,8 +104,9 @@ async def award(message):
     if (len(contents) == 3):
         try:
             amt = int(contents[2])
-        except:
+        except Exception as e:
             print("failed to parse amount")
+            print(e)
 
     if db.getCredits(message.author.id) < amt:
         await message.channel.send(
@@ -133,12 +134,10 @@ async def reputation(message):
             'Too many words. Try `' + botdata[0]
             + 'reputation <username>`.')
         return
-    id = user.id  # key to the database
+    uid = user.id  # key to the database
 
-    reputation = db.getReputation(id)
-    plurality = 's'
-    if reputation == 1:
-        plurality = ''
+    reputation = db.getReputation(uid)
+
     await message.channel.send(user.mention + ' is rank '
                                + str(db.get_rank(user.id)) + ' with ' + str(reputation)
                                + ' reputation.')
@@ -170,7 +169,7 @@ async def leaderboard(message):
 Command('help', None,
         'Shows a list of available commands.', help, 'h').register()
 
-Command('award', '<username>',
+Command('award', '<username> <?amount>',
         'Awards a user with a reputation point', award, 'a').register()
 
 Command('reputation', '<username>',

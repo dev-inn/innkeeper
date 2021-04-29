@@ -33,7 +33,7 @@ def getReputation(userID):
         return 0
     return rows[0][0]
 
-def award(userID):
+def award(userID, quantity=1):
     '''
     increment user score by one. Return new user score
     '''
@@ -41,5 +41,16 @@ def award(userID):
         register(userID)
     reputation = getReputation(userID)
     cursor.execute("UPDATE reputation SET value = ? WHERE id = ?",
-        (reputation + 1, userID))
+        (reputation + quantity, userID))
     return 0
+
+def nuke(userID):
+    '''
+    Delete user from database.
+    '''
+
+    # TODO: consider storing in a `recently_deleted`
+    # table so an admin may restore the change
+
+    if exists(userID):
+        cursor.execute("DELETE FROM reputation WHERE id = ?", (userID))

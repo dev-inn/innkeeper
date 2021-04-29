@@ -13,8 +13,15 @@ import time
 lastCheckedTime = time.time()
 scheduleInterval = 6 * 60 * 60  # 6 hours x 60 mins x 60 secs gets 6 hours in seconds
 
+
+def setLastCheckedTime(t):
+    global lastCheckedTime
+    lastCheckedTime = t
+
+
 with open('botdata.txt', 'r') as file:
     botdata = file.read().split(",")  # get variables from botdata.txt
+    admin_commands.setBotData(botdata)
 
 prefix = botdata[0]  # set prefix to the first in there
 
@@ -46,8 +53,8 @@ async def on_message(message):
     if (not message.content.startswith(prefix)):  # if the message doesn't start with the prefix, ignore
         return
 
-    command = message.content.replace(prefix, '').split(" ")[
-        0]  # get the command by getting the message minus the prefix and then getting the first word
+    command = message.content.replace(prefix, '').split(" ")[0]  # get the command by getting the message minus the prefix and then getting the first word
+    command = command.lower()
     if (command == ''):  # if theres nothing but the prefix, ignore
         return
     if command in command_registry:  # if the command exists, run it
@@ -63,9 +70,9 @@ async def on_message(message):
     # i dont like this but its the easiest way to have a non blocking scheduled event that runs repeatedly
     if lastCheckedTime + scheduleInterval < time.time():
         sj.run_scheduler()
-        global lastCheckedTime
-        lastCheckedTime = time.time() - ((
-                    time.time() - lastCheckedTime) - scheduleInterval)  # sets last checked time to when it should have been activated to account for the fact messages arent constantly sent
+
+        setLastCheckedTime(time.time() - ((
+                                        time.time() - lastCheckedTime) - scheduleInterval))  # sets last checked time to when it should have been activated to account for the fact messages arent constantly sent
 
 
 client.run(TOKEN)  # run the bot

@@ -67,7 +67,7 @@ def register(userID):
     Register a user into the database with a reputation of 0.
     '''
     cursor.execute(
-        "INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 0, 1, 1),)
+        "INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 1, 1, 1),)
     connection.commit()
 
 def getReputation(userID):

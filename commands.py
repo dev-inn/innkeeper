@@ -134,25 +134,6 @@ async def reputation(message):
         + str(db.get_rank(user.id)) + ' with ' + str(reputation)
         + ' reputation.')
 
-
-async def rank(message):
-    '''
-    Get the rank of the user.
-    '''
-    contents = message.content.split(' ')
-    user = message.author
-    if len(message.mentions) == 1:
-        user = message.mentions[0]
-    elif len(contents) > 1:
-        await message.channel.send(
-            'Too many words. Try `' + botdata[0]
-            + 'rank <username>`.')
-        return
-    id = user.id  # key to the database
-
-    await message.channel.send(user.mention + ' is rank #1, level 83.')
-
-
 async def leaderboard(message):
     '''
     Creates and sends a discord embed with a list of the top users by xp and
@@ -181,10 +162,7 @@ Command('award', '<username>',
         'Awards a user with a reputation point', award, 'a').register()
 
 Command('reputation', '<username>',
-        'Get the reputation of a user.', reputation, 'r').register()
-
-Command('rank', '<username>',
-        'Get the rank of a user.', rank).register()
+        'Get the rank and reputation of a user.', reputation, 'r').register()
 
 Command('leaderboard', None,
         'Shows a list of the top users by xp and reputation points.',

@@ -99,10 +99,9 @@ async def setprefix(message):
     '''
     ?setprefix <new_prefix>
     '''
-
     contents = message.content.split(' ')
     previousPrefix = botdata[0]
-    botdata[0] = contents
+    botdata[0] = str(contents)
 
     await message.channel.send('Successfully set the prefix to ' + contents)
     #    await message.channel.send('Successfully set the prefix to `' + contents + '` from `' + previousPrefix + '`')

@@ -44,6 +44,7 @@ def subtractCredits(self, userID: int, quantity: int = 1):
     """
     self.cursor.execute("UPDATE reputation SET credits = ? WHERE id = ?",
                         (self.get_credits(userID) - quantity, userID))
+    self.connection.commit()
 
 
 def register(self, userID: int):

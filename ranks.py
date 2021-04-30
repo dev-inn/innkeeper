@@ -8,12 +8,12 @@ rank_registry = {}
 
 class Rank:
     def __init__(self, rank, entry_rep, budget, name, role):
-        '''
+        """
         rank      - integer
         entry_rep - integer, reputation needed to qualify for rank
         budget    - integer, award budget for rank members - added to credits every 6 hours
         role      - discord.Role, role for rank members
-        '''
+        """
         self.rank = rank
         self.entry_rep = entry_rep
         self.budget = budget

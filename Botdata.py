@@ -2,9 +2,11 @@
 
 import configparser
 
+# default values to populate the config file the first time
 default_values = {'debug': 'False', 'prefix': '?', 'pfp': 'avatar.jpg',
-                  'gh_link': 'https://github.com/dev-inn/innkeeper', 'token': '<PUT_YOUR_TOKEN_HERE>'}
-filepath = 'innkeeperbot.cfg'
+                  'gh_link': 'https://github.com/dev-inn/innkeeper', 'token': '<PUT_YOUR_TOKEN_HERE>',
+                  'schedulerInterval': '21600', 'dbfile': 'reputation'}
+filepath = 'innkeeperbot.cfg'  # where config data is stored
 
 
 class Botdata:
@@ -14,12 +16,12 @@ class Botdata:
         self.config.read(filepath)
         self.validate_values()
 
-    def validate_values(self):
+    def validate_values(self):  # if any key,value pair does not exist it is created
         if 'DEFAULT' not in self.config:
             self.config['DEFAULT'] = default_values
             print("Config file created")
             print("Fill in your discord bot api token")
-            quit(0)
+            raise SystemExit
         print(default_values)
         for key in default_values:
             if not key in self.config['DEFAULT']:

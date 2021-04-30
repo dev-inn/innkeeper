@@ -4,37 +4,21 @@ import discord
 
 # local imports
 from Botdata import Botdata
-from Commands import Command
+from Commands import Command, commands
 from Database import DB
 
 
-class Admin_Commands:
+class AdminCommands:
+    # inherit funcs from Commands since they're identical
+    get_command = commands.Commands.get_command
 
-    def get_command(self, name):
-        if name in self.command_registry:
-            return self.command_registry[name]
-        elif name in self.hidden_command_registry:
-            return self.hidden_command_registry[name]
-        else:
-            return None
+    exists = commands.Commands.exists
 
-    def exists(self, name):
-        return name in self.command_registry or name in self.hidden_command_registry
-
-    def register(self, cmd):
-        if cmd.name in self.command_registry:
-            print('WARNING: ' + cmd.name
-                  + 'is already registered. Overwriting.')
-        self.command_registry[cmd.name] = cmd
-
-        if cmd.shorthand and cmd.shorthand in self.hidden_command_registry:
-            print('WARNING: ' + cmd.shorthand
-                  + 'is already registered. Overwriting.')
-        self.hidden_command_registry[cmd.shorthand] = cmd
+    register = commands.Commands.register
 
     def __init__(self, discordclient, botdata: Botdata, db: DB):
         self.botdata = botdata
-        self.discordclient = discordclient
+        self.discord_client = discordclient
         self.db = db
 
         self.command_registry = {}
@@ -77,7 +61,7 @@ class Admin_Commands:
             return
         try:
             amt = int(contents[2])
-        except Exception:
+        except ValueError:
             await message.channel.send('Invalid amount, must be integer amount of credits')
             return
         self.db.set_credits(user.id, amt)
@@ -120,15 +104,15 @@ class Admin_Commands:
 
         await message.channel.send(embed=embed)
 
-    async def setprefix(self, message):
+    async def set_prefix(self, message):
         """
         ?setprefix <new_prefix>
         """
         contents = message.content.split(' ')[-1]
-        previousPrefix = self.botdata.get('prefix')
+        previous_prefix = self.botdata.get('prefix')
         self.botdata.set('prefix', str(contents))
 
-        await message.channel.send('Successfully set the prefix to `' + contents + '` from `' + previousPrefix + '`')
+        await message.channel.send('Successfully set the prefix to `' + contents + '` from `' + previous_prefix + '`')
 
     # -------------------------------------------------------------------------- #
     #  Register Commands                                                         #
@@ -147,6 +131,6 @@ class Admin_Commands:
                               self.newrank))
 
         self.register(Command('setprefix', '<new_prefix>', 'Change the prefix used to execute commands',
-                              self.setprefix))
+                              self.set_prefix))
 
         self.register(Command('adminhelp', None, 'Shows this screen', self.help_admin, 'ah'))

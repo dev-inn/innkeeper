@@ -1,13 +1,15 @@
 import sqlite3
 
+from Botdata import Botdata
 from Database import user_database
 from Database import rank_database
 
 
 class DB:
 
-    def __init__(self):
-        self.connection = sqlite3.connect('../reputation.db')
+    def __init__(self, botdata: Botdata):
+        self.botdata = botdata
+        self.connection = sqlite3.connect('../' + botdata.get('dbfile') + '.db')
         self.cursor = self.connection.cursor()
         self.start_rankdb()
         self.start_userdb()

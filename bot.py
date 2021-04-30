@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     client = discord.Client()  # set up bot with discord api
 
-    db = Database.DB()
+    db = Database.DB(bot)
 
     cmds = commands.Commands(client, bot, db)
     a_cmds = admincommands.AdminCommands(client, bot, db)

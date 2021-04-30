@@ -106,7 +106,6 @@ async def setprefix(message):
     previousPrefix = botdata[0]
     botdata[0] = str(contents)
 
-    sleep(5)
     asyncio.run(changePrefix(botdata[0]))
     
 

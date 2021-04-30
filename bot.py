@@ -74,5 +74,8 @@ async def on_message(message):
         setLastCheckedTime(time.time() - ((
                                         time.time() - lastCheckedTime) - scheduleInterval))  # sets last checked time to when it should have been activated to account for the fact messages arent constantly sent
 
+async def changePrefix(newPrefix):
+    prefix = newPrefix
+
 
 client.run(TOKEN)  # run the bot

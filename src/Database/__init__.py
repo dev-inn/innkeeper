@@ -59,13 +59,13 @@ class DB:
 
         columns = [i[1] for i in self.cursor.execute('PRAGMA table_info(reputation)')]
         if columns != [name for name, _ in table_types.items()]:
-            self.cursor.execute('DROP TABLE reputation CASCADE')
+            self.cursor.execute('DROP TABLE reputation')
             self.cursor.execute(
                 "CREATE TABLE reputation " + table_string)
 
     def nuke_db(self):
-        self.cursor.execute('DROP TABLE reputation CASCADE')
-        self.cursor.execute('DROP TABLE roles CASCADE')
+        self.cursor.execute('DROP TABLE reputation')
+        self.cursor.execute('DROP TABLE roles')
 
     # -------------------------------------------------------------------------- #
     #  Rank DB funcs                                                             #

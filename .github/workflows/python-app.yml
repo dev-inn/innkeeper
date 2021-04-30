@@ -5,9 +5,7 @@ name: Python application
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ main, beta ]
 
 jobs:
   build:
@@ -34,9 +32,17 @@ jobs:
     - name: Test with pytest
       run: |
         # pytest
-    - name: Deploy Webhook
+    - name: Deploy Beta Webhook
       uses: joelwmale/webhook-action@6f6298309b7aa21dc601d8c6271e0be055ce6f0e
+      if: ${{ github.ref == 'refs/heads/beta' }}
+      with:
+        url: ${{ secrets.DEPLOY_BETA_WEBHOOK }}
+        headers: '{"repository": "dev-inn/innkeeper"}'
+        body: '{"event": "beta deployment", "repository": "dev-inn/innkeeper"}'
+    - name: Deploy Production Webhook
+      uses: joelwmale/webhook-action@6f6298309b7aa21dc601d8c6271e0be055ce6f0e
+      if: ${{ github.ref == 'refs/heads/main' }}
       with:
         url: ${{ secrets.DEPLOY_WEBHOOK_URL }}
         headers: '{"repository": "dev-inn/innkeeper"}'
-        body: '{"event": "deployment", "repository": "dev-inn/innkeeper"}'
+        body: '{"event": "production deployment", "repository": "dev-inn/innkeeper"}'

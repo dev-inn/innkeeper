@@ -3,9 +3,10 @@
 import discord
 
 # local imports
-from Botdata import Botdata
-from Commands import Command, commands
-from Database import DB
+from src.Botdata import Botdata
+from src.Commands import Command
+from src.Commands import commands
+from src.Database import DB
 
 
 class AdminCommands:

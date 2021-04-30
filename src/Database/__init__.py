@@ -1,8 +1,8 @@
 import sqlite3
 
-from Botdata import Botdata
-from Database import user_database
-from Database import rank_database
+from src.Botdata import Botdata
+from src.Database import user_database
+from src.Database import rank_database
 
 
 class DB:
@@ -62,6 +62,10 @@ class DB:
             self.cursor.execute('DROP TABLE reputation CASCADE')
             self.cursor.execute(
                 "CREATE TABLE reputation " + table_string)
+
+    def nuke_db(self):
+        self.cursor.execute('DROP TABLE reputation CASCADE')
+        self.cursor.execute('DROP TABLE roles CASCADE')
 
     # -------------------------------------------------------------------------- #
     #  Rank DB funcs                                                             #

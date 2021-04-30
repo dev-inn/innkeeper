@@ -1,8 +1,5 @@
 # rank_database.py
 
-import sqlite3
-
-
 def addrank(self, roleID, entry_rep: int, budget: int):
     """
     Register a rank and role into the database.

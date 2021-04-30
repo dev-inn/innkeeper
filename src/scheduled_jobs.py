@@ -1,8 +1,8 @@
 # scheduled_jobs.py
 
 # local imports
-import Database
-import ranks
+from src import Database
+from src import ranks
 
 
 def reload_awards(db: Database.DB):

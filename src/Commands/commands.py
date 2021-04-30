@@ -5,9 +5,9 @@ import discord
 # local imports
 # from Database import database as db
 
-from Commands import Command
-from Database import DB
-from ranks import Rank
+from src.Commands import Command
+from src.Database import DB
+from src.ranks import Rank
 
 
 class Commands:
@@ -146,7 +146,7 @@ class Commands:
         embed = discord.Embed(title="Leaderboard")
         embed.set_thumbnail(
             url="https://cdn.discordapp.com/attachments/525140186762575873/837189807411036200/unknown.png")
-        # embed.add_field(name='#1', value='Test User', inline=False)
+        # embed.add_field(name='#1', value='tests User', inline=False)
         rows = self.db.leaderboard()
         i = 0
         for row in rows:

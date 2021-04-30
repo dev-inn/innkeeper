@@ -1,5 +1,5 @@
 # ranks.py
-from Database import DB
+from src.Database import DB
 
 rank_registry = {}
 

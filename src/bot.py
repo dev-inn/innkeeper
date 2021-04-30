@@ -3,35 +3,35 @@
 # local imports
 import discord
 
-from Commands import admincommands, commands  # imports the files, the classes are instansiated later
-import scheduled_jobs as sj
+from src.Commands import admincommands  # imports the files, the classes are instansiated later
+from src.Commands import commands
+from src import scheduled_jobs as sj
 import time
-import Database
-from Botdata import Botdata
+from src import Database
+from src.Botdata import Botdata
 
 bot = Botdata()
 
 print(bot.get_is_debug())
 
-if __name__ == "__main__":
-    # used to check time elapsed at end of on_message
-    lastCheckedTime = time.time()
+# used to check time elapsed at end of on_message
+lastCheckedTime = time.time()
 
-    # Avatar
-    pfp_path = bot.get('pfp')
+# Avatar
+pfp_path = bot.get('pfp')
 
-    fp = open(pfp_path, 'rb')
-    pfp = fp.read()
+fp = open(pfp_path, 'rb')
+pfp = fp.read()
 
-    # load secrets
-    TOKEN = bot.get('token')
+# load secrets
+TOKEN = bot.get('token')
 
-    client = discord.Client()  # set up bot with discord api
+client = discord.Client()  # set up bot with discord api
 
-    db = Database.DB(bot)
+db = Database.DB(bot)
 
-    cmds = commands.Commands(client, bot, db)
-    a_cmds = admincommands.AdminCommands(client, bot, db)
+cmds = commands.Commands(client, bot, db)
+a_cmds = admincommands.AdminCommands(client, bot, db)
 
 
 def set_last_checked_time(t):

@@ -9,7 +9,6 @@ filepath = 'innkeeperbot.cfg'
 
 class Botdata:
 
-    # todo make these loaded from file and saved on bot close
     def __init__(self):
         self.config = configparser.ConfigParser()
         self.config.read(filepath)

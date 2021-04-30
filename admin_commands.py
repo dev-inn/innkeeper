@@ -99,7 +99,7 @@ async def setprefix(message):
     '''
     ?setprefix <new_prefix>
     '''
-    contents = message.content.split(' ')
+    contents = message.content.split(' ')[-1]
     previousPrefix = botdata[0]
     botdata[0] = str(contents)
 

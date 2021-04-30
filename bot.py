@@ -9,6 +9,7 @@ import scheduled_jobs as sj
 from commands import *
 import time
 
+
 # used to check time elapsed at end of on_message
 lastCheckedTime = time.time()
 scheduleInterval = 6 * 60 * 60  # 6 hours x 60 mins x 60 secs gets 6 hours in seconds

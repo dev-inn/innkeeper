@@ -8,6 +8,9 @@ admin_command_registry = {}
 import database as db
 from commands import Command
 
+from bot import changePrefix
+import asyncio
+
 ###--------------------------------------------------------------------------###
 ### Command Implementations                                                  ###
 ###--------------------------------------------------------------------------###
@@ -103,8 +106,9 @@ async def setprefix(message):
     previousPrefix = botdata[0]
     botdata[0] = str(contents)
 
-    from bot import changePrefix
-    changePrefix(botdata[0])
+    sleep(5)
+    asyncio.run(changePrefix(botdata[0]))
+    
 
     await message.channel.send('Successfully set the prefix to `' + contents + '` from `' + previousPrefix + '`')
 

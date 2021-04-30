@@ -95,6 +95,17 @@ async def help_admin(message):
 
     await message.channel.send(embed=embed)
 
+async def setprefix(message):
+    '''
+    ?setprefix <new_prefix>
+    '''
+
+    contents = message.content.split(' ')
+    previousPrefix = botdata[0]
+    botdata[0] = contents
+
+    await message.channel.send('Successfully set the prefix to `' + contents + '` from `' + previousPrefix + '`')
+
 
 ###--------------------------------------------------------------------------###
 ### Register Commands                                                        ###

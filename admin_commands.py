@@ -103,8 +103,7 @@ async def setprefix(message):
     previousPrefix = botdata[0]
     botdata[0] = str(contents)
 
-    await message.channel.send('Successfully set the prefix to ' + contents)
-    #    await message.channel.send('Successfully set the prefix to `' + contents + '` from `' + previousPrefix + '`')
+    await message.channel.send('Successfully set the prefix to `' + contents + '` from `' + previousPrefix + '`')
 
 
 ###--------------------------------------------------------------------------###

@@ -10,7 +10,8 @@ import scheduled_jobs as sj
 # from commands import *
 import time
 import Database
-from Botdata import Botdata as bot
+from Botdata import Botdata
+bot = Botdata()
 
 
 print(bot.prefix)
@@ -59,7 +60,7 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:  # bot won't reply to itself
         return
-    if (not message.content.startswith(prefix)):  # if the message doesn't start with the prefix, ignore
+    if not message.content.startswith(prefix):  # if the message doesn't start with the prefix, ignore
         return
 
     command = message.content.replace(prefix, '').split(" ")[

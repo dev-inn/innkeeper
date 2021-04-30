@@ -7,7 +7,6 @@ admin_command_registry = {}
 # local imports
 import database as db
 from commands import Command
-from bot import changePrefix
 
 ###--------------------------------------------------------------------------###
 ### Command Implementations                                                  ###
@@ -104,6 +103,7 @@ async def setprefix(message):
     previousPrefix = botdata[0]
     botdata[0] = str(contents)
 
+    from bot import changePrefix
     changePrefix(botdata[0])
 
     await message.channel.send('Successfully set the prefix to `' + contents + '` from `' + previousPrefix + '`')

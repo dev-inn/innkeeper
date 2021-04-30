@@ -1,11 +1,11 @@
 # scheduled_jobs.py
 
 # local imports
-import database as db
+import Database
 import ranks
 
 
-def reload_awards():
+def reload_awards(db: Database.DB):
     '''
     Reloads award budget every 6 hours
     '''
@@ -22,14 +22,14 @@ def reload_awards():
         print(e)
 
 
-###--------------------------------------------------------------------------###
-### Add the Scheduler                                                        ###
-###--------------------------------------------------------------------------###
+# -------------------------------------------------------------------------- #
+#  Add the Scheduler                                                         #
+# -------------------------------------------------------------------------- #
 
 
-def run_scheduler():
+def run_scheduler(db: Database.DB):
     '''
     Add scheduled jobs at the end of bot.py
     '''
 
-    reload_awards()
+    reload_awards(db)

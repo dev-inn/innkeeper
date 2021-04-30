@@ -1,9 +1,9 @@
 # ranks.py
+from Database import DB
 
 rank_registry = {}
 
 # local imports
-import database as db
 
 
 class Rank:
@@ -26,7 +26,7 @@ class Rank:
                   + 'is already registered. Overwriting.')
         registry[self.name] = self
 
-    def assign_rank(self, userID):
+    def assign_rank(self, userID, db: DB):
         '''
         userID - integer
         rank - Rank object

@@ -3,6 +3,7 @@
 import discord
 
 # local imports
+from Botdata import Botdata
 from Commands import Command
 from Database import DB
 
@@ -10,10 +11,15 @@ from Database import DB
 class Admin_Commands:
 
     def get_command(self, name):
-        return self.command_registry[name]
+        if name in self.command_registry:
+            return self.command_registry[name]
+        elif name in self.hidden_command_registry:
+            return self.hidden_command_registry[name]
+        else:
+            return None
 
     def exists(self, name):
-        return name in self.command_registry
+        return name in self.command_registry or name in self.hidden_command_registry
 
     def register(self, cmd):
         if cmd.name in self.command_registry:
@@ -26,7 +32,7 @@ class Admin_Commands:
                   + 'is already registered. Overwriting.')
         self.hidden_command_registry[cmd.shorthand] = cmd
 
-    def __init__(self, discordclient, botdata, db: DB):
+    def __init__(self, discordclient, botdata:Botdata, db: DB):
         self.botdata = botdata
         self.discordclient = discordclient
         self.db = db
@@ -51,7 +57,7 @@ class Admin_Commands:
             user = message.mentions[0]
         else:
             await message.channel.send(
-                'Try `' + self.botdata[0] + 'nuke <username>`.')
+                'Try `' + self.botdata.prefix + 'nuke <username>`.')
             return
         uid = user.id  # key to the database
         self.db.nuke(uid)
@@ -67,7 +73,7 @@ class Admin_Commands:
         if len(message.mentions) == 1:
             user = message.mentions[0]
         else:
-            await message.channel.send('Try `' + self.botdata[0] + 'setCredits <user> <amount>')
+            await message.channel.send('Try `' + self.botdata.prefix + 'setCredits <user> <amount>')
             return
         try:
             amt = int(contents[2])
@@ -86,7 +92,7 @@ class Admin_Commands:
         if len(message.role_mentions) == 1:
             user = message.role_mentions[0]
         else:
-            await message.channel.send('Try `' + self.botdata[0] + 'setCredits <user> <amount>')
+            await message.channel.send('Try `' + self.botdata.prefix + 'setCredits <user> <amount>')
             return
         try:
             entry_rep = int(contents[2])
@@ -97,8 +103,8 @@ class Admin_Commands:
         await message.channel.send('Successfully set ' + user.mention + '\'s credits to ' + str(amt))
 
     async def help_admin(self, message):
-        prefix = self.botdata[0]
-        url = self.botdata[2]
+        prefix = self.botdata.prefix
+        url = self.botdata.gh_link
 
         embed = discord.Embed(title="Command list", color=0x215FF3)
         embed.set_thumbnail(
@@ -119,8 +125,8 @@ class Admin_Commands:
         ?setprefix <new_prefix>
         """
         contents = message.content.split(' ')[-1]
-        previousPrefix = self.botdata[0]
-        self.botdata[0] = str(contents)
+        previousPrefix = self.botdata.prefix
+        self.botdata.prefix = str(contents)
 
         await message.channel.send('Successfully set the prefix to `' + contents + '` from `' + previousPrefix + '`')
 

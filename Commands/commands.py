@@ -55,8 +55,8 @@ class Commands:
         Creates and sends a discord embed with a list of all command names and
         descriptions avalable in the command_registry.
         """
-        prefix = self.botdata[0]
-        url = self.botdata[2]
+        prefix = self.botdata.prefix
+        url = self.botdata.gh_link
 
         embed = discord.Embed(title="Command list", color=0x215FF3)
         embed.set_thumbnail(
@@ -79,17 +79,17 @@ class Commands:
         contents = message.content.split(' ')
         if len(contents) == 1:
             await message.channel.send(
-                'This command needs a username. Try `' + self.botdata[0]
+                'This command needs a username. Try `' + self.botdata.prefix
                 + 'award <username> <?amount>`.')
             return
         elif len(contents) > 3:
             await message.channel.send(
-                'Too many words. Try `' + self.botdata[0]
+                'Too many words. Try `' + self.botdata.prefix
                 + 'award <username> <?amount>`.')
             return
         elif len(message.mentions) != 1:
             await message.channel.send(
-                'Expected a mention. Did you mean `' + self.botdata[0]
+                'Expected a mention. Did you mean `' + self.botdata.prefix
                 + 'award @' + contents[1] + '`?')
             return
         user = message.mentions[0]
@@ -127,7 +127,7 @@ class Commands:
             user = message.mentions[0]
         elif len(contents) > 1:
             await message.channel.send(
-                'Too many words. Try `' + self.botdata[0]
+                'Too many words. Try `' + self.botdata.prefix
                 + 'reputation <username>`.')
             return
         uid = user.id  # key to the database

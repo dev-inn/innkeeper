@@ -10,19 +10,23 @@ import scheduled_jobs as sj
 # from commands import *
 import time
 import Database
+from Botdata import Botdata as bot
+
+
+print(bot.prefix)
 
 if __name__ == "__main__":
     # used to check time elapsed at end of on_message
     lastCheckedTime = time.time()
     scheduleInterval = 6 * 60 * 60  # 6 hours x 60 mins x 60 secs gets 6 hours in seconds
 
-    with open('botdata.txt', 'r') as file:
-        botdata = file.read().split(",")  # get variables from botdata.txt
+    # with open('botdata.txt', 'r') as file:
+        # botdata = file.read().split(",")  # get variables from botdata.txt
 
-    prefix = botdata[0]  # set prefix to the first in there
+    prefix = bot.prefix  # set prefix to the first in there
 
     # Avatar
-    pfp_path = botdata[1]
+    pfp_path = bot.pfp
 
     fp = open(pfp_path, 'rb')
     pfp = fp.read()
@@ -35,8 +39,8 @@ if __name__ == "__main__":
 
     db = Database.DB()
 
-    cmds = commands.Commands(client, botdata, db)
-    a_cmds = admin_commands.Admin_Commands(client, botdata, db)
+    cmds = commands.Commands(client, bot, db)
+    a_cmds = admin_commands.Admin_Commands(client, bot, db)
 
 
 def setLastCheckedTime(t):

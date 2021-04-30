@@ -14,7 +14,7 @@ from Botdata import Botdata
 bot = Botdata()
 
 
-print(bot.prefix)
+print(bot.get_is_debug())
 
 if __name__ == "__main__":
     # used to check time elapsed at end of on_message
@@ -24,18 +24,15 @@ if __name__ == "__main__":
     # with open('botdata.txt', 'r') as file:
         # botdata = file.read().split(",")  # get variables from botdata.txt
 
-    prefix = bot.prefix  # set prefix to the first in there
-
     # Avatar
-    pfp_path = bot.pfp
+    pfp_path = bot.get('pfp')
 
     fp = open(pfp_path, 'rb')
     pfp = fp.read()
 
     # load secrets
-    TOKEN = os.environ.get("DISCORD_TOKEN")
-    if TOKEN is None:
-        TOKEN = sys.argv[1]
+    TOKEN = bot.get('token')
+
     client = discord.Client()  # set up bot with discord api
 
     db = Database.DB()
@@ -60,10 +57,10 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:  # bot won't reply to itself
         return
-    if not message.content.startswith(prefix):  # if the message doesn't start with the prefix, ignore
+    if not message.content.startswith(bot.get('prefix')):  # if the message doesn't start with the prefix, ignore
         return
 
-    command = message.content.replace(prefix, '').split(" ")[
+    command = message.content.replace(bot.get('prefix'), '').split(" ")[
         0]  # get the command by getting the message minus the prefix and then getting the first word
     command = command.lower()
 

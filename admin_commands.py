@@ -121,4 +121,8 @@ Command('setcredits', '<username> <amount>', 'Sets a users credits to specified 
 Command('newrank', '<role> <entry_reputation>', 'Create a new role for a given reputation level',
         newrank).register(admin_command_registry)
 
+Command('setprefix', '<new_prefix', 'Change the prefix used to execute commands',
+        setprefix).register(admin_command_registry)
+
 Command('adminhelp', None, 'Shows this screen', help_admin, 'ah').register(admin_command_registry)
+

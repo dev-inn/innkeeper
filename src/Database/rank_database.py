@@ -29,7 +29,7 @@ def del_rank(self, rid):
 
 
 def get_rank_by_rep(self, rep):  # gets highest rank for given rep
-    r = self.cursor.execute("SELECT id,entry_rep,budget,roleid FROM ranks WHERE entry_rep <= ? ORDER BY id DESC",
+    r = self.cursor.execute("SELECT id,entry_rep,budget,roleid FROM ranks WHERE entry_rep <= ? ORDER BY entry_rep DESC",
                             (rep,)).fetchone()
     return r
 

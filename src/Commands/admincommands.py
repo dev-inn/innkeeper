@@ -1,5 +1,7 @@
 # admin_commands.py
 # these are only available to admin users
+import random
+
 import discord
 
 # local imports
@@ -47,7 +49,8 @@ class AdminCommands:
         oldrole = message.channel.guild.get_role(db.get_rank(db.get_user_rank(uid))[3])
         await user.remove_roles(oldrole)
         db.nuke(uid)
-        await message.channel.send('Reset ' + user.mention + ' reputation to `0`. Their initial reputation was `' + str(reputation) + '`.')
+        await message.channel.send(
+            'Reset ' + user.mention + ' reputation to `0`. Their initial reputation was `' + str(reputation) + '`.')
 
     async def del_rank(self, message, db: DB, cmd: Command):
         """
@@ -88,7 +91,7 @@ class AdminCommands:
         """
         contents = message.content.split(' ')
 
-        if not len(contents) == 5:
+        if not len(contents) == 4:
             await cmd.send_usage_guide(message)
             return
         if len(message.role_mentions) == 1:
@@ -99,7 +102,8 @@ class AdminCommands:
         try:
             entry_rep = int(contents[2])
             budget = int(contents[3])
-            rank = int(contents[4])
+            rand = random.Random()
+            rank = rand.randint(0, 50000)
         except Exception:
             await cmd.send_usage_guide(message)
             return
@@ -150,7 +154,7 @@ class AdminCommands:
         self.register(Command('setcredits', '<username> <amount>', 'Sets a users credits to specified amount',
                               self.set_credits))
 
-        self.register(Command('newrank', '<role> <entry_reputation> <budget> <rank>',
+        self.register(Command('newrank', '<role> <entry_reputation> <budget>',
                               'Create a new role for a given reputation level',
                               self.newrank))
 

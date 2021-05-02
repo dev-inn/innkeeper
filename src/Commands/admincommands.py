@@ -43,8 +43,9 @@ class AdminCommands:
             await cmd.send_usage_guide(message)
             return
         uid = user.id  # key to the database
+        reputation = db.get_reputation(uid)
         db.nuke(uid)
-        await message.channel.send('Reset ' + user.mention + ' reputation to 0.')
+        await message.channel.send('Reset ' + user.mention + ' reputation to `0`. Their initial reputation was `' + reputation + '`.')
 
     async def del_rank(self, message, db: DB, cmd: Command):
         """

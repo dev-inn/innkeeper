@@ -187,8 +187,8 @@ class Commands:
                 rolename = message.channel.guild.get_role(roleid).name
 
             embed.add_field(name='#' + str(i),
-                            value=(await self.discordclient.fetch_user(row[0])).mention + " | " + str(
-                                row[1]) + "\n" + rolename,
+                            value=(await self.discordclient.fetch_user(row[0])).mention + "\n" + rolename + "\n" + str(
+                                row[1]),
                             inline=False)
 
         await message.channel.send(embed=embed)

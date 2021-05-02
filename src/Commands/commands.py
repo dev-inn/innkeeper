@@ -117,14 +117,13 @@ class Commands:
         newrole = message.channel.guild.get_role(rank[3])
         try:
             oldrole = message.channel.guild.get_role(db.get_rank(oldrankid)[3])
-        except TypeError:  # just means there is no old role
-            pass
-        print(newrole)
-        print(user)
-        if newrole not in user.roles:
-            await user.add_roles(newrole)
             if newrole != oldrole:
                 await user.remove_roles(oldrole)
+        except TypeError:  # just means there is no old role
+            pass
+        if newrole not in user.roles:
+            await user.add_roles(newrole)
+
 
     async def list_ranks(self, message, db: DB, cmd: Command):
         ranks = db.get_all_ranks()

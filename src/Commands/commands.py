@@ -188,8 +188,8 @@ class Commands:
 
             embed.add_field(name='#' + str(i),
                             value=(await self.discordclient.fetch_user(
-                                row[0])).mention + "\nRank:" + rolename
-                                  + "\nReputation:" + str(row[1]),
+                                row[0])).mention + "\nRank: " + rolename
+                                  + "\nReputation: " + str(row[1]),
                             inline=False)
 
         await message.channel.send(embed=embed)

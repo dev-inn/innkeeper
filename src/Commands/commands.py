@@ -124,25 +124,25 @@ class Commands:
         if newrole not in user.roles:
             await user.add_roles(newrole)
 
-
     async def list_ranks(self, message, db: DB, cmd: Command):
         ranks = db.get_all_ranks()
         embed = discord.Embed(title=message.channel.guild.name + "'s Ranks")
         embed.set_thumbnail(
             url="https://cdn.discordapp.com/attachments/525140186762575873/837189807411036200/unknown.png")
         roles = await message.channel.guild.fetch_roles()
+        level = len(ranks)
         for rank in ranks:
+            level -= 1
             roleid = rank[3]
 
             name = ''
             for role in roles:
                 if role.id == roleid:
                     name = role.mention
-            id = str(rank[0])
             rep = str(rank[1])
             budget = str(rank[2])
             text = 'Name: ' + name + '\nRequired rep: ' + rep + '\nCredit budget: ' + budget
-            embed.add_field(name=id + ') ', value=text, inline=False)
+            embed.add_field(name=str(level) + ') ', value=text, inline=False)
         await message.channel.send(embed=embed)
 
     async def reputation(self, message, db: DB, cmd: Command):

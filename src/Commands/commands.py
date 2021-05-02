@@ -128,10 +128,10 @@ class Commands:
         embed = discord.Embed(title=message.channel.guild.name + "'s Ranks")
         embed.set_thumbnail(
             url="https://cdn.discordapp.com/attachments/525140186762575873/837189807411036200/unknown.png")
-
+        roles = await message.channel.guild.fetch_roles()
         for rank in ranks:
             roleid = rank[3]
-            roles = await message.channel.guild.fetch_roles()
+
             name = ''
             for role in roles:
                 if role.id == roleid:

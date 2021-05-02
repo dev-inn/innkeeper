@@ -159,7 +159,7 @@ class Commands:
         uid = user.id  # key to the database
 
         reputation = db.get_reputation(uid)
-        message.channel.guild.fetch_roles()  # update roles cache
+        await message.channel.guild.fetch_roles()  # update roles cache
         await message.channel.send(user.mention + ' is rank '
                                    + message.channel.guild.get_role(
             db.get_rank(db.get_user_rank(user.id))[3]).name + ' with ' + str(reputation)
@@ -179,8 +179,18 @@ class Commands:
         i = 0
         for row in rows:
             i += 1
-            embed.add_field(name='#' + str(i) + ' | Reputation: ' + str(row[1]),
-                            value=(await self.discordclient.fetch_user(row[0])).mention, inline=False)
+            role = db.get_rank(row[2])
+            if (role is None):
+                rolename = ""
+            else:
+                roleid = role[3]
+                rolename = message.channel.guild.get_role(roleid).name
+
+            embed.add_field(name='#' + str(i),
+                            value=(await self.discordclient.fetch_user(
+                                row[0])).mention + "\nRank: `" + rolename + '`'
+                                  + "\nReputation: `" + str(row[1]) + '`',
+                            inline=False)
 
         await message.channel.send(embed=embed)
 

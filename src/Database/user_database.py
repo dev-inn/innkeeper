@@ -51,8 +51,11 @@ def register(self, userID: int):
     """
     Register a user into the database with a reputation of 0.
     """
+    base_rank = self.get_rank_by_rep(0)
+    if base_rank is None:
+        base_rank = [0]
     self.cursor.execute(
-        "INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 0, 0, 1), )
+        "INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 0, base_rank[0], 1), )
     self.connection.commit()
 
 
@@ -120,7 +123,7 @@ def leaderboard(self):
     """
     Return top 10 rows' id and value fields
     """
-    rows = self.cursor.execute("SELECT id,value FROM reputation ORDER BY value DESC LIMIT 10").fetchall()
+    rows = self.cursor.execute("SELECT id,value,rank FROM reputation ORDER BY value DESC LIMIT 10").fetchall()
     return rows
 
 

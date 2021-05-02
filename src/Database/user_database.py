@@ -52,6 +52,8 @@ def register(self, userID: int):
     Register a user into the database with a reputation of 0.
     """
     base_rank = self.get_rank_by_rep(0)
+    if base_rank is None:
+        base_rank = [0]
     self.cursor.execute(
         "INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 0, base_rank[0], 1), )
     self.connection.commit()

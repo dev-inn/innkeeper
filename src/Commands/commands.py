@@ -179,11 +179,16 @@ class Commands:
         i = 0
         for row in rows:
             i += 1
-            print(row)
-            roleid = db.get_rank(row[2])[3]
+            role = db.get_rank(row[2])
+            if (role is None):
+                rolename = None
+            else:
+                roleid = role[3]
+                rolename = message.channel.guild.get_role(roleid).name
+
             embed.add_field(name='#' + str(i),
                             value=(await self.discordclient.fetch_user(row[0])).mention + " | " + str(
-                                row[1]) + "\n" + message.channel.guild.get_role(roleid).name,
+                                row[1]) + "\n" + rolename,
                             inline=False)
 
         await message.channel.send(embed=embed)

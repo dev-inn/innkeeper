@@ -115,7 +115,7 @@ class Commands:
         db.set_rank(user.id, rank[0])
         await message.channel.guild.fetch_roles()  # updates roles from server
         newrole = message.channel.guild.get_role(rank[3])
-        oldrole = message.channel.guild.get_role(db.get_rank(db.get_user_rank(user.id))[3])
+        oldrole = message.channel.guild.get_role(db.get_rank(oldrankid)[3])
         print(newrole)
         print(user)
         if newrole not in user.roles:

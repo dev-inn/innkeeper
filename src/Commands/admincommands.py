@@ -43,7 +43,10 @@ class AdminCommands:
             await cmd.send_usage_guide(message)
             return
         uid = user.id  # key to the database
+        oldrole = message.channel.guild.get_role(db.get_rank(db.get_user_rank(uid))[3])
+        await user.remove_roles(oldrole)
         db.nuke(uid)
+
         await message.channel.send('Reset ' + user.mention + ' reputation to 0.')
 
     async def del_rank(self, message, db: DB, cmd: Command):
@@ -101,7 +104,7 @@ class AdminCommands:
             await cmd.send_usage_guide(message)
             return
         if db.addrank(rank, entry_rep, budget, role.id):
-            await message.channel.send("Successfully created `" + role.name+'`')
+            await message.channel.send("Successfully created `" + role.name + '`')
         else:
             await message.channel.send("Error creating role")
             await cmd.send_usage_guide(message)

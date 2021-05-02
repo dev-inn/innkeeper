@@ -58,6 +58,7 @@ async def on_message(message):
         if len(server_db_id_list) > int(bot.get('server_cache_limit')):
             server_db_dict[server_db_id_list[0]].close()
             server_db_dict.pop(server_db_id_list[0])
+            server_db_id_list.pop(0)
         server_db_dict[sid] = Database.DB(bot, str(sid))
 
     db = server_db_dict[sid]

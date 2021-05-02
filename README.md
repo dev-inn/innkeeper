@@ -25,18 +25,22 @@ Shows a list of the top users by xp and reputation points.
 
 ### Admin Command List
 
-#### `admin help`
+#### `admin help or ah`
 Shows a list of admin commands.
 #### `nuke`
 Resets a users reputation back to 0
 #### `setcredits \<username> <amount>`
 Sets a users credits to specified amount.
-#### `newrank <role> <entry_reputation>`
+#### `newrank <role> <entry_reputation> <budget> <rank>`
+Create a new role for a given reputation level.
+#### `delrank <@rank>`
+Create a new role for a given reputation level.
+#### `setprefix <new_prefix>`
 Create a new role for a given reputation level.
 
 ### Support
 
-File an [issue](https://github.com/dev-inn/innkeeper/issues) here on Github.
+File an [issue](https://github.com/dev-inn/innkeeper/issues) here on Github. Or contact us on the Developer's Inn <a href="https://discord.gg/va3eAbg">Discord</a>
 
 ## Developers
 

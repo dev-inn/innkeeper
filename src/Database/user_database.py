@@ -52,7 +52,7 @@ def register(self, userID: int):
     Register a user into the database with a reputation of 0.
     """
     self.cursor.execute(
-        "INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 0, 1, 1), )
+        "INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 0, 0, 1), )
     self.connection.commit()
 
 
@@ -96,7 +96,7 @@ def set_rank(self, userID: int, rank: int):
     self.connection.commit()
 
 
-def get_rank(self, userID: int) -> int:
+def get_user_rank(self, userID: int) -> int:
     """
     Return user rank
     """

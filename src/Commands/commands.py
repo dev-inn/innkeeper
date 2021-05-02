@@ -107,7 +107,29 @@ class Commands:
         await message.channel.send('Awarded ' + str(amt) + ' reputation to ' + user.mention + '. ' +
                                    message.author.mention + ' has ' + str(db.get_credits(message.author.id)) +
                                    ' remaining credits.')
-        Rank.getRankForRep(reputation).assign_rank(user.id, db)
+
+        rid = db.get_rank_by_rep(reputation)
+        db.set_rank(user.id, rid[0])
+
+    async def list_ranks(self, message, db: DB, cmd: Command):
+        ranks = db.get_all_ranks()
+        embed = discord.Embed(title=message.channel.guild.name + "'s Ranks")
+        embed.set_thumbnail(
+            url="https://cdn.discordapp.com/attachments/525140186762575873/837189807411036200/unknown.png")
+
+        for rank in ranks:
+            roleid = rank[3]
+            roles = await message.channel.guild.fetch_roles()
+            name = ''
+            for role in roles:
+                if role.id == roleid:
+                    name = role.mention
+            id = str(rank[0])
+            rep = str(rank[1])
+            budget = str(rank[2])
+            text = 'Name: ' + name + '\nRequired rep: ' + rep + '\nCredit budget: ' + budget
+            embed.add_field(name=id + ') ', value=text, inline=False)
+        await message.channel.send(embed=embed)
 
     async def reputation(self, message, db: DB, cmd: Command):
         """
@@ -125,7 +147,7 @@ class Commands:
         reputation = db.get_reputation(uid)
 
         await message.channel.send(user.mention + ' is rank '
-                                   + str(db.get_rank(user.id)) + ' with ' + str(reputation)
+                                   + str(db.get_user_rank(user.id)) + ' with ' + str(reputation)
                                    + ' reputation.')
 
     async def leaderboard(self, message, db: DB, cmd: Command):
@@ -165,3 +187,6 @@ class Commands:
         self.register(Command('leaderboard', None,
                               'Shows a list of the top users by xp and reputation points.',
                               self.leaderboard, 'l'))
+        self.register(Command('ranks', None,
+                              'Shows a list of all available ranks',
+                              self.list_ranks))

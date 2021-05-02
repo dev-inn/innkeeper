@@ -13,4 +13,4 @@ class Command:
 
     async def send_usage_guide(self, message):
         await message.channel.send(
-            'Invalid usage. Try `' + self.name + self.args + '`')
+            'Invalid usage. Try `' + self.name +' '+ self.args + '`')

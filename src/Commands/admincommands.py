@@ -71,19 +71,27 @@ class AdminCommands:
         ?newrank <@role> <entry_rep>
         """
         contents = message.content.split(' ')
-        amt = 0
+
+        if not len(contents) == 5:
+            await cmd.send_usage_guide(message)
+            return
         if len(message.role_mentions) == 1:
-            user = message.role_mentions[0]
+            role = message.role_mentions[0]
         else:
             await cmd.send_usage_guide(message)
             return
         try:
             entry_rep = int(contents[2])
+            budget = int(contents[3])
+            rank = int(contents[4])
         except Exception:
-            await message.channel.send('Invalid amount, must be integer amount of credits')
+            await cmd.send_usage_guide(message)
             return
-        db.set_credits(user.id, amt)
-        await message.channel.send('Successfully set ' + user.mention + '\'s credits to ' + str(amt))
+        if db.addrank(rank, entry_rep, budget, role.id):
+            await message.channel.send("Successfully created " + role.name)
+        else:
+            await message.channel.send("Error creating role")
+            await cmd.send_usage_guide(message)
 
     async def help_admin(self, message, db: DB, _cmd: Command):
         prefix = self.botdata.get('prefix')
@@ -126,7 +134,8 @@ class AdminCommands:
         self.register(Command('setcredits', '<username> <amount>', 'Sets a users credits to specified amount',
                               self.set_credits))
 
-        self.register(Command('newrank', '<role> <entry_reputation>', 'Create a new role for a given reputation level',
+        self.register(Command('newrank', '<role> <entry_reputation> <budget> <rank>',
+                              'Create a new role for a given reputation level',
                               self.newrank))
 
         self.register(Command('setprefix', '<new_prefix>', 'Change the prefix used to execute commands',

@@ -1,17 +1,37 @@
 # rank_database.py
 
-def addrank(self, roleID, entry_rep: int, budget: int):
+def addrank(self, rankid, entry_rep: int, budget: int, roleid: str):
     """
     Register a rank and role into the database.
     """
+    row = self.get_rank(rankid)
+    if row is not None:
+        return False
     self.cursor.execute(
-        "INSERT INTO roles VALUES (?, ?, ?)", (roleID, entry_rep, budget), )
+        "INSERT INTO ranks VALUES (?, ?, ?, ?)", (rankid, entry_rep, budget, roleid), )
     self.connection.commit()
+    return True
 
 
-def nukerank(self, roleID):
+def get_all_ranks(self):
+    rows = self.cursor.execute("SELECT id,entry_rep,budget,roleid FROM ranks ORDER BY id DESC").fetchall()
+    return rows
+
+
+def get_rank(self, id):
+    row = self.cursor.execute("SELECT id,entry_rep,budget,roleid FROM ranks WHERE id = ?", (id,)).fetchone()
+    return row
+
+
+def get_rank_by_rep(self, rep):  # gets highest rank for given rep
+    r = self.cursor.execute("SELECT id,entry_rep,budget,roleid FROM ranks WHERE entry_rep <= ? ORDER BY id DESC",
+                            (rep,)).fetchone()
+    return r
+
+
+def nukerank(self, rankid):
     """
     Delete a rank from the database.
     """
-    self.cursor.execute("DELETE FROM roles WHERE id = ?", (roleID,), )
+    self.cursor.execute("DELETE FROM ranks WHERE id = ?", (rankid,), )
     self.connection.commit()

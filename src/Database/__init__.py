@@ -21,9 +21,10 @@ class DB:
 
     def start_rankdb(self):
         table_types = {
-            'id': 'INTEGER',
+            'id': 'INTEGER', # also counts as level, higher is better
             'entry_rep': 'INTEGER',
             'budget': 'INTEGER',
+            'roleid': 'STRING'
         }
 
         # create the sqlite table string
@@ -35,13 +36,13 @@ class DB:
         table_string += ')'
 
         self.cursor.execute(
-            "CREATE TABLE IF NOT EXISTS roles " + table_string)
+            "CREATE TABLE IF NOT EXISTS ranks " + table_string)
 
-        columns = [i[1] for i in self.cursor.execute('PRAGMA table_info(roles)')]
+        columns = [i[1] for i in self.cursor.execute('PRAGMA table_info(ranks)')]
         if columns != [name for name, _ in table_types.items()]:
-            self.cursor.execute('DROP TABLE roles')
+            self.cursor.execute('DROP TABLE ranks')
             self.cursor.execute(
-                "CREATE TABLE roles " + table_string)
+                "CREATE TABLE ranks " + table_string)
 
     def start_userdb(self):
         table_types = {
@@ -70,7 +71,7 @@ class DB:
 
     def nuke_db(self):
         self.cursor.execute('DROP TABLE reputation')
-        self.cursor.execute('DROP TABLE roles')
+        self.cursor.execute('DROP TABLE ranks')
 
     # -------------------------------------------------------------------------- #
     #  Rank DB funcs                                                             #
@@ -79,6 +80,12 @@ class DB:
     addrank = rank_database.addrank
 
     nukerank = rank_database.nukerank
+
+    get_rank = rank_database.get_rank
+
+    get_rank_by_rep = rank_database.get_rank_by_rep
+
+    get_all_ranks = rank_database.get_all_ranks
 
     # -------------------------------------------------------------------------- #
     #  User DB funcs                                                             #
@@ -98,7 +105,7 @@ class DB:
 
     award = user_database.award
 
-    get_rank = user_database.get_rank
+    get_user_rank = user_database.get_user_rank
 
     set_rank = user_database.set_rank
 

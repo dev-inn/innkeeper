@@ -101,7 +101,7 @@ class AdminCommands:
             await cmd.send_usage_guide(message)
             return
         if db.addrank(rank, entry_rep, budget, role.id):
-            await message.channel.send("Successfully created " + role.name)
+            await message.channel.send("Successfully created `" + role.name+'`')
         else:
             await message.channel.send("Error creating role")
             await cmd.send_usage_guide(message)

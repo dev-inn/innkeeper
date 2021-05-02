@@ -46,6 +46,19 @@ class AdminCommands:
         db.nuke(uid)
         await message.channel.send('Reset ' + user.mention + ' reputation to 0.')
 
+    async def del_rank(self, message, db: DB, cmd: Command):
+        """
+        Deletes a rank
+        """
+        if len(message.role_mentions) == 1:
+            role = message.role_mentions[0]
+        else:
+            await cmd.send_usage_guide(message)
+            return
+        db.del_rank(role.id)
+        role.delete()
+        await message.channel.send('Successfully deleted rank')
+
     async def set_credits(self, message, db: DB, cmd: Command):
         """
         Set a users credits to desired amount
@@ -142,3 +155,6 @@ class AdminCommands:
                               self.set_prefix))
 
         self.register(Command('adminhelp', None, 'Shows this screen', self.help_admin, 'ah'))
+
+        self.register(Command('delrank', '<@rank>', 'Deletes tagged rank',
+                              self.del_rank))

@@ -18,9 +18,14 @@ def get_all_ranks(self):
     return rows
 
 
-def get_rank(self, id):
-    row = self.cursor.execute("SELECT id,entry_rep,budget,roleid FROM ranks WHERE id = ?", (id,)).fetchone()
+def get_rank(self, rid):
+    row = self.cursor.execute("SELECT id,entry_rep,budget,roleid FROM ranks WHERE id = ?", (rid,)).fetchone()
     return row
+
+
+def del_rank(self, rid):
+    self.cursor.execute("DELETE FROM ranks WHERE id = ?", (rid,))
+    self.connection.commit()
 
 
 def get_rank_by_rep(self, rep):  # gets highest rank for given rep

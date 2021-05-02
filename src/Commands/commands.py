@@ -110,7 +110,7 @@ class Commands:
 
         oldrankid = db.get_user_rank(user.id)
         rank = db.get_rank_by_rep(reputation)
-        if rank == oldrankid:
+        if rank[0] == oldrankid:
             return
         db.set_rank(user.id, rank[0])
         await message.channel.guild.fetch_roles()  # updates roles from server

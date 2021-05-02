@@ -181,7 +181,7 @@ class Commands:
             i += 1
             role = db.get_rank(row[2])
             if (role is None):
-                rolename = None
+                rolename = ""
             else:
                 roleid = role[3]
                 rolename = message.channel.guild.get_role(roleid).name

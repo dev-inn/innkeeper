@@ -14,7 +14,7 @@ def addrank(self, rankid, entry_rep: int, budget: int, roleid: str):
 
 
 def get_all_ranks(self):
-    rows = self.cursor.execute("SELECT id,entry_rep,budget,roleid FROM ranks ORDER BY id DESC").fetchall()
+    rows = self.cursor.execute("SELECT id,entry_rep,budget,roleid FROM ranks ORDER BY entry_rep DESC").fetchall()
     return rows
 
 

@@ -108,8 +108,11 @@ class Commands:
                                    message.author.mention + ' has ' + str(db.get_credits(message.author.id)) +
                                    ' remaining credits.')
 
-        rid = db.get_rank_by_rep(reputation)
-        db.set_rank(user.id, rid[0])
+        rank = db.get_rank_by_rep(reputation)
+        db.set_rank(user.id, rank[0])
+        await message.channel.guild.fetch_roles()
+        role = message.channel.guild.get_role(rank[0])
+        await user.add_roles(role)
 
     async def list_ranks(self, message, db: DB, cmd: Command):
         ranks = db.get_all_ranks()

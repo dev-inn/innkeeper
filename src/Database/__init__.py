@@ -12,16 +12,20 @@ class DB:
         self.connection.close()
 
     def __init__(self, botdata: Botdata, sid: str):
-        self.botdata = botdata
-        self.connection = sqlite3.connect(botdata.get('dbdir') + '/' + sid + '.db')
-        self.cursor = self.connection.cursor()
-        self.start_rankdb()
-        self.start_userdb()
-        self.server_id = sid
+        try:
+            self.botdata = botdata
+            self.connection = sqlite3.connect(botdata.get('dbdir') + '/' + sid + '.db')
+            self.cursor = self.connection.cursor()
+            self.start_rankdb()
+            self.start_userdb()
+            self.server_id = sid
+        except sqlite3.OperationalError:
+            print("Error reading db file: Did you create the directory?")
+            raise SystemExit
 
     def start_rankdb(self):
         table_types = {
-            'id': 'INTEGER', # also counts as level, higher is better
+            'id': 'INTEGER',  # also counts as level, higher is better
             'entry_rep': 'INTEGER',
             'budget': 'INTEGER',
             'roleid': 'STRING'

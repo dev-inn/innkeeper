@@ -5,7 +5,8 @@ import configparser
 # default values to populate the config file the first time
 default_values = {'debug': 'False', 'prefix': '?', 'pfp': 'avatar.jpg',
                   'gh_link': 'https://github.com/dev-inn/innkeeper', 'token': '<PUT_YOUR_TOKEN_HERE>',
-                  'schedulerInterval': '21600', 'dbfile': 'reputation'}
+                  'schedulerInterval': '21600', 'dbfile': 'reputation', 'controller-role': '<PUT_YOUR_ROLE_ID_HERE>'}
+# controller is one specific role which has permissions to use admin commands, server admins also have the power
 filepath = 'innkeeperbot.cfg'  # where config data is stored
 
 
@@ -22,7 +23,6 @@ class Botdata:
             print("Config file created")
             print("Fill in your discord bot api token")
             raise SystemExit
-        print(default_values)
         for key in default_values:
             if not key in self.config['DEFAULT']:
                 self.config['DEFAULT'][key] = default_values[key]

@@ -180,7 +180,9 @@ class Commands:
         for row in rows:
             i += 1
             embed.add_field(name='#' + str(i),
-                            value=(await self.discordclient.fetch_user(row[0])).mention + " | " + str(row[1]),
+                            value=(await self.discordclient.fetch_user(row[0])).mention + " | " + str(
+                                row[1]) + "\n" + message.channel.guild.get_role(
+                                db.get_rank(db.get_user_rank(row[0]))[3]).name,
                             inline=False)
 
         await message.channel.send(embed=embed)

@@ -42,8 +42,11 @@ def set_last_checked_time(t):
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')  # just a debug message to let us know bot is up and running
-    if client.user.avatar != pfp:
-        await client.user.edit(avatar=pfp)  # adds an avatar to the bot
+    try:
+        if client.user.avatar != pfp:
+            await client.user.edit(avatar=pfp)  # adds an avatar to the bot
+    except discord.HTTPException:
+        pass
 
 
 @client.event

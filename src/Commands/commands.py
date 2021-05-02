@@ -157,9 +157,10 @@ class Commands:
         uid = user.id  # key to the database
 
         reputation = db.get_reputation(uid)
-
+        message.channel.guild.fetch_roles()  # update roles cache
         await message.channel.send(user.mention + ' is rank '
-                                   + str(db.get_user_rank(user.id)) + ' with ' + str(reputation)
+                                   + message.channel.guild.get_role(
+            db.get_rank(db.get_user_rank(user.id))).name + ' with ' + str(reputation)
                                    + ' reputation.')
 
     async def leaderboard(self, message, db: DB, cmd: Command):

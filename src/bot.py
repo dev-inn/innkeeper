@@ -75,6 +75,12 @@ async def on_message(message):
     if command == '':  # if theres nothing but the prefix, ignore
         return
 
+    if not db.exists(message.author.id):
+        db.register(message.author.id)
+    for user in message.mentions:
+        if not db.exists(user.id):
+            db.register(user.id)
+
     if cmds.exists(command):  # if the command exists, run it
         await cmds.get_command(command).invoke(message, db)
 

@@ -31,7 +31,13 @@ client = discord.Client()  # set up bot with discord api
 db = Database.DB(bot)
 
 cmds = commands.Commands(client, bot, db)
-a_cmds = admincommands.AdminCommands(client, bot, db)
+a_cmds = admincommands.AdminCommands(client, bot, db
+
+admin_roles = [
+    "712592562866749452",
+    "712600364679168070",
+    "837461892535418891"
+]
 
 
 def set_last_checked_time(t):
@@ -62,9 +68,15 @@ async def on_message(message):
 
     if cmds.exists(command):  # if the command exists, run it
         await cmds.get_command(command).invoke(message)
-    elif a_cmds.exists(command):  # if the command exists, run it
-        # TODO: verify permissions, or check if we are in debug mode
-        await a_cmds.get_command(command).invoke(message)
+    elif a_cmds.exists(command):  # if the command exists and is an admin command
+        # check if user has one of the admin roles
+        has_role = False;
+        for role in message.author.roles:
+            if(role.id in admin_roles):
+                await a_cmds.get_command(command).invoke(message)
+                has_role = True;
+        if(has_role == False):
+            await message.channel.send("You are not an admin!")
 
     else:
         await message.channel.send('Oops, I don\'t recognize that command')

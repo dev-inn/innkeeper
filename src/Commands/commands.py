@@ -159,7 +159,7 @@ class Commands:
         uid = user.id  # key to the database
 
         reputation = db.get_reputation(uid)
-        message.channel.guild.fetch_roles()  # update roles cache
+        await message.channel.guild.fetch_roles()  # update roles cache
         await message.channel.send(user.mention + ' is rank '
                                    + message.channel.guild.get_role(
             db.get_rank(db.get_user_rank(user.id))[3]).name + ' with ' + str(reputation)

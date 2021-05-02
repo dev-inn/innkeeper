@@ -58,7 +58,7 @@ class AdminCommands:
         if len(message.mentions) == 1:
             user = message.mentions[0]
         else:
-            await message.channel.send('Try `' + self.botdata.get('prefix') + 'setCredits <user> <amount>')
+            await message.channel.send('Try `' + self.botdata.get('prefix') + 'setCredits <user> <amount>`')
             return
         try:
             amt = int(contents[2])

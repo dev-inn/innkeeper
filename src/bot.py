@@ -66,8 +66,7 @@ async def on_message(message):
     elif a_cmds.exists(command):  # if the command exists and is an admin command
         # check if user has one of the admin roles
         for role in message.author.roles:
-            if role.id == bot.get('controller-role') or role.permissions.administrator:
-                print("hi")
+            if str(role.id) == bot.get('controller-role') or role.permissions.administrator:
                 await a_cmds.get_command(command).invoke(message)
                 break
         else:

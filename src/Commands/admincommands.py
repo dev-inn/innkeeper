@@ -44,7 +44,7 @@ class AdminCommands:
         else:
             await cmd.send_usage_guide(message)
             return
-        uid = user.id  # key to the database
+        uid = user.id  # key to the database.
         reputation = db.get_reputation(uid)
         oldrole = None
         try:

@@ -121,7 +121,7 @@ def leaderboard(self):
     """
     Return top 10 rows' id and value fields
     """
-    rows = self.cursor.execute("SELECT id,value FROM reputation ORDER BY value DESC LIMIT 10").fetchall()
+    rows = self.cursor.execute("SELECT id,value,rank FROM reputation ORDER BY value DESC LIMIT 10").fetchall()
     return rows
 
 

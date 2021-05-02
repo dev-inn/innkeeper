@@ -48,7 +48,7 @@ class AdminCommands:
         await user.remove_roles(oldrole)
         db.nuke(uid)
 
-        await message.channel.send('Reset ' + user.mention + ' reputation to `0`. Their initial reputation was `' + str(reputation) + '` and their rank was ' + str(rank) + '.')
+        await message.channel.send('Reset ' + user.mention + ' reputation to `0`. Their initial reputation was `' + str(reputation) + '` and their rank was ' + str(oldrole) + '.')
 
     async def del_rank(self, message, db: DB, cmd: Command):
         """

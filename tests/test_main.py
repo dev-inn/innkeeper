@@ -3,7 +3,7 @@ from src.Botdata import Botdata
 
 bot = Botdata()
 
-db = Database.DB(bot)
+db = Database.DB(bot, str(0))
 
 
 def test_reset_db():

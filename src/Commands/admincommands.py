@@ -46,6 +46,7 @@ class AdminCommands:
             return
         uid = user.id  # key to the database
         reputation = db.get_reputation(uid)
+        oldrole = None
         try:
             oldrole = message.channel.guild.get_role(db.get_rank(db.get_user_rank(uid))[3])
             await user.remove_roles(oldrole)
@@ -53,8 +54,9 @@ class AdminCommands:
             pass
         db.nuke(uid)
 
+        rankname = oldrole if (oldrole is not None) else ""
         await message.channel.send('Reset ' + user.mention + ' reputation to `0`. Their initial reputation was `' + str(
-            reputation) + '` and their rank was ' + str(oldrole) + '.')
+            reputation) + '` and their rank was ' + str(rankname) + '.')
 
     async def del_rank(self, message, db: DB, cmd: Command):
         """

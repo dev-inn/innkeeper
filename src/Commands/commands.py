@@ -108,11 +108,17 @@ class Commands:
                                    message.author.mention + ' has ' + str(db.get_credits(message.author.id)) +
                                    ' remaining credits.')
 
+        oldrankid = db.get_user_rank(user.id)
         rank = db.get_rank_by_rep(reputation)
+        if rank == oldrankid:
+            return
         db.set_rank(user.id, rank[0])
-        await message.channel.guild.fetch_roles()
-        role = message.channel.guild.get_role(rank[0])
-        await user.add_roles(role)
+        await message.channel.guild.fetch_roles()  # updates roles from server
+        newrole = message.channel.guild.get_role(rank[0])
+        oldrole = message.channel.guild.get_role(db.get_rank(db.get_user_rank(user.id)))
+        if newrole not in user.roles:
+            await user.add_roles(newrole)
+            await user.remove_roles(oldrole)
 
     async def list_ranks(self, message, db: DB, cmd: Command):
         ranks = db.get_all_ranks()

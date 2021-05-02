@@ -1,8 +1,8 @@
 import sqlite3
 
 from src.Botdata import Botdata
-from src.Database import user_database
 from src.Database import rank_database
+from src.Database import user_database
 
 
 class DB:

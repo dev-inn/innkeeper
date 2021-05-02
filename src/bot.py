@@ -1,14 +1,15 @@
 # bot.py
 
+import time
+
 # local imports
 import discord
 
+from src import Database
+from src import scheduled_jobs as sj
+from src.Botdata import Botdata
 from src.Commands import admincommands  # imports the files, the classes are instansiated later
 from src.Commands import commands
-from src import scheduled_jobs as sj
-import time
-from src import Database
-from src.Botdata import Botdata
 
 bot = Botdata()
 

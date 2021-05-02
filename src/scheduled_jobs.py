@@ -2,21 +2,20 @@
 
 # local imports
 from src import Database
-from src import ranks
 
 
 def reload_awards(db: Database.DB):
-    '''
+    """
     Reloads award budget every 6 hours
-    '''
+    """
 
     # Reload a budget equal to user rank
     # e.g. 1 award budget per 1 rank every 6 hrs
     try:  # need this else the thread can crash
-        for rankName in ranks.rank_registry:
-            rank = ranks.rank_registry[rankName]
+        all_ranks = db.get_all_ranks()
+        for rank in all_ranks:
             print(rank.entry_rep)
-            db.reload_awards(rank.rank, rank.budget)
+            db.reload_awards(rank[0], rank[2])
     except Exception as e:
         print("Error setting budgets")
         print(e)

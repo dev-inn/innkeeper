@@ -7,7 +7,6 @@ import discord
 from src.Botdata import Botdata
 from src.Commands import Command
 from src.Database import DB
-from src.ranks import Rank
 
 
 class Commands:

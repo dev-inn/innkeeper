@@ -80,7 +80,7 @@ async def on_message(message):
         await cmds.get_command(command).invoke(message)
     elif a_cmds.exists(command):  # if the command exists, run it
         hasRole = False
-        for role in user.roles: # if the user has the role, run the command
+        for role in message.author.roles: # if the user has the role, run the command
             if(role.id in admin_roles):
                 await a_cmds.get_command(command).invoke(message)
                 hasRole = True

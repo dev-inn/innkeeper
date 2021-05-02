@@ -77,7 +77,6 @@ async def on_message(message):
                 has_role = True;
         if(has_role == False):
             await message.channel.send("You are not an admin!")
-
     else:
         await message.channel.send('Oops, I don\'t recognize that command')
 

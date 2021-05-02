@@ -179,6 +179,7 @@ class Commands:
         i = 0
         for row in rows:
             i += 1
+            print(row)
             roleid = db.get_rank(row[2])[3]
             embed.add_field(name='#' + str(i),
                             value=(await self.discordclient.fetch_user(row[0])).mention + " | " + str(

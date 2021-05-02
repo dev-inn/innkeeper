@@ -53,7 +53,7 @@ def register(self, userID: int):
     """
     base_rank = self.get_rank_by_rep(0)
     self.cursor.execute(
-        "INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 0, base_rank[2], 1), )
+        "INSERT INTO reputation VALUES (?, ?, ?, ?)", (userID, 0, base_rank[0], 1), )
     self.connection.commit()
 
 

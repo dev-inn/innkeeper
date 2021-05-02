@@ -27,11 +27,11 @@ pfp = fp.read()
 TOKEN = bot.get('token')
 
 client = discord.Client()  # set up bot with discord api
+server_db_id_list = []
+server_db_dict = {}
 
-db = Database.DB(bot)
-
-cmds = commands.Commands(client, bot, db)
-a_cmds = admincommands.AdminCommands(client, bot, db)
+cmds = commands.Commands(client, bot)
+a_cmds = admincommands.AdminCommands(client, bot)
 
 
 def set_last_checked_time(t):
@@ -48,6 +48,17 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    sid = message.channel.guild.id  # server id
+    # if server not cached
+    if sid not in server_db_id_list:
+        server_db_id_list.append(sid)
+        if len(server_db_id_list) > int(bot.get('server_cache_limit')):
+            server_db_dict[server_db_id_list[0]].close()
+            server_db_dict.pop(server_db_id_list[0])
+        server_db_dict[sid] = Database.DB(bot, str(sid))
+
+    db = server_db_dict[sid]
+
     if message.author == client.user:  # bot won't reply to itself
         return
     if not message.content.startswith(bot.get('prefix')):  # if the message doesn't start with the prefix, ignore
@@ -61,13 +72,13 @@ async def on_message(message):
         return
 
     if cmds.exists(command):  # if the command exists, run it
-        await cmds.get_command(command).invoke(message)
+        await cmds.get_command(command).invoke(message, db)
 
     elif a_cmds.exists(command):  # if the command exists and is an admin command
         # check if user has one of the admin roles
         for role in message.author.roles:
             if str(role.id) == bot.get('controller-role') or role.permissions.administrator:
-                await a_cmds.get_command(command).invoke(message)
+                await a_cmds.get_command(command).invoke(message, db)
                 break
         else:
             await message.channel.send("Sorry, only an admin can use that command")

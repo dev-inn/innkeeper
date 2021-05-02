@@ -4,7 +4,7 @@ import discord
 
 # local imports
 # from Database import database as db
-
+from src.Botdata import Botdata
 from src.Commands import Command
 from src.Database import DB
 from src.ranks import Rank
@@ -34,10 +34,9 @@ class Commands:
                   + 'is already registered. Overwriting.')
         self.hidden_command_registry[cmd.shorthand] = cmd
 
-    def __init__(self, discordclient, botdata, db: DB):
+    def __init__(self, discordclient, botdata: Botdata):
         self.botdata = botdata
         self.discordclient = discordclient
-        self.db = db
 
         self.command_registry = {}
 
@@ -50,7 +49,7 @@ class Commands:
     #  Command Implementations                                                   #
     # -------------------------------------------------------------------------- #
 
-    async def help(self, message):
+    async def help(self, message, db: DB, cmd: Command):
         """
         Creates and sends a discord embed with a list of all command names and
         descriptions avalable in the command_registry.
@@ -72,20 +71,13 @@ class Commands:
 
         await message.channel.send(embed=embed)
 
-    async def award(self, message):
+    async def award(self, message, db: DB, cmd: Command):
         """
         Awards a user with a reputation point.
         """
         contents = message.content.split(' ')
-        if len(contents) == 1:
-            await message.channel.send(
-                'This command needs a username. Try `' + self.botdata.get('prefix')
-                + 'award <username> <?amount>`.')
-            return
-        elif len(contents) > 3:
-            await message.channel.send(
-                'Too many words. Try `' + self.botdata.get('prefix')
-                + 'award <username> <?amount>`.')
+        if len(contents) == 1 or len(contents) > 3:
+            await cmd.send_usage_guide(message)
             return
         elif len(message.mentions) != 1:
             await message.channel.send(
@@ -105,19 +97,19 @@ class Commands:
                 print("failed to parse amount")
                 print(e)
 
-        if self.db.get_credits(message.author.id) < amt:
+        if db.get_credits(message.author.id) < amt:
             await message.channel.send(
                 'Sorry, ' + message.author.mention + ', you dont have enough awards left'
                 + 'to give. Credits reload every 6 hours.')
             return
 
-        reputation = self.db.award(message.author.id, user.id, quantity=amt)
+        reputation = db.award(message.author.id, user.id, quantity=amt)
         await message.channel.send('Awarded ' + str(amt) + ' reputation to ' + user.mention + '. ' +
-                                   message.author.mention + ' has ' + str(self.db.get_credits(message.author.id)) +
+                                   message.author.mention + ' has ' + str(db.get_credits(message.author.id)) +
                                    ' remaining credits.')
-        Rank.getRankForRep(reputation).assign_rank(user.id, self.db)
+        Rank.getRankForRep(reputation).assign_rank(user.id, db)
 
-    async def reputation(self, message):
+    async def reputation(self, message, db: DB, cmd: Command):
         """
         Get the reputation of a user.
         """
@@ -126,28 +118,27 @@ class Commands:
         if len(message.mentions) == 1:
             user = message.mentions[0]
         elif len(contents) > 1:
-            await message.channel.send(
-                'Too many words. Try `' + self.botdata.get('prefix')
-                + 'reputation <username>`.')
+            await cmd.send_usage_guide(message)
             return
         uid = user.id  # key to the database
 
-        reputation = self.db.get_reputation(uid)
+        reputation = db.get_reputation(uid)
 
         await message.channel.send(user.mention + ' is rank '
-                                   + str(self.db.get_rank(user.id)) + ' with ' + str(reputation)
+                                   + str(db.get_rank(user.id)) + ' with ' + str(reputation)
                                    + ' reputation.')
 
-    async def leaderboard(self, message):
+    async def leaderboard(self, message, db: DB, cmd: Command):
         """
         Creates and sends a discord embed with a list of the top users by xp and
         reputation points available in (somewhere).
         """
-        embed = discord.Embed(title="Leaderboard")
+        server = message.channel.guild.name
+        embed = discord.Embed(title=server + "'s Leaderboard")
         embed.set_thumbnail(
             url="https://cdn.discordapp.com/attachments/525140186762575873/837189807411036200/unknown.png")
         # embed.add_field(name='#1', value='tests User', inline=False)
-        rows = self.db.leaderboard()
+        rows = db.leaderboard()
         i = 0
         for row in rows:
             i += 1

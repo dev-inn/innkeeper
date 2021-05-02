@@ -8,5 +8,9 @@ class Command:
         self.description = description
         self.function = function
 
-    async def invoke(self, message):
-        await self.function(message)
+    async def invoke(self, message, db):
+        await self.function(message, db, self)
+
+    async def send_usage_guide(self, message):
+        await message.channel.send(
+            'Invalid usage. Try `' + self.name + self.args + '`')

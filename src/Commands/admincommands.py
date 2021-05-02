@@ -17,10 +17,9 @@ class AdminCommands:
 
     register = commands.Commands.register
 
-    def __init__(self, discordclient, botdata: Botdata, db: DB):
+    def __init__(self, discordclient, botdata: Botdata):
         self.botdata = botdata
         self.discord_client = discordclient
-        self.db = db
 
         self.command_registry = {}
 
@@ -33,7 +32,7 @@ class AdminCommands:
     #  Command Implementations                                                   #
     # -------------------------------------------------------------------------- #
 
-    async def nuke(self, message):
+    async def nuke(self, message, db: DB, cmd: Command):
         """
         Completely resets a user reputation.
         Only to be used by admins.
@@ -41,14 +40,13 @@ class AdminCommands:
         if len(message.mentions) == 1:
             user = message.mentions[0]
         else:
-            await message.channel.send(
-                'Try `' + self.botdata.get('prefix') + 'nuke <username>`.')
+            await cmd.send_usage_guide(message)
             return
         uid = user.id  # key to the database
-        self.db.nuke(uid)
+        db.nuke(uid)
         await message.channel.send('Reset ' + user.mention + ' reputation to 0.')
 
-    async def set_credits(self, message):
+    async def set_credits(self, message, db: DB, cmd: Command):
         """
         Set a users credits to desired amount
         Only to be used by admins
@@ -58,17 +56,17 @@ class AdminCommands:
         if len(message.mentions) == 1:
             user = message.mentions[0]
         else:
-            await message.channel.send('Try `' + self.botdata.get('prefix') + 'setCredits <user> <amount>`')
+            await cmd.send_usage_guide(message)
             return
         try:
             amt = int(contents[2])
         except ValueError:
             await message.channel.send('Invalid amount, must be integer amount of credits')
             return
-        self.db.set_credits(user.id, amt)
+        db.set_credits(user.id, amt)
         await message.channel.send('Successfully set ' + user.mention + '\'s credits to ' + str(amt))
 
-    async def newrank(self, message):
+    async def newrank(self, message, db: DB, cmd: Command):
         """
         ?newrank <@role> <entry_rep>
         """
@@ -77,17 +75,17 @@ class AdminCommands:
         if len(message.role_mentions) == 1:
             user = message.role_mentions[0]
         else:
-            await message.channel.send('Try `' + self.botdata.get('prefix') + 'setCredits <user> <amount>')
+            await cmd.send_usage_guide(message)
             return
         try:
             entry_rep = int(contents[2])
         except Exception:
             await message.channel.send('Invalid amount, must be integer amount of credits')
             return
-        self.db.set_credits(user.id, amt)
+        db.set_credits(user.id, amt)
         await message.channel.send('Successfully set ' + user.mention + '\'s credits to ' + str(amt))
 
-    async def help_admin(self, message):
+    async def help_admin(self, message, db: DB, _cmd: Command):
         prefix = self.botdata.get('prefix')
         url = self.botdata.get('gh_link')
 
@@ -105,7 +103,7 @@ class AdminCommands:
 
         await message.channel.send(embed=embed)
 
-    async def set_prefix(self, message):
+    async def set_prefix(self, message, db: DB, cmd: Command):
         """
         ?setprefix <new_prefix>
         """

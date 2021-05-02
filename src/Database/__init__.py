@@ -7,12 +7,17 @@ from src.Database import rank_database
 
 class DB:
 
-    def __init__(self, botdata: Botdata):
+    def close(self):
+        self.connection.commit()
+        self.connection.close()
+
+    def __init__(self, botdata: Botdata, sid: str):
         self.botdata = botdata
-        self.connection = sqlite3.connect('../' + botdata.get('dbfile') + '.db')
+        self.connection = sqlite3.connect(botdata.get('dbdir') + '/' + sid + '.db')
         self.cursor = self.connection.cursor()
         self.start_rankdb()
         self.start_userdb()
+        self.server_id = sid
 
     def start_rankdb(self):
         table_types = {
@@ -34,7 +39,7 @@ class DB:
 
         columns = [i[1] for i in self.cursor.execute('PRAGMA table_info(roles)')]
         if columns != [name for name, _ in table_types.items()]:
-            self.cursor.execute('DROP TABLE roles CASCADE')
+            self.cursor.execute('DROP TABLE roles')
             self.cursor.execute(
                 "CREATE TABLE roles " + table_string)
 

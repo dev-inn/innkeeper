@@ -5,8 +5,10 @@ import configparser
 # default values to populate the config file the first time
 default_values = {'debug': 'False', 'prefix': '?', 'pfp': 'avatar.jpg',
                   'gh_link': 'https://github.com/dev-inn/innkeeper', 'token': '<PUT_YOUR_TOKEN_HERE>',
-                  'schedulerInterval': '21600', 'dbfile': 'reputation', 'controller-role': '<PUT_YOUR_ROLE_ID_HERE>'}
+                  'schedulerInterval': '21600', 'dbfile': 'reputation', 'controller-role': '<PUT_YOUR_ROLE_ID_HERE>',
+                  'dbdir': 'data', 'server_cache_limit': '5'}
 # controller is one specific role which has permissions to use admin commands, server admins also have the power
+# server cache is how many db connections to keep open at once
 filepath = 'innkeeperbot.cfg'  # where config data is stored
 
 

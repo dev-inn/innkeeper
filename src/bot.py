@@ -24,6 +24,10 @@ pfp_path = bot.get('pfp')
 fp = open(pfp_path, 'rb')
 pfp = fp.read()
 
+# Custom Status
+activityvar = discord.Activity(type=discord.ActivityType.custom,state="Coding Ultron")
+
+
 # load secrets
 TOKEN = bot.get('token')
 
@@ -43,6 +47,7 @@ def set_last_checked_time(t):
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')  # just a debug message to let us know bot is up and running
+    await bot.change_presence(activity=activityvar)
     try:
         if client.user.avatar != pfp:
             await client.user.edit(avatar=pfp)  # adds an avatar to the bot

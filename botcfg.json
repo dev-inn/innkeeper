@@ -1,0 +1,12 @@
+{
+  "debug": "False",
+  "prefix": "?",
+  "pfp": "avatar.jpg",
+  "gh_link": "https://github.com/dev-inn/innkeeper",
+  "token": "<YOUR_TOKEN_HERE>",
+  "schedulerInterval": "21600",
+  "dbfile": "reputation",
+  "controller_role": "<YOUR_ROLE_ID_HERE>",
+  "dbdir": "data",
+  "server_cache_limit": "5"
+}

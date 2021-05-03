@@ -1,0 +1,36 @@
+{
+  "name": "innkeeper",
+  "version": "1.0.0",
+  "description": "A Discord bot built on discord.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node out/bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dev-inn/innkeeper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dev-inn/innkeeper/issues"
+  },
+  "homepage": "https://github.com/dev-inn/innkeeper#readme",
+  "devDependencies": {
+    "@types/node": "^15.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.25.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "@noodlewrecker7/logger": "^2.1.4",
+    "discord.js": "^12.5.3",
+    "source-map-support": "^0.5.19",
+    "typescript": "^4.2.4"
+  }
+}

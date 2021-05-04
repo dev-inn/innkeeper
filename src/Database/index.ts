@@ -1,4 +1,5 @@
-import { Model, DataTypes, ModelDefined, Sequelize, ModelAttributes, AttributeType } from 'sequelize'
+import { Model, Sequelize } from 'sequelize'
+
 /**
  * Initialise db connection*/
 const sequelize = new Sequelize('database', 'user', 'password', {
@@ -7,7 +8,9 @@ const sequelize = new Sequelize('database', 'user', 'password', {
     logging: false,
     storage: 'database.sqlite'
 })
+import Models from './Models'
 
+const models = Models(sequelize)
 /**
  * Class containing methods to access db */
 export default class Database {
@@ -16,7 +19,7 @@ export default class Database {
     }
 
     async getServer(serverID: string): Promise<Model<any, any> | null> {
-        return await servers.findOne({ where: { serverid: serverID } })
+        return await models.servers.findOne({ where: { serverid: serverID } })
     }
 
     async getServerPrefix(serverID: string): Promise<string> {
@@ -25,35 +28,8 @@ export default class Database {
     }
 
     sync(): void {
-        servers.sync()
-        users.sync()
-        ranks.sync()
+        models.servers.sync()
+        models.users.sync()
+        models.ranks.sync()
     }
 }
-
-/** Stores data about a users reputation*/
-const users = sequelize.define('reputation', {
-    userid: { type: DataTypes.STRING, unique: false },
-    serverid: { type: DataTypes.STRING, unique: false },
-    reputation: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false },
-    credits: { type: DataTypes.INTEGER, defaultValue: 1, allowNull: false },
-    xp: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false },
-    level: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false }
-})
-
-/**
- * Ranks for reputation by [p]award*/
-const ranks = sequelize.define('ranks', {
-    serverid: { type: DataTypes.STRING, unique: false },
-    entry_rep: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
-    budget: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
-    name: { type: DataTypes.STRING, allowNull: false },
-    roleid: { type: DataTypes.STRING, allowNull: true }
-})
-/**
- * Stores data about the servers*/
-const servers = sequelize.define('servers', {
-    serverid: { type: DataTypes.STRING, unique: false },
-    prefix: { type: DataTypes.CHAR, allowNull: false, defaultValue: '?' },
-    bot_admin_role: { type: DataTypes.STRING, allowNull: true }
-})

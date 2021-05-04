@@ -1,4 +1,4 @@
-import Discord, { Permissions } from 'discord.js'
+import Discord from 'discord.js'
 import { Bot } from './Bot'
 
 export default class {
@@ -16,7 +16,8 @@ export default class {
     /**Name of the command, can be used to call the command*/
     name: string // command name
     private cooldownTimers = new Discord.Collection<string, number>() // userid:timestamp
-
+    /**Displayed by the help command to describe the command function*/
+    description = ''
     /**
      * Adds a new alias
      * @param name the string to alias with the command*/
@@ -27,7 +28,15 @@ export default class {
     constructor(name: string, args: string[], func: (message: Discord.Message, bot: Bot, args: { [key: string]: string }) => void) {
         this.func = func
         this.argNames = args
-        this.name = name
+        this.name = name.toLowerCase()
+    }
+
+    usageString(prefix: string) {
+        let argsString = ''
+        for (let i = 0; i < this.argNames.length; i++) {
+            argsString += ` <${this.argNames[i]}>`
+        }
+        return prefix + this.name + argsString
     }
 
     /**

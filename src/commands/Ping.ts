@@ -7,5 +7,6 @@ const cmd = new Command('ping', [], (message, bot, args) => {
 cmd.guildOnly = false
 cmd.alias('p')
 cmd.cooldown = 5000
+cmd.description = 'Pong!'
 
 export default cmd

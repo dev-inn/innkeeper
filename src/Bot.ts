@@ -7,6 +7,7 @@ import events from './events'
 import * as fs from 'fs'
 import Command from './Command'
 import Database from './Database'
+import path from 'path'
 const log = logger.Logger
 log.setLevel(Logger.Levels.TRACE)
 
@@ -29,8 +30,8 @@ export class Bot extends Discord.Client {
 
     async loadCommands(): Promise<void> {
         this.commands.clear()
-        const commandFiles = fs.readdirSync('./out/commands').filter((name) => name.endsWith('.js'))
 
+        const commandFiles = fs.readdirSync('./out/commands').filter((name) => name.endsWith('.js'))
         for (let i = 0; i < commandFiles.length; i++) {
             const file = commandFiles[i]
             const cmd: Command = (await import(`./commands/${file}`)).default

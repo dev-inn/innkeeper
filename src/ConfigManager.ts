@@ -18,9 +18,7 @@ export class ConfigManager {
     get(key: string): string {
         const d = this.data[key]
         if (!d) {
-            log.warn(
-                `Could not find ${key}\nDid you make sure to set it in ${this.filepath}?`
-            )
+            log.warn(`Could not find ${key}\nDid you make sure to set it in ${this.filepath}?`)
         }
         return d
     }
@@ -60,10 +58,16 @@ export class ConfigManager {
             return
         }
         this.data = JSON.parse(response.toString())
+
+        for (let i = 0; i < Object.keys(default_data).length; i++) {
+            if (!this.data[Object.keys(default_data)[i]]) {
+                this.data[Object.keys(default_data)[i]] = default_data[Object.keys(default_data)[i]]
+            }
+        }
     }
 }
 
-const default_data = {
+const default_data: { [key: string]: string } = {
     debug: 'False',
     prefix: '?',
     pfp: 'avatar.jpg',
@@ -73,5 +77,6 @@ const default_data = {
     dbfile: 'reputation',
     controller_role: '<PUT_YOUR_ROLE_ID_HERE>',
     dbdir: 'data',
-    server_cache_limit: '5'
+    server_cache_limit: '5',
+    bot_name: 'Innkeeper'
 }

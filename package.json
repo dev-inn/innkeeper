@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@noodlewrecker7/logger": "^2.1.4",
+    "@small-tech/import-fresh": "^1.0.1",
     "@types/validator": "^13.1.3",
     "discord.js": "^12.5.3",
     "sequelize": "^6.6.2",

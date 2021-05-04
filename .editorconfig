@@ -6,19 +6,9 @@ end_of_line = crlf
 indent_size = 4
 indent_style = space
 insert_final_newline = true
-max_line_length = 120
+max_line_length = 150
 tab_width = 4
 trim_trailing_whitespace = true
-
-[{*.ats, *.ts}]
-indent_size = 2
-tab_width = 2
-ij_typescript_use_semicolon_after_statement = false
-
-[{*.cjs, *.js}]
-indent_size = 2
-max_line_length = 100
-tab_width = 2
 ij_typescript_use_semicolon_after_statement = false
 
 [{*.har, *.jsb2, *.jsb3, *.json, .babelrc, .eslintrc, .prettierrc, .stylelintrc, bowerrc, jest.config}]

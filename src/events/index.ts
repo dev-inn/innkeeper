@@ -1,7 +1,11 @@
-import message from './message'
 import Discord from 'discord.js'
 
-export default (client:Discord.Client) => {
+//
+import message from './message'
+import ready from './ready'
+import { Bot } from '../Bot'
 
-  message(client)
+export default (client: Bot) => {
+    message(client)
+    ready(client)
 }

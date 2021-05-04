@@ -11,10 +11,13 @@ const client: Discord.Client = new Discord.Client()
 const cfg = new ConfigManager('botcfg.json')
 
 client.on('ready', () => {
-    log.info('Ready')
+  log.info('Ready')
 })
 client.on('message', () => {
-    return
+  return
 })
+import events from './events'
+
+events(client)
 
 client.login(cfg.get('token'))

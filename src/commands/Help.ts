@@ -26,7 +26,7 @@ const cmd = new Command('help', ['command_name'], async (message, bot, args) => 
         text += '`' + command.usageString(prefix) + `\` - ${command.description}\n\n`
     })
     embed.setDescription(text)
-    embed.setImage(bot.cfg.get('pfp'))
+    embed.setThumbnail(bot.cfg.get('pfp'))
     embed.setFooter(`Thank you for using ${bot.cfg.get('bot_name')}`)
     embed.setColor('LUMINOUS_VIVID_PINK')
     message.reply(embed)

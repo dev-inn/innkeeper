@@ -70,7 +70,7 @@ export class ConfigManager {
 const default_data: { [key: string]: string } = {
     debug: 'False',
     prefix: '?',
-    pfp: 'avatar.jpg',
+    pfp: 'https://files.noodlewrecker.net/innkeeper.png',
     gh_link: 'https://github.com/dev-inn/innkeeper',
     token: '<PUT_YOUR_TOKEN_HERE>',
     scheduler_interval: '21600',

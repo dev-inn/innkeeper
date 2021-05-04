@@ -11,6 +11,8 @@
     "allowJs": false,
     "noImplicitAny": true,
     "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "lib": [
       "ES2020"
     ],

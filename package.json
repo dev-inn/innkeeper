@@ -21,16 +21,19 @@
   "homepage": "https://github.com/dev-inn/innkeeper#readme",
   "devDependencies": {
     "@types/node": "^15.0.1",
-    "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/parser": "^4.22.0",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
     "eslint": "^7.25.0",
     "eslint-plugin-prettier": "^3.4.0",
     "prettier": "^2.2.1"
   },
   "dependencies": {
     "@noodlewrecker7/logger": "^2.1.4",
+    "@types/validator": "^13.1.3",
     "discord.js": "^12.5.3",
+    "sequelize": "^6.6.2",
     "source-map-support": "^0.5.19",
+    "sqlite3": "^5.0.2",
     "typescript": "^4.2.4"
   }
 }

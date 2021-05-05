@@ -67,7 +67,6 @@ export default class {
             return
         }
         // check permissions
-        // todo allow dev role to bypass
         if (this.requiredPermissions) {
             // if command needs perms
             if (!message.guild) {

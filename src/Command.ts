@@ -1,9 +1,18 @@
 import Discord from 'discord.js'
 import { Bot } from './Bot'
+import { logger } from '@noodlewrecker7/logger'
 
+const log = logger.Logger
+
+type argDefinitions = {
+    name: string
+    optional: boolean
+    mention?: string
+}[]
+/**Contains all required data for handling command execution*/
 export default class {
     /**List of argument names*/
-    argNames: string[]
+    argDefs: argDefinitions
     private readonly func: (message: Discord.Message, bot: Bot, args: { [key: string]: string }) => void
     /**Cooldown time in ms*/
     cooldown = 5000 // time in milliseconds of command usage cooldown per user
@@ -11,29 +20,36 @@ export default class {
     guildOnly = true
     /**Other single-word strings that should trigger this command*/
     aliases: string[] = []
-    /**List of permissions that are required to use this command*/
-    requiredPermissions: string[] = []
+    /**List of permissions bit flags that are required to use this command*/
+    requiredPermissions: number[] = []
     /**Name of the command, can be used to call the command*/
     name: string // command name
     private cooldownTimers = new Discord.Collection<string, number>() // userid:timestamp
     /**Displayed by the help command to describe the command function*/
     description = ''
+
     /**Adds a new alias
      * @param name the string to alias with the command*/
-    alias(name: string) {
+    alias(name: string): void {
         this.aliases.push(name)
     }
 
-    constructor(name: string, args: string[], func: (message: Discord.Message, bot: Bot, args: { [key: string]: string }) => void) {
+    constructor(
+        name: string,
+        args: argDefinitions,
+        func: (message: Discord.Message, bot: Bot, args: { [key: string]: string }) => void
+    ) {
         this.func = func
-        this.argNames = args
+        this.argDefs = args
         this.name = name.toLowerCase()
     }
 
-    usageString(prefix: string) {
+    /**Returns a string to displayed to use explaining usage of command*/
+    usageString(prefix: string): string {
         let argsString = ''
-        for (let i = 0; i < this.argNames.length; i++) {
-            argsString += ` <${this.argNames[i]}>`
+        for (let i = 0; i < this.argDefs.length; i++) {
+            const arg = this.argDefs[i]
+            argsString += ` <${arg.optional ? '?' : ''}${arg.mention ? '@' : ''}${arg.name}>`
         }
         return prefix + this.name + argsString
     }
@@ -41,8 +57,11 @@ export default class {
     /**
      * Invokes the command's function
      * @param message the message object provided by discord
-     * @param bot instance of Bot class*/
-    invoke(message: Discord.Message, bot: Bot) {
+     * @param bot instance of Bot class
+     * @param args list of strings that are passes as arguments*/
+    async invoke(message: Discord.Message, bot: Bot, args: string[]): Promise<void> {
+        // im really sorry this function is a bit of a mess but it shouldn't ever really need to be touched
+
         // check if can be run in this context
         if (this.guildOnly && !message.guild) {
             return
@@ -51,28 +70,77 @@ export default class {
         // todo allow dev role to bypass
         if (this.requiredPermissions) {
             // if command needs perms
-            for (let i = 0; i < this.requiredPermissions.length; i++) {
-                // for each required perm
-                if (
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    !message.member?.hasPermission(this.requiredPermissions[i]) // user doesnt have perm
-                ) {
-                    return
+            if (!message.guild) {
+                // if it needs perms then it musts be in a server
+                return
+            }
+            const adminRole = <string>(await bot.DB.getServer(message.guild.id)).bot_admin_role
+
+            if (
+                !message.member?.hasPermission('ADMINISTRATOR') &&
+                !message.member?.roles.cache.has(adminRole)
+            ) {
+                // bypassed if they have admin privileges
+                for (let i = 0; i < this.requiredPermissions.length; i++) {
+                    // for each required perm
+                    if (
+                        !message.member?.hasPermission(this.requiredPermissions[i]) // user doesnt have perm
+                    ) {
+                        return
+                    }
                 }
             }
         }
 
-        // convert args to key:value object
-        const args = message.content.trim().split(/ +/) // splits on space and removes duplicate spacing
-        args.shift() // removes command from start
-        if (args.length > this.argNames.length) {
-            message.channel.send('Too many arguments')
+        if (args.length > this.argDefs.length) {
+            await message.channel.send('Too many arguments')
             return
         }
         const argObj: { [key: string]: string } = {}
-        for (let i = 0; i < args.length; i++) {
-            argObj[this.argNames[i]] = args[i]
+        for (let i = 0; i < this.argDefs.length; i++) {
+            if (!args[i] && !this.argDefs[i].optional) {
+                await message.channel.send(`Missing ${this.argDefs[i].name} parameter`)
+                return
+            }
+            if (this.argDefs[i].optional && !args[i]) {
+                break
+            }
+            let content
+            if (this.argDefs[i].mention == 'user') {
+                // /^<@!?(\d+)>$/
+                const regex = args[i].match(/^<@!?(\d+)>$/)
+                if (regex) {
+                    content = regex[0]
+                }
+            } else if (this.argDefs[i].mention == 'role') {
+                // /^<@&(\d+)>$/
+                const regex = args[i].match(/^<@&(\d+)>$/)
+                if (regex) {
+                    content = regex[0]
+                }
+            } else if (this.argDefs[i].mention == 'channel') {
+                // /^<#(\d+)>$/
+                const regex = args[i].match(/^<#(\d+)>$/)
+                if (regex) {
+                    content = regex[0]
+                }
+            } else {
+                content = args[i]
+            }
+            if (!content) {
+                await message.reply(`Error parsing argument ${this.argDefs[i].name}`)
+                return
+            }
+            if (this.argDefs[i].mention) {
+                content = content
+                    .replace('<', '')
+                    .replace('>', '')
+                    .replace('@', '')
+                    .replace('!', '')
+                    .replace('#', '')
+                    .replace('&', '')
+            }
+            argObj[this.argDefs[i].name] = content
         }
 
         // check user cooldowns
@@ -83,7 +151,7 @@ export default class {
                 const timestamp = this.cooldownTimers.get(message.author.id)
                 if (timestamp && timestamp + this.cooldown > Date.now()) {
                     // if they're still cooling down
-                    message.reply(
+                    await message.reply(
                         'You are doing that too fast\nPlease wait another `' +
                             Math.ceil((timestamp + this.cooldown - Date.now()) / 1000) +
                             '` seconds before trying that again'

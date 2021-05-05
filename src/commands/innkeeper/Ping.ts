@@ -1,4 +1,4 @@
-import Command from '../Command'
+import Command from '../../Command'
 
 const cmd = new Command('ping', [], (message, bot, args) => {
     message.channel.send('Pong!')

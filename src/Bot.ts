@@ -8,6 +8,7 @@ import * as fs from 'fs'
 import Command from './Command'
 import Database from './Database'
 import path from 'path'
+
 const log = logger.Logger
 log.setLevel(Logger.Levels.TRACE)
 
@@ -30,13 +31,32 @@ export class Bot extends Discord.Client {
 
     async loadCommands(): Promise<void> {
         this.commands.clear()
-
-        const commandFiles = fs.readdirSync('./out/commands').filter((name) => name.endsWith('.js'))
-        for (let i = 0; i < commandFiles.length; i++) {
-            const file = commandFiles[i]
-            const cmd: Command = (await import(`./commands/${file}`)).default
-            this.commands.set(cmd.name, cmd)
-            log.debug(`Loaded ${cmd.name}`)
+        // loops through each folder
+        const commandDirs = fs.readdirSync('./out/commands')
+        for (let i = 0; i < commandDirs.length; i++) {
+            const commandFiles = fs
+                .readdirSync(`./out/commands/${commandDirs[i]}`)
+                .filter((name) => name.endsWith('.js'))
+            //get all the js files in the folder
+            // loops through each file
+            for (let j = 0; j < commandFiles.length; j++) {
+                const file = commandFiles[j]
+                // imports the file
+                const cmd: any = (await import(`./commands/${commandDirs[i]}/${file}`)).default
+                // if a Command object is exported
+                if (cmd instanceof Command) {
+                    // loads the command to the collection
+                    this.commands.set(cmd.name, cmd)
+                    log.debug(`Loaded ${commandDirs[i]}/${cmd.name}`)
+                } else {
+                    // assumes its a setup file and calls it as function, passing and isntance of Bot
+                    try {
+                        cmd(this)
+                    } catch (e) {
+                        log.error(`Could not load ${commandDirs[i]}/${file}`)
+                    }
+                }
+            }
         }
     }
 }

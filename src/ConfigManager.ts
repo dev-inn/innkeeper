@@ -75,7 +75,6 @@ const default_data: { [key: string]: string } = {
     token: '<PUT_YOUR_TOKEN_HERE>',
     scheduler_interval: '21600',
     dbfile: 'reputation',
-    controller_role: '<PUT_YOUR_ROLE_ID_HERE>',
     dbdir: 'data',
     server_cache_limit: '5',
     bot_name: 'Innkeeper'

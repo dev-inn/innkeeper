@@ -1,4 +1,4 @@
-import Command from '../Command'
+import Command from '../../Command'
 
 /**Doesn't actually work yet as all imports are cached*/
 const cmd = new Command('reload', [], async (message, bot, args) => {

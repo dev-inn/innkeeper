@@ -13,7 +13,16 @@
   "rules": {
     "no-console": 1,
     // Means warning
-    "prettier/prettier": 2
+    "prettier/prettier": 2,
     // Means error
+    "require-jsdoc": ["warn", {
+      "require": {
+        "FunctionDeclaration": true,
+        "MethodDefinition": true,
+        "ClassDeclaration": true,
+        "ArrowFunctionExpression": false,
+        "FunctionExpression": false
+      }
+    }]
   }
 }

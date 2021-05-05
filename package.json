@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "eslint --fix && tsc && node out/Bot.js"
+    "start": "eslint --fix && tsc && node --trace-warnings out/Bot.js"
   },
   "repository": {
     "type": "git",

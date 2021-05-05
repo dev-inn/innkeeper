@@ -12,16 +12,18 @@ export default (bot: Bot) => {
         if (message.guild) {
             prefix = (await bot.DB.getServerPrefix(message.guild.id)) || bot.cfg.get('prefix')
         }
-        if (!message.content.startsWith(prefix) || message.author.bot) {
+        if (!message.content.startsWith(prefix) || message.author.bot || message.webhookID) {
             log.debug('Message not bot command')
             return
         }
-        const commandName = message.content.slice(prefix.length).split(/ +/)[0].toLowerCase()
+        const args = message.content.slice(prefix.length).split(/ +/)
+        const commandName = args.shift()?.toLowerCase()
+        if (!commandName) return
         const cmd =
             bot.commands.get(commandName) ||
             bot.commands.find((x) => {
                 return x.aliases && x.aliases.includes(commandName)
             })
-        cmd?.invoke(message, bot)
+        cmd?.invoke(message, bot, args)
     })
 }

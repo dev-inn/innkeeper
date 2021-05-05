@@ -39,7 +39,7 @@ export default (sequelize: Sequelize) => {
         { tableName: 'users', sequelize: sequelize }
     )
 
-    User.init(
+    Rank.init(
         {
             serverid: { type: DataTypes.STRING, unique: false },
             entry_rep: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
@@ -59,5 +59,5 @@ export default (sequelize: Sequelize) => {
         { tableName: 'ranks', sequelize: sequelize }
     )
 
-    return { Users: User }
+    // sequelize.sync({ force: true })
 }

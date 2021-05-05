@@ -27,6 +27,10 @@ export default class Database {
         return <string>server?.get('prefix')
     }
 
+    async getUserInServer(userID: string, serverID: string): Promise<Model<any, any> | null> {
+        return await models.users.findOne({ where: { userid: userID, serverid: serverID } })
+    }
+
     sync(): void {
         models.servers.sync()
         models.users.sync()

@@ -3,13 +3,12 @@ import { Sequelize, DataTypes } from 'sequelize'
 export default (sequelize: Sequelize) => {
     return {
         /** Stores data about a users reputation*/
-        users: sequelize.define('reputation', {
+        users: sequelize.define('users', {
             userid: { type: DataTypes.STRING, unique: false },
             serverid: { type: DataTypes.STRING, unique: false },
             reputation: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false },
             credits: { type: DataTypes.INTEGER, defaultValue: 1, allowNull: false },
-            xp: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false },
-            level: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false }
+            xp: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false }
         }),
 
         /**

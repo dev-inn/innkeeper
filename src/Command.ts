@@ -18,8 +18,7 @@ export default class {
     private cooldownTimers = new Discord.Collection<string, number>() // userid:timestamp
     /**Displayed by the help command to describe the command function*/
     description = ''
-    /**
-     * Adds a new alias
+    /**Adds a new alias
      * @param name the string to alias with the command*/
     alias(name: string) {
         this.aliases.push(name)

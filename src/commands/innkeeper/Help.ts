@@ -33,17 +33,19 @@ const cmd = new Command('help', [{ name: 'command', optional: true }], async (me
     }
     bot.commands.each((command) => {
         let allowed = true
-        if (!bypass) {
-            for (let i = 0; i < command.requiredPermissions.length; i++) {
-                const perm = command.requiredPermissions[i]
-                if (!message.member?.hasPermission(perm)) {
-                    allowed = false
-                    break
-                }
+        if (bypass) {
+            text += '`' + command.usageString(prefix) + `\` - ${command.description}\n\n`
+            return
+        }
+        for (let i = 0; i < command.requiredPermissions.length; i++) {
+            const perm = command.requiredPermissions[i]
+            if (!message.member?.hasPermission(perm)) {
+                allowed = false
+                break
             }
         }
 
-        if (allowed || bypass) {
+        if (allowed) {
             text += '`' + command.usageString(prefix) + `\` - ${command.description}\n\n`
         }
     })

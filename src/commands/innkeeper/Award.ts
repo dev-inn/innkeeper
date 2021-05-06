@@ -17,7 +17,7 @@ const cmd = new Command(
     async (message, bot, args) => {
         let amount
         try {
-            amount = toInt(args['?amount'])
+            amount = parseInt(args['?amount'])
         } catch (e) {
             amount = 1
         }

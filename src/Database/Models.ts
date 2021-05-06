@@ -44,7 +44,6 @@ export default (sequelize: Sequelize) => {
             serverid: { type: DataTypes.STRING, unique: false },
             entry_rep: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
             budget: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
-            name: { type: DataTypes.STRING, allowNull: false },
             roleid: { type: DataTypes.STRING, allowNull: true }
         },
         { tableName: 'ranks', sequelize: sequelize }

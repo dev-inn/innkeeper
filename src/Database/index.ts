@@ -1,4 +1,4 @@
-import { Model, Sequelize } from 'sequelize'
+import { Model, Op, Sequelize } from 'sequelize'
 import { User, Rank, Server } from './Models'
 import Models from './Models'
 import { logger } from '@noodlewrecker7/logger'
@@ -66,9 +66,30 @@ export default class Database {
         })
     }
 
+    async setUserCredits(userID: string, serverID: string, amount: number): Promise<void> {
+        const user = await this.getUserInServer(userID, serverID)
+        await user.update({ credits: amount })
+        await user.save()
+    }
+
+    /**Inserts rank into the db*/
+    async insertNewRank(serverid: string, roleid: string, entry_rep: number, budget: number): Promise<Rank> {
+        return await Rank.create({ serverid, roleid, entry_rep, budget })
+    }
+
+    /**Returns the rank with the highest rep that is below/equal to the passed rep*/
+    async getRankByRep(serverid: string, rep: number) {
+        return await Rank.findOne({
+            where: { entry_rep: { [Op.lte]: rep }, serverid },
+            order: [['entry_rep', 'DESC']],
+            limit: 1
+        })
+    }
+
     async nukeUserFromServer(userID: string, serverID: string): Promise<number> {
         return await User.destroy({ where: { userid: userID, serverid: serverID }, force: true })
     }
+
     sync(): void {
         sequelize.sync()
     }

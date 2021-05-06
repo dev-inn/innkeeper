@@ -70,7 +70,7 @@ export default (sequelize: Sequelize) => {
     Server.init(
         {
             serverid: { type: DataTypes.STRING, unique: true, allowNull: false },
-            prefix: { type: DataTypes.CHAR, allowNull: false, defaultValue: '?' },
+            prefix: { type: DataTypes.CHAR, allowNull: true },
             bot_admin_role: { type: DataTypes.STRING, allowNull: true }
         },
         { tableName: 'servers', sequelize: sequelize }

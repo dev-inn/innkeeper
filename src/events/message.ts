@@ -9,9 +9,11 @@ export default (bot: Bot) => {
     bot.on('message', async (message) => {
         log.debug('Message received')
         let prefix = bot.cfg.get('prefix')
+        log.debug(prefix)
         if (message.guild) {
             prefix = (await bot.DB.getServerPrefix(message.guild.id)) || bot.cfg.get('prefix')
         }
+        log.debug(prefix)
         if (!message.content.startsWith(prefix) || message.author.bot || message.webhookID) {
             log.debug('Message not bot command')
             return

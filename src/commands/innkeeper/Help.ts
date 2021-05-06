@@ -54,7 +54,7 @@ const cmd = new Command('help', [{ name: 'command', optional: true }], async (me
     embed.setThumbnail(bot.cfg.get('pfp'))
     embed.setFooter(`Thank you for using ${bot.cfg.get('bot_name')}`)
     embed.setColor('LUMINOUS_VIVID_PINK')
-    message.reply(embed)
+    await message.reply(embed)
 })
 
 cmd.guildOnly = false

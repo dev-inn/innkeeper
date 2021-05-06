@@ -13,7 +13,11 @@ type argDefinitions = {
 export default class {
     /**List of argument names*/
     argDefs: argDefinitions
-    private readonly func: (message: Discord.Message, bot: Bot, args: { [key: string]: string }) => void
+    private readonly func: (
+        message: Discord.Message,
+        bot: Bot,
+        args: { [key: string]: string }
+    ) => Promise<void>
     /**Cooldown time in ms*/
     cooldown = 5000 // time in milliseconds of command usage cooldown per user
     /**Whether command can only be used in servers*/
@@ -28,6 +32,9 @@ export default class {
     /**Displayed by the help command to describe the command function*/
     description = ''
 
+    /**Whether or not the command is invalid if too many args are passed*/
+    rejectExtraArgs = true
+
     /**Adds a new alias
      * @param name the string to alias with the command*/
     alias(name: string): void {
@@ -37,7 +44,7 @@ export default class {
     constructor(
         name: string,
         args: argDefinitions,
-        func: (message: Discord.Message, bot: Bot, args: { [key: string]: string }) => void
+        func: (message: Discord.Message, bot: Bot, args: { [key: string]: string }) => Promise<void>
     ) {
         this.func = func
         this.argDefs = args
@@ -85,13 +92,14 @@ export default class {
                     if (
                         !message.member?.hasPermission(this.requiredPermissions[i]) // user doesnt have perm
                     ) {
+                        await message.reply('You need permission to use that command')
                         return
                     }
                 }
             }
         }
 
-        if (args.length > this.argDefs.length) {
+        if (args.length > this.argDefs.length && this.rejectExtraArgs) {
             await message.channel.send('Too many arguments')
             return
         }
@@ -160,6 +168,23 @@ export default class {
             }
             this.cooldownTimers.set(message.author.id, Date.now())
         }
-        this.func(message, bot, argObj)
+        try {
+            this.func(message, bot, argObj).catch((err) => {
+                log.error(err)
+                log.trace(this.name)
+                log.debug(err.stack)
+                message.reply(
+                    'Uh oh! Something went wrong! Check the command was written properly, otherwise reach out to me at ' +
+                        bot.cfg.get('gh_link')
+                )
+            })
+        } catch (e) {
+            log.error('Failed to invoke command')
+            log.trace(this.name)
+            await message.reply(
+                'Uh oh! Something went wrong! Check the command was written properly, otherwise reach out to me at ' +
+                    bot.cfg.get('gh_link')
+            )
+        }
     }
 }

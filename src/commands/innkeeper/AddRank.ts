@@ -33,7 +33,12 @@ const cmd = new Command(
             return
         }
 
-        await bot.DB.insertNewRank(message.guild.id, role, entry_rep, budget)
+        try {
+            await bot.DB.insertNewRank(message.guild.id, role, entry_rep, budget)
+            await message.channel.send(`Made new rank: <@&${role}>`)
+        } catch (e) {
+            await message.channel.send('Error inserting rank, please contact a server admin')
+        }
     }
 )
 

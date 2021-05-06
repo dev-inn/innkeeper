@@ -22,8 +22,30 @@ const cmd = new Command('help', [{ name: 'command', optional: true }], async (me
     const embed = new Discord.MessageEmbed()
     embed.setTitle(bot.cfg.get('bot_name') + "'s Commands")
     let text = ''
+    let adminrole
+    if (message.guild) {
+        const server = await bot.DB.getServer(message.guild.id)
+        adminrole = server.bot_admin_role
+    }
+    let bypass = false
+    if (adminrole && message.member?.roles.cache.has(adminrole)) {
+        bypass = true
+    }
     bot.commands.each((command) => {
-        text += '`' + command.usageString(prefix) + `\` - ${command.description}\n\n`
+        let allowed = true
+        if (!bypass) {
+            for (let i = 0; i < command.requiredPermissions.length; i++) {
+                const perm = command.requiredPermissions[i]
+                if (!message.member?.hasPermission(perm)) {
+                    allowed = false
+                    break
+                }
+            }
+        }
+
+        if (allowed || bypass) {
+            text += '`' + command.usageString(prefix) + `\` - ${command.description}\n\n`
+        }
     })
     text += `**Need support?**\n${bot.cfg.get('gh_link')} `
     embed.setDescription(text)

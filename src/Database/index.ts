@@ -1,6 +1,5 @@
-import { Model, Op, Sequelize } from 'sequelize'
-import { User, Rank, Server } from './Models'
-import Models from './Models'
+import { Op, Sequelize } from 'sequelize'
+import Models, { Rank, RoleReaction, Server, User } from './Models'
 import { logger } from '@noodlewrecker7/logger'
 
 const log = logger.Logger
@@ -78,7 +77,7 @@ export default class Database {
     }
 
     /**Returns the rank with the highest rep that is below/equal to the passed rep*/
-    async getRankByRep(serverid: string, rep: number) {
+    async getRankByRep(serverid: string, rep: number): Promise<Rank | null> {
         return await Rank.findOne({
             where: { entry_rep: { [Op.lte]: rep }, serverid },
             order: [['entry_rep', 'DESC']],
@@ -88,6 +87,28 @@ export default class Database {
 
     async nukeUserFromServer(userID: string, serverID: string): Promise<number> {
         return await User.destroy({ where: { userid: userID, serverid: serverID }, force: true })
+    }
+
+    async insertRoleReaction(
+        serverid: string,
+        messageid: string,
+        roleid: string,
+        emoji: string,
+        channelid: string
+    ): Promise<RoleReaction> {
+        return await RoleReaction.create({ serverid, messageid, roleid, emoji, channelid })
+    }
+
+    async getAllRoleReactionsForMessage(messageid: string) {
+        return await RoleReaction.findAll({ where: { messageid } })
+    }
+
+    async getRoleReactionByEmoji(messageid: string, emoji: string): Promise<RoleReaction | null> {
+        return await RoleReaction.findOne({ where: { messageid, emoji } })
+    }
+
+    async setServerAdminRole(serverid: string, roleid: string) {
+        await Server.update({ bot_admin_role: roleid }, { where: { serverid } })
     }
 
     sync(): void {

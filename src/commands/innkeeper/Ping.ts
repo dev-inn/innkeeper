@@ -1,7 +1,7 @@
 import Command from '../../Command'
 
-const cmd = new Command('ping', [], (message, bot, args) => {
-    message.channel.send('Pong!')
+const cmd = new Command('ping', [], async (message, bot, args) => {
+    await message.channel.send('Pong!')
 })
 
 cmd.guildOnly = false

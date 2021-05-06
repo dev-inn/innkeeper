@@ -3,7 +3,7 @@ import validator from 'validator'
 import toInt = validator.toInt
 import Transaction, { IncrementDecrementOptionsWithBy } from 'sequelize'
 import Sequelize from 'sequelize'
-import { GuildMember } from 'discord.js'
+import { GuildMember, Role, Snowflake } from 'discord.js'
 import { logger } from '@noodlewrecker7/logger'
 
 const log = logger.Logger
@@ -15,10 +15,9 @@ const cmd = new Command(
         { name: 'amount', optional: true }
     ],
     async (message, bot, args) => {
-        let amount
-        try {
-            amount = parseInt(args['?amount'])
-        } catch (e) {
+        let amount: number
+        amount = parseInt(args['amount'])
+        if (!Number.isInteger(amount)) {
             amount = 1
         }
         if (!message.member || !message.guild) {
@@ -39,15 +38,36 @@ const cmd = new Command(
             return
         }
         const mentionedUserEntry = await bot.DB.getUserInServer(mentionedUser.user.id, mentionedUser.guild.id)
-        await user.decrement('credits', { by: amount })
-        await mentionedUserEntry.increment('reputation', { by: amount })
+        await user.decrement({ credits: amount })
+
+        await mentionedUserEntry.increment({ reputation: amount })
         await user.save()
         await mentionedUserEntry.save()
 
         const text = `${mentionedUser} has received \`${amount}\` reputation. They now have \`${
             mentionedUserEntry.reputation + amount
-        }\`` // using the current value of reputation gives the value form before it was incremented
+        }\`` // using the current value of reputation gives the value from before it was incremented, so adding the two gives the accurate total
         await message.channel.send(text)
+
+        const oldRank = await bot.DB.getRankByRep(message.guild.id, mentionedUserEntry.reputation)
+        const newRank = await bot.DB.getRankByRep(message.guild.id, mentionedUserEntry.reputation + amount)
+        if (!newRank) {
+            log.debug('rank not exist')
+            return
+        }
+        if (oldRank && newRank.equals(oldRank)) {
+            log.debug('ranks equal')
+            return
+        }
+        const discordUser = await message.guild.members.fetch(args.user)
+        try {
+            if (oldRank?.roleid) {
+                await discordUser.roles.remove(<string>oldRank?.roleid)
+            }
+            await discordUser.roles.add(<string>newRank.roleid)
+        } catch (e) {
+            await message.channel.send('Error setting rank roles, please contact a server admin')
+        }
     }
 )
 

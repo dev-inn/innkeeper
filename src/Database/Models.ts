@@ -15,7 +15,6 @@ export class Rank extends Model {
     public serverid!: string
     public entry_rep!: number
     public budget!: number
-    public name!: string
     public roleid?: string
 }
 
@@ -27,7 +26,26 @@ export class Server extends Model {
     bot_admin_role?: string
 }
 
+export class RoleReaction extends Model {
+    public serverid!: string
+    public roleid!: string
+    public messageid!: string
+    public emoji!: string
+    public channelid!: string
+}
+
 export default (sequelize: Sequelize) => {
+    RoleReaction.init(
+        {
+            serverid: { type: DataTypes.STRING, unique: false, allowNull: false },
+            roleid: { type: DataTypes.STRING, allowNull: false },
+            messageid: { type: DataTypes.STRING, allowNull: false },
+            emoji: { type: DataTypes.STRING, allowNull: false },
+            channelid: { type: DataTypes.STRING, allowNull: false }
+        },
+        { tableName: 'rolereactions', sequelize: sequelize }
+    )
+
     User.init(
         {
             userid: { type: DataTypes.STRING, unique: false },
@@ -55,7 +73,7 @@ export default (sequelize: Sequelize) => {
             prefix: { type: DataTypes.CHAR, allowNull: false, defaultValue: '?' },
             bot_admin_role: { type: DataTypes.STRING, allowNull: true }
         },
-        { tableName: 'ranks', sequelize: sequelize }
+        { tableName: 'servers', sequelize: sequelize }
     )
 
     // sequelize.sync({ force: true })

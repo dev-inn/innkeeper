@@ -5,3 +5,6 @@ venv/
 .idea/
 .vscode/
 innkeeperbot.cfg
+/node_modules
+/out
+tsconfig.tsbuildinfo

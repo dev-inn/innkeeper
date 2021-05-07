@@ -1,9 +1,11 @@
 import { Bot } from '../Bot'
 import { logger } from '@noodlewrecker7/logger'
+import message from './message'
 const log = logger.Logger
 
 export default (bot: Bot) => {
     bot.on('messageReactionRemove', async (messageReaction, user) => {
+        log.debug('message react removed')
         const reactions = await bot.DB.getAllRoleReactionsForMessage(messageReaction.message.id)
         if (reactions.length <= 0) {
             // if there are no reactions set for that message, do nothing
@@ -18,13 +20,12 @@ export default (bot: Bot) => {
         }
         const roleReaction = await bot.DB.getRoleReactionByEmoji(messageReaction.message.id, emoji)
         if (!roleReaction) {
-            // if that emoji doesnt have a set role
-            log.debug('Couldnt find role for emoji react remove')
-            await messageReaction.users.remove(user.id)
+            log.debug('could not find the role')
             return
         }
         if (!messageReaction.message.guild) {
             // not in a server
+            log.debug('not in server')
             return
         }
         const member = await messageReaction.message.guild.members.fetch(user.id)

@@ -20,7 +20,12 @@ export class Bot extends Discord.Client {
 
     constructor() {
         log.time('Started bot in')
-        super()
+        super({
+            ws: {
+                intents: ['GUILD_MESSAGES', 'GUILDS', 'GUILD_MESSAGE_REACTIONS']
+            },
+            partials: ['REACTION', 'MESSAGE']
+        })
         this.cfg = new ConfigManager('botcfg.json')
         events(this)
         this.login(this.cfg.get('token'))

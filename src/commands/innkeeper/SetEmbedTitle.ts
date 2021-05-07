@@ -27,7 +27,7 @@ cmd.guildOnly = true
 cmd.alias('setembedtitle')
 cmd.alias('etitle')
 cmd.cooldown = 5000
-cmd.description = 'Sets the description of a specified embed message'
+cmd.description = 'Sets the title of a specified embed message'
 cmd.rejectExtraArgs = false
 cmd.requiredPermissions = [Discord.Permissions.FLAGS.ADMINISTRATOR]
 

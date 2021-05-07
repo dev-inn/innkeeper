@@ -25,6 +25,15 @@ const cmd = new Command(
         }
         if (!message.guild) return
 
+        const ranks = await bot.DB.getAllRanksForServer(message.guild.id)
+        if (ranks.length >= 25) {
+            // discord embeds have a max of 25 fields
+            await message.reply(
+                'Sorry you can only have 25 ranks due to a discord limitation\nPerhaps remove one?'
+            )
+            return
+        }
+
         const rank = await bot.DB.getRankByRep(message.guild.id, entry_rep)
         if (rank?.entry_rep == entry_rep) {
             await message.reply(

@@ -107,10 +107,21 @@ export default class Database {
         return await RoleReaction.findOne({ where: { messageid, emoji } })
     }
 
+    /**Sets the admin role for the specified server
+     * @param serverid {string} the snowflake id of the server
+     * @param roleid {string} the snowflake id of the role*/
     async setServerAdminRole(serverid: string, roleid: string) {
         await Server.update({ bot_admin_role: roleid }, { where: { serverid } })
     }
 
+    /**Returns a list of all the rank in a given server, sorted by entry rep descending
+     * @param serverid {string} the snowflake id of the server
+     * @return an array of Rank objects */
+    async getAllRanksForServer(serverid: string): Promise<Rank[]> {
+        return await Rank.findAll({ where: { serverid }, order: [['entry_rep', 'DESC']] })
+    }
+
+    /**Calls sync() on the database to create any empty tables*/
     sync(): void {
         sequelize.sync()
     }

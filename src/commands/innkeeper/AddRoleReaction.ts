@@ -1,4 +1,5 @@
 import Command from '../../Command'
+import Discord from 'discord.js'
 
 const cmd = new Command(
     'addrolereaction',
@@ -35,5 +36,6 @@ cmd.guildOnly = true
 cmd.alias('arr')
 cmd.cooldown = 5000
 cmd.description = 'Adds an emoji reaction role to a message'
+cmd.requiredPermissions = [Discord.Permissions.FLAGS.ADMINISTRATOR]
 
 export default cmd

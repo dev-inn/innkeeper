@@ -7,6 +7,7 @@ export default (bot: Bot) => {
         const reactions = await bot.DB.getAllRoleReactionsForMessage(messageReaction.message.id)
         if (reactions.length <= 0) {
             // if there are no reactions set for that message, do nothing
+            log.debug('didnt find any reactions')
             return
         }
         const emoji = bot.emojis.resolveIdentifier(messageReaction.emoji) // get the emoji

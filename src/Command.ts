@@ -62,7 +62,7 @@ export default class {
     }
 
     /**
-     * Invokes the command's function
+     * Invokes the command's function performs a variety of checks on the incoming data to make sure everything runs smoothly
      * @param message the message object provided by discord
      * @param bot instance of Bot class
      * @param args list of strings that are passes as arguments*/

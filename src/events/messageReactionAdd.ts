@@ -14,7 +14,7 @@ export default (bot: Bot) => {
         }
         const roleReaction = await bot.DB.getRoleReactionByEmoji(messageReaction.message.id, emoji)
         if (!roleReaction) {
-            await messageReaction.users.remove(user.id)
+            await messageReaction.remove()
             return
         }
         if (!messageReaction.message.guild) {

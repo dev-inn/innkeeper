@@ -121,8 +121,12 @@ export default class Database {
         return await Rank.findAll({ where: { serverid }, order: [['entry_rep', 'DESC']] })
     }
 
+    async getAllMessagesWithRoleReactions(): Promise<RoleReaction[]> {
+        return await RoleReaction.findAll()
+    }
+
     /**Calls sync() on the database to create any empty tables*/
-    sync(): void {
-        sequelize.sync()
+    async sync(): Promise<void> {
+        await sequelize.sync()
     }
 }

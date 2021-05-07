@@ -12,11 +12,13 @@ export default (bot: Bot) => {
         const emoji = bot.emojis.resolveIdentifier(messageReaction.emoji) // get the emoji
         if (!emoji) {
             // emoji invalid somehow
+            log.debug('emoji invalid on remove reaction')
             return
         }
         const roleReaction = await bot.DB.getRoleReactionByEmoji(messageReaction.message.id, emoji)
         if (!roleReaction) {
             // if that emoji doesnt have a set role
+            log.debug('Couldnt find role for emoji react remove')
             await messageReaction.users.remove(user.id)
             return
         }

@@ -4,7 +4,7 @@ import Discord from 'discord.js'
 const cmd = new Command(
     'createembed',
     [
-        { name: 'color'. optional: true }
+        { name: 'color', optional: true }
     ],
     async (message, bot, args) => {
         let argColor;

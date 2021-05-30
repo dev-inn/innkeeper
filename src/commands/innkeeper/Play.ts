@@ -22,7 +22,14 @@ const cmd = new Command(
             url = regMatch[0]
         } else {
             // otherwise it searches for a video by that name and gives first result
-            const results = await ytsr(args.video, { limit: 1 })
+
+            const filters1 = await ytsr.getFilters(args.video)
+            const filter1 = filters1.get('Type')?.get('Video')
+            if (!filter1?.url) {
+                await message.reply("Couldn't find any results ;(")
+                return
+            }
+            const results = await ytsr(filter1.url, { limit: 1 })
             const item = <Video>results.items[0]
             url = item.url
         }
@@ -44,5 +51,5 @@ const cmd = new Command(
 cmd.guildOnly = true
 cmd.cooldown = 5000
 cmd.description = 'Plays a video'
-
+cmd.rejectExtraArgs = false
 export default cmd

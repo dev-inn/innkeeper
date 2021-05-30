@@ -27,10 +27,15 @@ const cmd = new Command(
             url = item.url
         }
         log.debug(`Playing ${url}`)
+        await message.channel.send(`Playing video:\n${url}`)
         if (message.member?.voice?.channel) {
             const connection = await message.member.voice.channel.join()
             const dispatcher = connection.play(await ytdl(url), {
                 type: 'opus'
+            })
+            connection.on('disconnect', () => {
+                connection.disconnect()
+                dispatcher.destroy()
             })
         } else {
             await message.reply('You are not in a voice channel')

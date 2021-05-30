@@ -34,7 +34,6 @@ const cmd = new Command(
                 type: 'opus'
             })
             connection.on('disconnect', () => {
-                connection.disconnect()
                 dispatcher.destroy()
             })
         } else {

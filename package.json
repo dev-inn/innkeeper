@@ -36,6 +36,5 @@
     "sequelize": "^6.6.2",
     "source-map-support": "^0.5.19",
     "sqlite3": "^5.0.2",
-    "typescript": "^4.2.4"
-  }
+    "typescript": "^4.2.4"}
 }

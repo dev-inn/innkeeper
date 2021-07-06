@@ -3,5 +3,6 @@
   "trailingComma": "none",
   "singleQuote": true,
   "printWidth": 110,
-  "proseWrap": "preserve"
+  "proseWrap": "preserve",
+  "tabWidth": 2
 }

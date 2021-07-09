@@ -13,7 +13,7 @@ export default (bot: Bot) => {
         if (reactions.length <= 0) {
             return
         }
-        const emoji = bot.emojis.resolveIdentifier(messageReaction.emoji)
+        const emoji = messageReaction.emoji
         if (!emoji) {
             return
         }

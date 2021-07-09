@@ -4,6 +4,11 @@ const log = logger.Logger
 
 export default (bot: Bot) => {
     bot.on('messageReactionAdd', async (messageReaction, user) => {
+        // todo properly test this
+        if (user.bot) {
+            // assume if origin is bot then its good
+            return
+        }
         const reactions = await bot.DB.getAllRoleReactionsForMessage(messageReaction.message.id)
         if (reactions.length <= 0) {
             return

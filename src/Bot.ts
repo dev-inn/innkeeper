@@ -23,7 +23,7 @@ export class Bot extends Discord.Client {
         log.time('Started bot in')
         super({
             ws: {
-                intents: ['GUILD_MESSAGES', 'GUILDS', 'GUILD_MESSAGE_REACTIONS']
+                intents: ['GUILD_MESSAGES', 'GUILDS', 'GUILD_MESSAGE_REACTIONS', 'GUILD_VOICE_STATES']
             },
             partials: ['REACTION', 'MESSAGE']
         })

@@ -8,6 +8,8 @@ type argDefinitions = {
     name: string
     optional: boolean
     mention?: string
+    /**Wether the rest of the input will be collected in this one arg*/
+    catchRest?: boolean
 }[]
 /**Contains all required data for handling command execution*/
 export default class {
@@ -32,7 +34,8 @@ export default class {
     /**Displayed by the help command to describe the command function*/
     description = ''
 
-    /**Whether or not the command is invalid if too many args are passed*/
+    /**Whether or not the command is invalid if too many args are passed
+     * Automatically false if a catchRest arg is supplied*/
     rejectExtraArgs = true
 
     /**Adds a new alias
@@ -54,6 +57,28 @@ export default class {
         this.func = func
         this.argDefs = args
         this.name = name.toLowerCase()
+
+        // Validation of arg defs
+        let optionalPrecedent = false
+        for (let i = 0; i < args.length; i++) {
+            if (optionalPrecedent && !args[i].optional) {
+                log.warn(
+                    `Command Definition Error: <${name}> Cannot have optional argument followed by non-optional argument`
+                )
+            }
+            if (args[i].catchRest) {
+                this.rejectExtraArgs = false
+                if (i != args.length - 1) {
+                    log.warn(
+                        `Command Definition Error: <${name}> Cannot have an argument with catchRest followed by other argument`
+                    )
+                }
+            }
+
+            if (args[i].optional) {
+                optionalPrecedent = true
+            }
+        }
     }
 
     /**Returns a string to displayed to use explaining usage of command*/
@@ -67,7 +92,7 @@ export default class {
     }
 
     /**
-     * Invokes the command's function
+     * Invokes the command's function performs a variety of checks on the incoming data to make sure everything runs smoothly
      * @param message the message object provided by discord
      * @param bot instance of Bot class
      * @param args list of strings that are passes as arguments*/
@@ -108,13 +133,25 @@ export default class {
             await message.channel.send('Too many arguments')
             return
         }
+        // args to be passed to fund
         const argObj: { [key: string]: string } = {}
+
+        /**Args obj creation*/
+        // loops all the expected args
         for (let i = 0; i < this.argDefs.length; i++) {
+            if (this.argDefs[i].catchRest) {
+                argObj[this.argDefs[i].name] = args.slice(i).join().replace(/,/g, ' ')
+                continue
+            }
+
+            // if there is nothing supplied and its not optional
             if (!args[i] && !this.argDefs[i].optional) {
                 await message.channel.send(`Missing ${this.argDefs[i].name} parameter`)
                 return
             }
+            // if its not there but its optional
             if (this.argDefs[i].optional && !args[i]) {
+                // break not continue because there should be no further args after the first optional is omitted
                 break
             }
             let content

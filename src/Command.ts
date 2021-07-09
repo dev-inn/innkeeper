@@ -44,6 +44,11 @@ export default class {
         this.aliases.push(name)
     }
 
+    /**
+     * @param name The call name and display name of the command
+     * @param args and argDefinitions object containing the layout of arguments
+     * @param func invoked when the command is successfully called with adequate arguments
+     */
     constructor(
         name: string,
         args: argDefinitions,

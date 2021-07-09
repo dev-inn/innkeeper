@@ -18,6 +18,7 @@ export class Bot extends Discord.Client {
     commands: Discord.Collection<string, Command>
     DB: Database
 
+    /**Initialises client object, sets intents and configs etc*/
     constructor() {
         log.time('Started bot in')
         super({
@@ -34,6 +35,7 @@ export class Bot extends Discord.Client {
         this.DB = new Database()
     }
 
+    /**Loops through all directories in the commands folder, then loops through each file and loads it. Does not recurse through folders only one layer deep*/
     async loadCommands(): Promise<void> {
         this.commands.clear()
         // loops through each folder

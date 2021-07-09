@@ -17,8 +17,13 @@ export default (bot: Bot) => {
         if (!emoji) {
             return
         }
-        const roleReaction = await bot.DB.getRoleReactionByEmoji(messageReaction.message.id, emoji)
+        const roleReaction = await bot.DB.getRoleReactionByEmoji(
+            messageReaction.message.id,
+            messageReaction.emoji.identifier
+        )
         if (!roleReaction) {
+            log.debug('No role reaction found')
+            log.debug(`emoji: ${emoji}`)
             await messageReaction.remove()
             return
         }

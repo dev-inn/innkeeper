@@ -13,14 +13,12 @@ export default (bot: Bot) => {
         if (reactions.length <= 0) {
             return
         }
-        const emoji = messageReaction.emoji.identifier
+
+        const emoji = messageReaction.message.guild?.emojis.resolveIdentifier(messageReaction.emoji)
         if (!emoji) {
             return
         }
-        const roleReaction = await bot.DB.getRoleReactionByEmoji(
-            messageReaction.message.id,
-            messageReaction.emoji.identifier
-        )
+        const roleReaction = await bot.DB.getRoleReactionByEmoji(messageReaction.message.id, emoji)
         if (!roleReaction) {
             log.debug('No role reaction found')
             log.debug(`emoji: ${emoji}`)

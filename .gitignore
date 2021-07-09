@@ -9,3 +9,4 @@ innkeeperbot.cfg
 /out
 tsconfig.tsbuildinfo
 database.sqlite
+botcfg.json

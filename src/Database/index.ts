@@ -103,11 +103,14 @@ export default class Database {
         emoji: string,
         channelid: string
     ): Promise<RoleReaction> {
-        return await RoleReaction.create({ serverid, messageid, roleid, emoji, channelid })
+        log.debug('Inserting rolereaction')
+        log.debug(JSON.stringify({ serverid, messageid, roleid, emoji, channelid }))
+        return RoleReaction.create({ serverid, messageid, roleid, emoji, channelid })
     }
 
-    async getAllRoleReactionsForMessage(messageid: string) {
-        return await RoleReaction.findAll({ where: { messageid } })
+    /**Returns all rolereaction ties for a given messageid*/
+    async getAllRoleReactionsForMessage(messageid: string): Promise<RoleReaction[]> {
+        return RoleReaction.findAll({ where: { messageid } })
     }
 
     async getRoleReactionByEmoji(messageid: string, emoji: string): Promise<RoleReaction | null> {

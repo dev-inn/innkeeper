@@ -2,7 +2,7 @@ import Command from '../../Command'
 import Discord from 'discord.js'
 
 const cmd = new Command(
-    'addrolereaction',
+    'removerolereaction',
     [
         { name: 'message_id', optional: false },
         { name: 'emoji', optional: false }
@@ -35,9 +35,9 @@ const cmd = new Command(
 )
 
 cmd.guildOnly = true
-cmd.alias('arr')
+cmd.alias('rrr')
 cmd.cooldown = 5000
-cmd.description = 'Adds an emoji reaction role to a message'
+cmd.description = 'Removes an emoji reaction role from a message'
 cmd.requiredPermissions = [Discord.Permissions.FLAGS.ADMINISTRATOR]
 
 export default cmd

@@ -3,6 +3,7 @@ import { logger } from '@noodlewrecker7/logger'
 
 const log = logger.Logger
 
+/**Manages config file's data*/
 export class ConfigManager {
     private data: { [key: string]: string } = {}
     private filepath: string
@@ -15,6 +16,9 @@ export class ConfigManager {
         this.read()
     }
 
+    /**Gets data from given key
+     * @param key the key for the desired data
+     */
     get(key: string): string {
         const d = this.data[key]
         if (!d) {
@@ -23,7 +27,11 @@ export class ConfigManager {
         return d
     }
 
-    set(key: string, value: string) {
+    /**Sets data to given key
+     * @param key the key of the data to set
+     * @param value the value to store
+     */
+    set(key: string, value: string): void {
         this.data[key] = value
         this.save()
     }
@@ -47,7 +55,7 @@ export class ConfigManager {
 
     /**
      * Will overwrite any stored data with that loaded from file*/
-    read() {
+    read(): void {
         let response
         try {
             response = fs.readFileSync(this.filepath)

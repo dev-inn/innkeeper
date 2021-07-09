@@ -40,7 +40,7 @@ const cmd = new Command(
             msg.guild.id,
             args.message_id,
             args.role,
-            argemoji.replace('<', '').replace('>', ''),
+            argemoji.replace('<', '').replace('>', '').substring(1),
             msg.channel.id
         )
         await msg.react(emojiObj)

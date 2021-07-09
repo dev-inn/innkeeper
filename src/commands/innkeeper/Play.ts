@@ -8,7 +8,8 @@ import ytsr, { Item, Video } from 'ytsr'
 
 const log = logger.Logger
 
-const insaneRegexString = /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w-]+\?v=|embed\/|v\/)?)([\w-]+)(\S+)?$/
+const insaneRegexString =
+    /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w-]+\?v=|embed\/|v\/)?)([\w-]+)(\S+)?$/
 
 const cmd = new Command(
     'play',
@@ -40,6 +41,7 @@ const cmd = new Command(
             const dispatcher = connection.play(await ytdl(url), {
                 type: 'opus'
             })
+            log.debug(bot.voice?.connections.get('808712354534653982'))
             connection.on('disconnect', () => {
                 dispatcher.destroy()
             })

@@ -28,7 +28,7 @@ const cmd = new Command(
             await message.channel.send('Invalid emoji')
             return
         }
-        if (await bot.DB.getRoleReactionByEmoji(args.message_id, args.emoji)) {
+        if (await bot.DB.getRoleReactionByEmoji(args.message_id, emojiObj)) {
             await message.channel.send("Sorry you can't use the same emoji twice")
             return
         }
@@ -37,13 +37,7 @@ const cmd = new Command(
             return
         }
 
-        await bot.DB.insertRoleReaction(
-            msg.guild.id,
-            args.message_id,
-            args.role,
-            emojiObj.identifier,
-            msg.channel.id
-        )
+        await bot.DB.insertRoleReaction(msg.guild.id, args.message_id, args.role, emojiObj, msg.channel.id)
         await msg.react(emojiObj)
     }
 )

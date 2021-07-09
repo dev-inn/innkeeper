@@ -8,3 +8,4 @@ innkeeperbot.cfg
 /node_modules
 /out
 tsconfig.tsbuildinfo
+database.sqlite

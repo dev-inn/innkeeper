@@ -36,7 +36,13 @@ const cmd = new Command(
             return
         }
 
-        await bot.DB.insertRoleReaction(msg.guild.id, args.message_id, args.role, emojiObj, msg.channel.id)
+        await bot.DB.insertRoleReaction(
+            msg.guild.id,
+            args.message_id,
+            args.role,
+            argemoji.replace('<', '').replace('>', ''),
+            msg.channel.id
+        )
         await msg.react(emojiObj)
     }
 )

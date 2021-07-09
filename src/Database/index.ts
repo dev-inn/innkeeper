@@ -89,6 +89,13 @@ export default class Database {
         return await User.destroy({ where: { userid: userID, serverid: serverID }, force: true })
     }
 
+    /**Creates a tie between a messageid, roleid, and the reaction emoji
+     * @param serverid - Discord snowflake of the server its in
+     * @param messageid - Discord snowflake of the message
+     * @param roleid - Discord snowflake of the role
+     * @param emoji - emoji name string
+     * @param channelid - Discord snowflake of the channel its in
+     */
     async insertRoleReaction(
         serverid: string,
         messageid: string,
@@ -105,6 +112,11 @@ export default class Database {
 
     async getRoleReactionByEmoji(messageid: string, emoji: string): Promise<RoleReaction | null> {
         return await RoleReaction.findOne({ where: { messageid, emoji } })
+    }
+
+    /**Removes the role reaction connection on the specified emoji*/
+    async removeRoleReactionByEmoji(messageid: string, emoji: string): Promise<number> {
+        return await RoleReaction.destroy({ where: { messageid, emoji } })
     }
 
     /**Sets the admin role for the specified server

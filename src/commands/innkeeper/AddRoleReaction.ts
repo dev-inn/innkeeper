@@ -1,6 +1,11 @@
 import Command from '../../Command'
 import Discord from 'discord.js'
 
+import { logger } from '@noodlewrecker7/logger'
+import { ListFormat } from 'typescript'
+
+const log = logger.Logger
+
 const cmd = new Command(
     'addrolereaction',
     [
@@ -15,6 +20,9 @@ const cmd = new Command(
             return
         }
         const emojiObj = bot.emojis.resolveIdentifier(args.emoji)
+        const argemoji = args.emoji
+        log.debug('Adding rolereaction')
+        log.debug(JSON.stringify({ emojiObj, argemoji }))
         if (!emojiObj) {
             await message.channel.send('Invalid emoji')
             return
@@ -27,6 +35,7 @@ const cmd = new Command(
             await message.channel.send('Error getting server data')
             return
         }
+
         await bot.DB.insertRoleReaction(msg.guild.id, args.message_id, args.role, emojiObj, msg.channel.id)
         await msg.react(emojiObj)
     }

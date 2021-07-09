@@ -19,7 +19,7 @@ const cmd = new Command(
             await message.channel.send('Could not find message')
             return
         }
-        const emojiObj = message.guild?.emojis.resolve(args.emoji)
+        const emojiObj = message.guild?.emojis.resolveIdentifier(args.emoji)
         // const emojiObj = bot.emojis.resolveIdentifier(args.emoji)
         const argemoji = args.emoji
         log.debug('Adding rolereaction')

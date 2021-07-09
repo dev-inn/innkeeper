@@ -14,11 +14,15 @@ export default (bot: Bot) => {
             return
         }
 
-        const emoji = messageReaction.message.guild?.emojis.resolveIdentifier(messageReaction.emoji)
+        let emoji = messageReaction.message.guild?.emojis.resolveIdentifier(messageReaction.emoji)
         if (!emoji) {
             return
         }
-        const roleReaction = await bot.DB.getRoleReactionByEmoji(messageReaction.message.id, emoji)
+        let roleReaction = await bot.DB.getRoleReactionByEmoji(messageReaction.message.id, emoji)
+        if (!roleReaction) {
+            emoji = emoji.replace(':', '%3A')
+            roleReaction = await bot.DB.getRoleReactionByEmoji(messageReaction.message.id, emoji)
+        }
         if (!roleReaction) {
             log.debug('No role reaction found')
             log.debug(`emoji: ${emoji}`)

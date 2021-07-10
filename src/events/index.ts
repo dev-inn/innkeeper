@@ -8,8 +8,8 @@ import messageReactionRemove from './messageReactionRemove'
 import { Bot } from '../Bot'
 
 export default (client: Bot) => {
-    message(client)
-    ready(client)
-    messageReactionAdd(client)
-    messageReactionRemove(client)
+  message(client)
+  ready(client)
+  messageReactionAdd(client)
+  messageReactionRemove(client)
 }

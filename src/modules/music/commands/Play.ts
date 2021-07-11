@@ -1,10 +1,9 @@
 import Command from '../../../Command'
 import 'fs'
-import * as fs from 'fs'
 
 import { logger } from '@noodlewrecker7/logger'
 import ytdl from 'ytdl-core-discord'
-import ytsr, { Item, Video } from 'ytsr'
+import ytsr, { Video } from 'ytsr'
 
 const log = logger.Logger
 

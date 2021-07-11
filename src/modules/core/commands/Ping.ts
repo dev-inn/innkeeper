@@ -1,6 +1,6 @@
 import Command from '../../../Command'
 
-const cmd = new Command('ping', [], async (message, bot, args) => {
+const cmd = new Command('ping', [], async (message) => {
   await message.channel.send('Pong!')
 })
 

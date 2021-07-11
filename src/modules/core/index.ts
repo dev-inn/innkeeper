@@ -1,4 +1,3 @@
-import { TextChannel } from 'discord.js'
 import { Bot } from '../../Bot'
 import AddRank from './commands/AddRank'
 import AddRoleReaction from './commands/AddRoleReaction'

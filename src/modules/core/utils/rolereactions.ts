@@ -36,6 +36,7 @@ export async function removeRoleReactionByEmoji(messageid: string, emoji: string
   return await RoleReaction.destroy({ where: { messageid, emoji } })
 }
 
-export async function getAllMessagesWithRoleReactions(): Promise<RoleReaction[]> {
+/**Selects all rolereaction ties*/
+export async function getAllRoleReactions(): Promise<RoleReaction[]> {
   return await RoleReaction.findAll()
 }

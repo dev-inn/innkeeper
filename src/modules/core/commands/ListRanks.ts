@@ -1,7 +1,7 @@
 import Command from '../../../Command'
 import Discord from 'discord.js'
 import { getAllRanksForServer } from '../utils/rank'
-const cmd = new Command('listranks', [], async (message, bot, args) => {
+const cmd = new Command('listranks', [], async (message, bot) => {
   if (!message.guild) {
     return
   }

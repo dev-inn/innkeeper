@@ -25,12 +25,22 @@ export async function getTopTenUsersByRep(serverID: string): Promise<User[]> {
   })
 }
 
+/**Sets a users credits to exact amount
+ * @param userID the user to alter
+ * @param serverID the server in which to change their credit count
+ * @param amount the new amount of credits to have
+ */
 export async function setUserCredits(userID: string, serverID: string, amount: number): Promise<void> {
   const user = await getUserInServer(userID, serverID)
   await user.update({ credits: amount })
   await user.save()
 }
 
+/**Wipes the user from the database within that specific server
+ * @param userID ID of the user to delete
+ * @param serverID the server from within which to delete the user
+ * @returns number of user objects destroyed
+ */
 export async function nukeUserFromServer(userID: string, serverID: string): Promise<number> {
   return await User.destroy({ where: { userid: userID, serverid: serverID }, force: true })
 }

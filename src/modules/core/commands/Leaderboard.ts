@@ -2,7 +2,7 @@ import Command from '../../../Command'
 import Discord from 'discord.js'
 import { getTopTenUsersByRep } from '../utils/user'
 
-const cmd = new Command('leaderboard', [], async (message, bot, args) => {
+const cmd = new Command('leaderboard', [], async (message, bot) => {
   if (!message.guild) {
     return // not really any need for a message as the command.invoke() wouldn't allow this to run if not in a guild
   }

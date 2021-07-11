@@ -1,7 +1,7 @@
 import Command from '../../../Command'
 
 /**Doesn't actually work yet as all imports are cached*/
-const cmd = new Command('reload', [], async (message, bot, args) => {
+const cmd = new Command('reload', [], async (message, bot) => {
   await bot.loadModules()
   message.channel.send(`Reloaded \`${bot.commands.size}\` commands`)
 })

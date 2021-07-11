@@ -1,12 +1,10 @@
-import Discord from 'discord.js'
 import { logger } from '@noodlewrecker7/logger'
 import { Bot } from '../Bot'
-import Command from '../Command'
 import { getServerPrefix } from '../modules/core/utils/server'
 
 const log = logger.Logger
 
-export default (bot: Bot) => {
+export default (bot: Bot): void => {
   bot.on('message', async (message) => {
     log.debug('Message received')
     let prefix = bot.cfg.get('prefix')

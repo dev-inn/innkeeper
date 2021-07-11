@@ -1,11 +1,11 @@
 import Command from '../../../Command'
+import 'fs'
 
 import { logger } from '@noodlewrecker7/logger'
 import ytdl from 'ytdl-core-discord'
 import { getYoutubeUrlFromVideoArg } from '../utils/youtube'
-import { ConnectionError } from 'sequelize'
-import { StreamDispatcher, VoiceConnection } from 'discord.js'
 import { QueueItem } from '../models/QueueItem'
+import { VoiceConnection } from 'discord.js'
 
 const log = logger.Logger
 

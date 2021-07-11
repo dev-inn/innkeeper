@@ -17,6 +17,9 @@ export class Bot extends Discord.Client {
   commands: Discord.Collection<string, Command>
   DB: Sequelize
 
+  /**Tracks the name of the currently loading module for logging purposes*/
+  currentlyLoadingModule: string
+
   /**Initialises client object, sets intents and configs etc*/
   constructor() {
     log.time('Started bot in')
@@ -30,6 +33,7 @@ export class Bot extends Discord.Client {
     events(this)
     this.login(this.cfg.get('token'))
     this.commands = new Discord.Collection()
+    this.currentlyLoadingModule = ''
     this.loadModules()
     this.DB = new Sequelize('database', 'user', 'password', {
       host: 'localhost',
@@ -46,25 +50,37 @@ export class Bot extends Discord.Client {
       log.warn(`${cmd.name} Already exists and will be overwritten. Check for naming conflicts`)
     }
     this.commands.set(cmd.name, cmd)
-    log.debug(`Loaded ${cmd.name}`)
+    log.debug(`Loaded ${this.currentlyLoadingModule}/${cmd.name}`)
   }
 
-  /**Loops through all directories in the commands folder, then loops through each file and loads it. Does not recurse through folders only one layer deep*/
+  /**Loads each module in the /modules/ folder by running the index.js file*/
   async loadModules(): Promise<void> {
     this.commands.clear()
-    // loops through each folder
-    const moduleDirs = fs.readdirSync('./out/modules')
+    // loops through each folder, loads core first just incase anything else depends on it
+    const moduleDirs = fs.readdirSync('./out/modules').filter((name) => name != 'core')
+    await this.loadModule('core')
     for (let i = 0; i < moduleDirs.length; i++) {
-      // gets the index / setup file
-      const setupFile = fs.readdirSync(`./out/modules/${moduleDirs[i]}`).filter((name) => name == 'index.js')
-      const cmd: (bot: Bot) => void = (await import(`./modules/${moduleDirs[i]}/${setupFile}`)).default
-      try {
-        cmd(this)
-      } catch (e) {
-        log.error(`Could not load ${moduleDirs[i]}/${setupFile}`)
-      }
-      // }
+      await this.loadModule(moduleDirs[i])
     }
+  }
+  /**Loads the specified module
+   * @param dir name of the dir in the /modules/ directory to load
+   */
+  async loadModule(dir: string): Promise<void> {
+    this.currentlyLoadingModule = dir
+    // gets the index / setup file
+    const setupFile = fs.readdirSync(`./out/modules/${dir}`).filter((name) => name == 'index.js')[0]
+    if (!setupFile) {
+      log.error(`Module ${dir} is missing index.js`)
+      return
+    }
+    const module: (bot: Bot) => void = (await import(`./modules/${dir}/${setupFile}`)).default
+    try {
+      module(this)
+    } catch (e) {
+      log.error(`Could not load ${dir}/${setupFile}`)
+    }
+    log.info(`Module '${dir}' loaded successfully`)
   }
 }
 

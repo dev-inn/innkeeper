@@ -53,7 +53,9 @@ const cmd = new Command('help', [{ name: 'command', optional: true }], async (me
   text += `**Need support?**\n${bot.cfg.get('gh_link')} `
   embed.setDescription(text)
   embed.setThumbnail(bot.cfg.get('pfp'))
-  embed.setFooter(`Thank you for using ${bot.cfg.get('bot_name')}`)
+  embed.setFooter(
+    `Thank you for using ${bot.cfg.get('bot_name')}\nVersion: ${process.env.npm_package_version}`
+  )
   embed.setColor('LUMINOUS_VIVID_PINK')
   await message.reply(embed)
 })

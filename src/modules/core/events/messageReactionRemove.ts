@@ -1,9 +1,9 @@
-import { Bot } from '../Bot'
+import { Bot } from '../../../Bot'
 import { logger } from '@noodlewrecker7/logger'
-import { getAllRoleReactionsForMessage, getRoleReactionByEmoji } from '../modules/core/utils'
+import { getAllRoleReactionsForMessage, getRoleReactionByEmoji } from '../utils/rolereactions'
 const log = logger.Logger
 
-export default (bot: Bot) => {
+export default (bot: Bot): void => {
   bot.on('messageReactionRemove', async (messageReaction, user) => {
     log.debug('message react removed')
     const reactions = await getAllRoleReactionsForMessage(messageReaction.message.id)

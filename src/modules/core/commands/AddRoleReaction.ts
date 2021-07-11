@@ -2,7 +2,7 @@ import Command from '../../../Command'
 import Discord from 'discord.js'
 
 import { logger } from '@noodlewrecker7/logger'
-import { getRoleReactionByEmoji, insertRoleReaction } from '../utils'
+import { getRoleReactionByEmoji, insertRoleReaction } from '../utils/rolereactions'
 
 const log = logger.Logger
 

@@ -22,14 +22,14 @@ const cmd = new Command(
     if (regMatch) {
       url = regMatch[0]
     } else {
-      // otherwise it searches for a video by that name and gives first result
-
+      // Creates filter url to filter out results that aren't videos
       const filters1 = await ytsr.getFilters(args.video)
       const filter1 = filters1.get('Type')?.get('Video')
       if (!filter1?.url) {
         await message.reply("Couldn't find any results ;(")
         return
       }
+
       const results = await ytsr(filter1.url, { limit: 1 })
       const item = <Video>results.items[0]
       url = item.url

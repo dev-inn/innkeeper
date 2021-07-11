@@ -1,6 +1,6 @@
 import Command from '../../../Command'
 import Discord from 'discord.js'
-import { removeRoleReactionByEmoji } from '../utils'
+import { removeRoleReactionByEmoji } from '../utils/rolereactions'
 
 const cmd = new Command(
   'removerolereaction',

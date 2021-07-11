@@ -12,7 +12,7 @@ export class User extends Model {
 export default function (sequelize: Sequelize): void {
   User.init(
     {
-      userid: { type: DataTypes.STRING, unique: false },
+      userid: { type: DataTypes.STRING, unique: false, primaryKey: true },
       serverid: { type: DataTypes.STRING, unique: false },
       reputation: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false },
       credits: { type: DataTypes.INTEGER, defaultValue: 1, allowNull: false },

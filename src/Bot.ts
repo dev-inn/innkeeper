@@ -30,18 +30,19 @@ export class Bot extends Discord.Client {
       partials: ['REACTION', 'MESSAGE']
     })
     this.cfg = new ConfigManager('botcfg.json')
-    events(this)
-    this.login(this.cfg.get('token'))
-    this.commands = new Discord.Collection()
-    this.currentlyLoadingModule = ''
-    this.loadModules()
     this.DB = new Sequelize('database', 'user', 'password', {
       host: 'localhost',
       dialect: 'sqlite',
       logging: false,
       storage: 'database.sqlite'
     })
-    this.DB.sync()
+    events(this)
+    this.login(this.cfg.get('token'))
+    this.commands = new Discord.Collection()
+    this.currentlyLoadingModule = ''
+    this.loadModules().then(() => {
+      this.DB.sync()
+    })
   }
 
   /**Adds command object*/

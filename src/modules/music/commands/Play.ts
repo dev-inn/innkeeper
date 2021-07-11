@@ -1,49 +1,60 @@
 import Command from '../../../Command'
-import 'fs'
-import * as fs from 'fs'
 
 import { logger } from '@noodlewrecker7/logger'
 import ytdl from 'ytdl-core-discord'
-import ytsr, { Item, Video } from 'ytsr'
+import { getYoutubeUrlFromVideoArg } from '../utils/youtube'
+import { ConnectionError } from 'sequelize'
+import { StreamDispatcher, VoiceConnection } from 'discord.js'
+import { QueueItem } from '../models/QueueItem'
 
 const log = logger.Logger
 
-const insaneRegexString =
-  /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w-]+\?v=|embed\/|v\/)?)([\w-]+)(\S+)?$/
+/**Called when the dispatcher finishes playing, plays the next song in the queue if one exists*/
+async function onDispatcherFinish(connection: VoiceConnection) {
+  // get next url
+  const qitem = await QueueItem.findOne({
+    where: { serverId: connection.channel.guild.id },
+    order: [['createdAt', 'ASC']]
+  })
+  if (!qitem) {
+    connection.disconnect()
+    return
+  }
+
+  const dispatcher = connection.play(await ytdl(qitem.url), {
+    type: 'opus'
+  })
+  qitem.destroy()
+  dispatcher.on('finish', async () => {
+    onDispatcherFinish(connection)
+  })
+}
 
 const cmd = new Command(
   'play',
   [{ name: 'video', optional: false, catchRest: true }],
   async (message, bot, args) => {
-    let url
-
-    // tests if input was a url
-    const regMatch = args.video.match(insaneRegexString)
-    if (regMatch) {
-      url = regMatch[0]
-    } else {
-      // Creates filter url to filter out results that aren't videos
-      const filters1 = await ytsr.getFilters(args.video)
-      const filter1 = filters1.get('Type')?.get('Video')
-      if (!filter1?.url) {
-        await message.reply("Couldn't find any results ;(")
-        return
-      }
-
-      const results = await ytsr(filter1.url, { limit: 1 })
-      const item = <Video>results.items[0]
-      url = item.url
+    const url = await getYoutubeUrlFromVideoArg(args.video).catch(async (err) => {
+      await message.reply(err)
+    })
+    if (!url) {
+      return
     }
+
     log.debug(`Playing ${url}`)
-    await message.channel.send(`Playing video:\n${url}`)
     if (message.member?.voice?.channel) {
       const connection = await message.member.voice.channel.join()
+      // automatically destroys the old dispatcher if exists
       const dispatcher = connection.play(await ytdl(url), {
         type: 'opus'
       })
-      log.debug(bot.voice?.connections.get('808712354534653982'))
+      await message.channel.send(`Playing video:\n${url}`)
+      dispatcher.on('finish', async () => {
+        onDispatcherFinish(connection)
+      })
+
       connection.on('disconnect', () => {
-        dispatcher.destroy()
+        connection.dispatcher.destroy()
       })
     } else {
       await message.reply('You are not in a voice channel')

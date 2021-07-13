@@ -82,8 +82,8 @@ const default_data: { [key: string]: string } = {
   gh_link: 'https://github.com/dev-inn/innkeeper',
   token: '<PUT_YOUR_TOKEN_HERE>',
   scheduler_interval: '21600',
-  dbfile: 'reputation',
+  dbfile: 'database',
   dbdir: 'data',
-  server_cache_limit: '5',
+  server_cache_limit: '5', // redundant, carried over from old python bot
   bot_name: 'Innkeeper'
 }

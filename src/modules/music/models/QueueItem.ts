@@ -5,7 +5,6 @@ import {
   BelongsToGetAssociationMixin,
   BelongsToSetAssociationMixin
 } from 'sequelize'
-import { StringMappingType } from 'typescript'
 import { Server } from '../../core/models/Server'
 import { User } from '../../core/models/User'
 

@@ -10,3 +10,4 @@ innkeeperbot.cfg
 tsconfig.tsbuildinfo
 database.sqlite
 botcfg.json
+testcfg.json

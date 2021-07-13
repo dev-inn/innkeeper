@@ -23,6 +23,9 @@ export async function getVideoObjFromYTVideoArg(arg: string): Promise<Video> {
     url = filter1.url
   }
   const results = await ytsr(url, { limit: 1 })
+  if (results.items.length == 0) {
+    throw new Error('Could not find any results ;(')
+  }
   const item = <Video>results.items[0]
   return item
 }

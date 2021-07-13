@@ -21,7 +21,7 @@ export class Bot extends Discord.Client {
   currentlyLoadingModule: string
 
   /**Initialises client object, sets intents and configs etc*/
-  constructor() {
+  constructor(cfg = 'botcfg.json') {
     log.time('Started bot in')
     super({
       ws: {
@@ -29,19 +29,19 @@ export class Bot extends Discord.Client {
       },
       partials: ['REACTION', 'MESSAGE']
     })
-    this.cfg = new ConfigManager('botcfg.json')
+    this.cfg = new ConfigManager(cfg)
     this.DB = new Sequelize('database', 'user', 'password', {
       host: 'localhost',
       dialect: 'sqlite',
       logging: false,
-      storage: 'database.sqlite'
+      storage: this.cfg.get('dbfile') + '.sqlite'
     })
     events(this)
-    this.login(this.cfg.get('token'))
     this.commands = new Discord.Collection()
     this.currentlyLoadingModule = ''
     this.loadModules().then(() => {
       this.DB.sync()
+      this.login(this.cfg.get('token'))
     })
   }
 
@@ -70,7 +70,9 @@ export class Bot extends Discord.Client {
   async loadModule(dir: string): Promise<void> {
     this.currentlyLoadingModule = dir
     // gets the index / setup file
-    const setupFile = fs.readdirSync(`./out/modules/${dir}`).filter((name) => name == 'index.js')[0]
+    const setupFile = fs
+      .readdirSync(`./out/modules/${dir}`)
+      .filter((name) => name == 'index.js' || name == 'index.ts')[0]
     if (!setupFile) {
       log.error(`Module ${dir} is missing index.js`)
       return
@@ -85,7 +87,7 @@ export class Bot extends Discord.Client {
   }
 }
 
-const BOT = new Bot()
-BOT.generateInvite().then((str) => {
-  log.info(`Bot started. Invite with ${str}`)
-})
+// const BOT = new Bot()
+// BOT.generateInvite().then((str) => {
+// log.info(`Bot started. Invite with ${str}`)
+// })

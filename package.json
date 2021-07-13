@@ -2,11 +2,8 @@
   "name": "innkeeper",
   "version": "1.1.0",
   "description": "A Discord bot built on discord.js",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
-    "test": "eslint src && tsc",
+    "test": "jest",
     "start": "eslint --fix --quiet src && tsc && node --trace-warnings out/Bot.js"
   },
   "repository": {
@@ -21,6 +18,7 @@
   "homepage": "https://github.com/dev-inn/innkeeper#readme",
   "devDependencies": {
     "@types/bluebird": "^3.5.36",
+    "@types/jest": "^26.0.24",
     "@types/node": "^15.14.1",
     "@types/sequelize": "^4.28.10",
     "@types/validator": "^13.6.3",
@@ -28,7 +26,9 @@
     "@typescript-eslint/parser": "^4.28.2",
     "eslint": "^7.30.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "prettier": "^2.3.2"
+    "jest": "^27.0.6",
+    "prettier": "^2.3.2",
+    "ts-jest": "^27.0.3"
   },
   "dependencies": {
     "@discordjs/opus": "^0.5.3",

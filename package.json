@@ -6,7 +6,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "eslint src && tsc -c ",
+    "test": "eslint src && tsc",
     "start": "eslint --fix --quiet src && tsc && node --trace-warnings out/Bot.js"
   },
   "repository": {

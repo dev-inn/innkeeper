@@ -3,7 +3,7 @@ import 'fs'
 
 import { logger } from '@noodlewrecker7/logger'
 import ytdl from 'ytdl-core-discord'
-import { getYoutubeUrlFromVideoArg } from '../utils/youtube'
+import { getVideoObjFromYTVideoArg } from '../utils/youtube'
 import { QueueItem } from '../models/QueueItem'
 import { VoiceConnection } from 'discord.js'
 
@@ -34,21 +34,21 @@ const cmd = new Command(
   'play',
   [{ name: 'video', optional: false, catchRest: true }],
   async (message, bot, args) => {
-    const url = await getYoutubeUrlFromVideoArg(args.video).catch(async (err) => {
+    const video = await getVideoObjFromYTVideoArg(args.video).catch(async (err) => {
       await message.reply(err)
     })
-    if (!url) {
+    if (!video) {
       return
     }
 
-    log.debug(`Playing ${url}`)
+    log.debug(`Playing ${video.title}`)
     if (message.member?.voice?.channel) {
       const connection = await message.member.voice.channel.join()
       // automatically destroys the old dispatcher if exists
-      const dispatcher = connection.play(await ytdl(url), {
+      const dispatcher = connection.play(await ytdl(video.url), {
         type: 'opus'
       })
-      await message.channel.send(`Playing video:\n${url}`)
+      await message.channel.send(`Playing video:\n${video.url}`)
       dispatcher.on('finish', async () => {
         onDispatcherFinish(connection)
       })

@@ -21,9 +21,13 @@ export default class {
     bot: Bot,
     args: { [key: string]: string }
   ) => Promise<void>
-  /**Cooldown time in ms*/
+  /**Cooldown time between commands in ms
+   * @default 5000
+   */
   cooldown = 5000 // time in milliseconds of command usage cooldown per user
-  /**Whether command can only be used in servers*/
+  /**Whether command can only be used in servers
+   * @default true
+   */
   guildOnly = true
   /**Other single-word strings that should trigger this command*/
   aliases: string[] = []

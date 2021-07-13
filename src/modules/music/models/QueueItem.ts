@@ -5,6 +5,7 @@ import {
   BelongsToGetAssociationMixin,
   BelongsToSetAssociationMixin
 } from 'sequelize'
+import { StringMappingType } from 'typescript'
 import { Server } from '../../core/models/Server'
 import { User } from '../../core/models/User'
 
@@ -16,12 +17,17 @@ export class QueueItem extends Model {
 
   getServer!: BelongsToGetAssociationMixin<Server>
   setServer!: BelongsToSetAssociationMixin<Server, string>
+
+  public title?: string
+  public author?: string
 }
 /* eslint-disable require-jsdoc */
 export default function (sequelize: Sequelize): void {
   QueueItem.init(
     {
-      url: { type: DataTypes.STRING, unique: false, allowNull: false }
+      url: { type: DataTypes.STRING, unique: false, allowNull: false },
+      title: { type: DataTypes.STRING, unique: false, allowNull: false },
+      author: { type: DataTypes.STRING, unique: false, allowNull: true }
     },
     { tableName: 'musicqueue', sequelize: sequelize }
   )

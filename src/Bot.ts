@@ -41,7 +41,11 @@ export class Bot extends Discord.Client {
     this.currentlyLoadingModule = ''
     this.loadModules().then(() => {
       this.DB.sync()
-      this.login(this.cfg.get('token'))
+      this.login(this.cfg.get('token')).then(()=>{
+        this.generateInvite().then((str) => {
+          log.info(`Bot started. Invite with ${str}`)
+        })
+      })
     })
   }
 
@@ -88,6 +92,4 @@ export class Bot extends Discord.Client {
 }
 
 const BOT = new Bot()
-BOT.generateInvite().then((str) => {
-log.info(`Bot started. Invite with ${str}`)
-})
+

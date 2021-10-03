@@ -87,7 +87,7 @@ export class Bot extends Discord.Client {
   }
 }
 
-// const BOT = new Bot()
-// BOT.generateInvite().then((str) => {
-// log.info(`Bot started. Invite with ${str}`)
-// })
+const BOT = new Bot()
+BOT.generateInvite().then((str) => {
+log.info(`Bot started. Invite with ${str}`)
+})

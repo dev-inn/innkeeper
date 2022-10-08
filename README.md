@@ -5,6 +5,8 @@ Bot for the Developer’s Inn Discord server
 
 ## User Guide
 
+This bot is being semi-actively maintained, though is not currently being hosted. If you would like to use the bot for your server contact a maintainer
+
 ### Command List
 *For a full list of commands do ?h in a server with the bot in*
 #### Prefix
